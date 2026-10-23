@@ -23,14 +23,21 @@ async function prmCompanyRequest<T>(
   token: string,
   options: RequestInit = {}
 ): Promise<T> {
+  const isFormData = typeof FormData !== "undefined" && options.body instanceof FormData;
+
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+    Authorization: `Bearer ${token}`,
+    ...((options.headers as Record<string, string>) || {}),
+  };
+
+  if (!isFormData) {
+    headers["Content-Type"] = "application/json";
+  }
+
   const response = await fetch(`${prmApiBaseUrl}${path}`, {
     ...options,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      ...options.headers,
-    },
+    headers,
   });
 
   const data = await response.json().catch(() => null);
@@ -69,6 +76,26 @@ export function prmSaveCompanyDraft(
   return prmCompanyRequest("/v1/companies/my/draft", token, {
     method: "PUT",
     body: JSON.stringify(payload),
+  });
+}
+
+export function prmUploadCompanyFile(
+  token: string,
+  type: "logo" | "cover" | "catalog" | "resume" | "gallery" | "certs",
+  files: File | File[]
+): Promise<{ status: string; company: PrmCompany }> {
+  const formData = new FormData();
+  formData.append("type", type);
+
+  if (Array.isArray(files)) {
+    files.forEach((file) => formData.append("files[]", file));
+  } else {
+    formData.append("file", files);
+  }
+
+  return prmCompanyRequest("/v1/companies/my/upload", token, {
+    method: "POST",
+    body: formData,
   });
 }
 

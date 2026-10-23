@@ -8,6 +8,7 @@ import {
   prmGetMyCompany,
   prmSaveCompanyDraft,
   prmSubmitCompany,
+  prmUploadCompanyFile,
   PrmCompanyApiError,
 } from "@/lib/prm-companies/prm-companies-api";
 import { PrmCompanyStatusBadge } from "../prm-company-status-badge/prm-company-status-badge";
@@ -111,7 +112,7 @@ export function PrmDashboardCompanyView({
             ...companyRes.company,
           });
         }
-      } catch (err: any) {
+      } catch {
         if (isMounted) {
           setGeneralError("بارگذاری اطلاعات اولیه شرکت با خطا مواجه شد.");
         }
@@ -152,8 +153,26 @@ export function PrmDashboardCompanyView({
         setErrors(err.errors);
       }
       setGeneralError(err.message || "خطایی در ذخیره پیش‌نویس رخ داد.");
+      throw err;
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleUploadFile = async (
+    type: "logo" | "cover" | "catalog" | "resume" | "gallery" | "certs",
+    files: File | File[]
+  ) => {
+    setGeneralError(null);
+    try {
+      const res = await prmUploadCompanyFile(token, type, files);
+      setCompany(res.company);
+      setFormData((prev) => ({ ...prev, ...res.company }));
+    } catch (err: any) {
+      if (err instanceof PrmCompanyApiError && err.errors) {
+        setErrors(err.errors);
+      }
+      setGeneralError(err.message || "بارگذاری فایل با خطا مواجه شد.");
     }
   };
 
@@ -248,29 +267,13 @@ export function PrmDashboardCompanyView({
           industries={industries}
           errors={errors}
           readOnly={isReadOnly}
+          token={token}
+          isSaving={isSaving}
+          onSaveDraft={handleSaveDraft}
+          onSubmitInitiate={handleInitiateSubmit}
+          onUploadFile={handleUploadFile}
           onChange={handleFieldChange}
         />
-
-        {!isReadOnly && (
-          <div className="prm-form-actions">
-            <button
-              type="button"
-              className="prm-btn-secondary"
-              onClick={handleSaveDraft}
-              disabled={isSaving || isSubmitting}
-            >
-              {isSaving ? "در حال ذخیره..." : "ذخیره موقت (پیش‌نویس)"}
-            </button>
-            <button
-              type="button"
-              className="prm-btn-primary"
-              onClick={handleInitiateSubmit}
-              disabled={isSaving || isSubmitting}
-            >
-              ثبت و پرداخت هزینه بررسی
-            </button>
-          </div>
-        )}
       </div>
 
       <PrmCompanyPaymentModal

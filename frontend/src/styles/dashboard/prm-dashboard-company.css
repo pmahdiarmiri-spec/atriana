@@ -140,6 +140,134 @@
   color: #dc2626;
 }
 
+.prm-wizard-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.prm-wizard-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.prm-wizard-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prm-wizard-badge {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--prm-primary-color);
+  background: rgba(15, 23, 42, 0.05);
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.prm-wizard-remaining {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--prm-text-light);
+}
+
+.prm-wizard-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(15, 23, 42, 0.06);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.prm-wizard-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--prm-secondary-color), var(--prm-accent-color));
+  border-radius: 9999px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prm-wizard-step-indicators {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.prm-wizard-step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.prm-wizard-step-item:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.prm-step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.08);
+  color: var(--prm-text-dark);
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.prm-step-text {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.prm-step-text strong {
+  font-size: 0.88rem;
+  color: var(--prm-text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prm-step-text span {
+  font-size: 0.74rem;
+  color: var(--prm-text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prm-step-active {
+  border-color: var(--prm-secondary-color);
+  background: rgba(245, 158, 11, 0.06);
+}
+
+.prm-step-active .prm-step-circle {
+  background: var(--prm-secondary-color);
+  color: var(--prm-white);
+}
+
+.prm-step-done .prm-step-circle {
+  background: #10b981;
+  color: var(--prm-white);
+}
+
+.prm-wizard-content {
+  min-height: 380px;
+}
+
 .prm-company-form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -254,7 +382,7 @@
 
 .prm-form-checkboxes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 14px;
   grid-column: 1 / -1;
 }
@@ -276,9 +404,71 @@
   cursor: pointer;
 }
 
+.prm-upload-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px dashed rgba(15, 23, 42, 0.16);
+  border-radius: 14px;
+  gap: 12px;
+}
+
+.prm-upload-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prm-upload-info label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--prm-text-dark);
+}
+
+.prm-upload-info span {
+  font-size: 0.78rem;
+  color: var(--prm-text-light);
+}
+
+.prm-upload-success {
+  color: #059669 !important;
+  font-weight: 700;
+}
+
+.prm-upload-btn-label {
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.08);
+  font-weight: 700;
+  font-size: 0.84rem;
+  color: var(--prm-primary-color);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.prm-upload-btn-label:hover {
+  background: rgba(15, 23, 42, 0.14);
+}
+
+.prm-wizard-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.prm-actions-left,
+.prm-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .prm-form-actions {
   display: flex;
-  justify-content: flex-end;
   gap: 14px;
   margin-top: 24px;
 }
