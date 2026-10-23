@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { PrmDashboardSidebar } from "../prm-dashboard-sidebar/prm-dashboard-sidebar";
+import { PrmDashboardSidebar, PrmDashboardMenu } from "../prm-dashboard-sidebar/prm-dashboard-sidebar";
 import { PrmDashboardHeader } from "../prm-dashboard-header/prm-dashboard-header";
 import { PrmDashboardStats } from "../prm-dashboard-stats/prm-dashboard-stats";
 import { PrmDashboardQuickAccess } from "../prm-dashboard-quick-access/prm-dashboard-quick-access";
@@ -10,6 +10,7 @@ import { PrmDashboardBottomNav } from "../prm-dashboard-bottom-nav/prm-dashboard
 import { PrmDashboardComingSoonModal } from "../prm-dashboard-coming-soon-modal/prm-dashboard-coming-soon-modal";
 import { PrmDashboardSettings } from "../prm-dashboard-settings/prm-dashboard-settings";
 import { PrmDashboardSupport } from "../prm-dashboard-support/prm-dashboard-support";
+import { PrmTariffSearchView } from "@/components/prm-dashboard/prm-tariff-search/prm-tariff-search-view/prm-tariff-search-view";
 import { PrmUserProfileData } from "@/lib/prm-settings/prm-settings-api";
 import {
     prmClearAuthSession,
@@ -17,8 +18,6 @@ import {
 } from "@/lib/prm-auth/prm-auth-storage";
 import { prmLogout } from "@/lib/prm-auth/prm-auth-api";
 import "@/styles/dashboard/prm-dashboard.css";
-
-type PrmDashboardMenu = "dashboard" | "settings" | "support";
 
 export function PrmDashboardPage(): ReactNode {
     const router = useRouter();
@@ -78,6 +77,11 @@ export function PrmDashboardPage(): ReactNode {
     ): void => {
         if (id === "settings") {
             setPrmActiveMenu("settings");
+            return;
+        }
+
+        if (id === "hs-code" || id === "tariffs" || id === "tariff-search") {
+            setPrmActiveMenu("tariffs");
             return;
         }
 
@@ -153,6 +157,10 @@ export function PrmDashboardPage(): ReactNode {
                     </div>
                 )}
 
+                {prmActiveMenu === "tariffs" && (
+                    <PrmTariffSearchView token={prmToken} />
+                )}
+
                 {prmActiveMenu === "settings" && (
                     <PrmDashboardSettings
                         user={prmUser}
@@ -167,8 +175,8 @@ export function PrmDashboardPage(): ReactNode {
             </main>
 
             <PrmDashboardBottomNav
-                activeMenu={prmActiveMenu}
-                onMenuSelect={setPrmActiveMenu}
+                activeMenu={prmActiveMenu as any}
+                onMenuSelect={setPrmActiveMenu as any}
                 onItemClick={prmHandleOpenModal}
             />
 

@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { PrmUserProfileData } from "@/lib/prm-settings/prm-settings-api";
 
-type PrmDashboardMenu = "dashboard" | "settings" | "support";
+export type PrmDashboardMenu = "dashboard" | "tariffs" | "settings" | "support";
 
 interface PrmDashboardSidebarProps {
   user: PrmUserProfileData | null;
@@ -69,6 +69,20 @@ export function PrmDashboardSidebar({
             <rect x="3" y="14" width="7" height="7" rx="1.5" />
           </svg>
           <span>{t("menu.dashboard")}</span>
+        </button>
+
+        <button
+          type="button"
+          className={`prm-nav-item ${activeMenu === "tariffs" ? "prm-nav-item-active" : ""}`}
+          onClick={() => onMenuSelect("tariffs")}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="m21 21-4.34-4.34" />
+            <circle cx="11" cy="11" r="8" />
+            <line x1="11" y1="8" x2="11" y2="14" />
+            <line x1="8" y1="11" x2="14" y2="11" />
+          </svg>
+          <span>جستجوی کد تعرفه</span>
         </button>
 
         <span className="prm-nav-group-label">{t("menu.sections.ai")}</span>
@@ -168,20 +182,6 @@ export function PrmDashboardSidebar({
             <path d="m9 15 3-3 3 3" />
           </svg>
           <span>{t("menu.export")}</span>
-        </button>
-
-        <button
-          type="button"
-          className="prm-nav-item"
-          onClick={() => onItemClick(t("menu.import"), t("menu.importDesc"))}
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14 2 14 8 20 8" />
-            <path d="M12 12v6" />
-            <path d="m9 15 3 3 3-3" />
-          </svg>
-          <span>{t("menu.import")}</span>
         </button>
 
         <button

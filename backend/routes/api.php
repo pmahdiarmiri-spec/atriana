@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\PrmSupport\PrmAdminTicketController;
 use App\Http\Controllers\Api\PrmSupport\PrmSuperAdminTicketController;
 use App\Http\Controllers\Api\PrmSupport\PrmTicketCategoryController;
 use App\Http\Controllers\Api\PrmSupport\PrmTicketController;
+use App\Http\Controllers\Api\PrmTariffSearch\PrmTariffSearchController;
 use App\Http\Middleware\PrmAdmin\PrmRequireAdminRoleMiddleware;
 use App\Http\Middleware\PrmAdmin\PrmRequireSuperAdminMiddleware;
 use App\Http\Middleware\PrmAdmin\PrmVerifyAdminGateMiddleware;
@@ -72,6 +73,10 @@ Route::prefix('v1/settings')->middleware('auth:sanctum')->group(function () {
     Route::post('/email/verify/request', [PrmAccountSettingsController::class, 'requestEmailVerification']);
     Route::post('/email/verify/confirm', [PrmAccountSettingsController::class, 'confirmEmailVerification']);
     Route::get('/plans', [PrmSubscriptionController::class, 'getUserPlans']);
+});
+
+Route::prefix('v1/tariffs')->middleware('auth:sanctum')->group(function () {
+    Route::get('/search', [PrmTariffSearchController::class, 'search']);
 });
 
 Route::prefix('v1/support')->middleware('auth:sanctum')->group(function () {
