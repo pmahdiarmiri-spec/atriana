@@ -1,0 +1,135 @@
+{
+  "brand": {
+    "name": "ATRIANA Platform",
+    "tagline": "Smart Trade Management"
+  },
+  "user": {
+    "planActive": "Active Plan"
+  },
+  "status": {
+    "loading": "Loading ATRIANA Dashboard...",
+    "betaVersion": "Platform Beta Version",
+    "comingSoonBadge": "Coming Soon",
+    "verified": "Verified",
+    "understand": "Got it",
+    "loggingOut": "Logging out..."
+  },
+  "header": {
+    "greeting": "Hello, {name}",
+    "welcome": "Welcome to ATRIANA Integrated International Trade Management Panel"
+  },
+  "menu": {
+    "sections": {
+      "ai": "Artificial Intelligence",
+      "management": "Management",
+      "reports": "Reports & Communications"
+    },
+    "dashboard": "Dashboard",
+    "ai": "ATRIANA AI",
+    "aiDesc": "Smart trade consulting and target market analysis",
+    "wallet": "Multi-Currency Wallet",
+    "walletDesc": "Integrated currency payment and account top-up",
+    "company": "My Company",
+    "companyDesc": "Company profile, legal verification and documents",
+    "myAds": "My Listings",
+    "myAdsDesc": "View and monitor registered trade listings",
+    "createAd": "Create Listing",
+    "createAdDesc": "Introduce new products and register in import/export directory",
+    "meetings": "Meetings Management",
+    "meetingsDesc": "Host and manage international video conferences",
+    "export": "Export",
+    "exportDesc": "Analyze foreign markets and export opportunities",
+    "import": "Import",
+    "importDesc": "Customs clearance data and import analytics",
+    "customDashboard": "Custom Analytics",
+    "customDashboardDesc": "Custom analytics and insights",
+    "hsCode": "HS Code Search",
+    "hsCodeDesc": "International customs tariffs and HS codes",
+    "messages": "My Messages",
+    "messagesDesc": "View and manage communications and inquiries",
+    "support": "Support & Tickets",
+    "supportDesc": "Submit and track customer support requests",
+    "settings": "Settings",
+    "settingsDesc": "Account settings and security management",
+    "logout": "Logout"
+  },
+  "quickAccess": {
+    "title": "Quick Access"
+  },
+  "stats": {
+    "wallet": {
+      "title": "Currency Wallet",
+      "desc": "Transactions, balance deposits and USDT account",
+      "label": "Wallet Balance",
+      "unit": "USDT",
+      "value": "0"
+    },
+    "activeAds": {
+      "title": "Active Listings",
+      "desc": "List of your published trade products and services",
+      "label": "Active Listings",
+      "unit": "Items",
+      "value": "0"
+    },
+    "verification": {
+      "title": "Verification Level",
+      "desc": "Your company identity and legal verification is approved",
+      "label": "Verification Level"
+    }
+  },
+  "support": {
+    "list": {
+      "title": "Support Tickets",
+      "newTicket": "New Ticket",
+      "empty": "You have no tickets yet"
+    },
+    "categoryLabel": "Category: {name}",
+    "replies": "{count} replies",
+    "status": {
+      "open": "Open",
+      "answered": "Answered",
+      "pending_user": "Waiting for you",
+      "closed": "Closed"
+    },
+    "priority": {
+      "low": "Low",
+      "normal": "Normal",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "form": {
+      "title": "Submit Support Ticket",
+      "category": "Category",
+      "priority": "Priority",
+      "subject": "Subject",
+      "subjectPlaceholder": "Enter the ticket subject",
+      "message": "Description",
+      "messagePlaceholder": "Describe your issue or request in detail",
+      "submit": "Submit Ticket",
+      "submitting": "Submitting...",
+      "errors": {
+        "category": "Selecting a category is required",
+        "subject": "Subject must be at least 3 characters",
+        "message": "Description must be at least 10 characters"
+      }
+    },
+    "thread": {
+      "adminName": "ATRIANA Support",
+      "userName": "You",
+      "closeTicket": "Close Ticket",
+      "closedNotice": "This ticket is closed",
+      "replyPlaceholder": "Write your reply...",
+      "send": "Send Reply",
+      "sending": "Sending...",
+      "errors": {
+        "empty": "Please enter your reply"
+      }
+    },
+    "errors": {
+      "loadFailed": "Failed to load support data",
+      "createFailed": "Failed to create ticket, please try again",
+      "sendFailed": "Failed to send message, please try again",
+      "closeFailed": "Failed to close ticket"
+    }
+  }
+}

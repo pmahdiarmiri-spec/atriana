@@ -1,0 +1,34 @@
+{
+  "brand": "ATRIANA",
+  "slogan": "Smart Business Solutions",
+  "footer_slogan": "Intelligence in Global Trade",
+  "footer_desc": "We eliminate the complexity of raw data. By collecting, refining, and accurately categorizing millions of customs records, ATRIANA provides the clearest picture of the trade market to let you make decisions without trial and error.",
+  "testConnection": "Test Connection",
+  "auth": {
+    "login_register": "Login / Register"
+  },
+  "menu": {
+    "home": "Home",
+    "strategy": "Strategy",
+    "ads": "Ads",
+    "companies": "Companies",
+    "blog": "Blog",
+    "contact": "Contact Us",
+    "about": "About Us",
+    "pricing": "Services & Pricing",
+    "rules": "Terms & Conditions",
+    "faq": "FAQ"
+  },
+  "footer": {
+    "quick_links": "Quick Access",
+    "services_title": "Data & Platform Services",
+    "hs_code": "Smart HS Code Search",
+    "ahp": "AHP Strategy & Analysis",
+    "reports": "Custom Reports for Organizations",
+    "contact_info": "Contact Info",
+    "address": "Khorasan Razavi",
+    "privacy": "Privacy & Security",
+    "terms": "Terms of Service",
+    "copyright": "All material and intellectual rights of this platform are reserved for ATRIANA © 2026"
+  }
+}

@@ -1,0 +1,27 @@
+# Dependencies
+**/node_modules/
+**/vendor/
+
+# Environment and sensitive data
+**/.env
+**/.env.*
+!**/.env.example
+
+# Build outputs
+**/dist/
+**/build/
+**/.next/
+**/out/
+
+# Caches and logs
+**/storage/*.key
+**/storage/logs/*
+**/storage/framework/cache/*
+**/storage/framework/sessions/*
+**/storage/framework/views/*
+**/*.log
+**/.phpunit.cache/
+
+# System files
+.DS_Store
+Thumbs.db

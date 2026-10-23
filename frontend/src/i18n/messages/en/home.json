@@ -1,0 +1,366 @@
+{
+  "hero": {
+    "badge": "Intelligent Global Trade Infrastructure",
+    "brand": "ATRIANA;",
+    "titleLineOne": "Intelligence in",
+    "titleLineTwo": "International Trade",
+    "phrases": [
+      "The latest international trade data",
+      "Intelligent analysis of global markets",
+      "Discovering real export opportunities",
+      "Accurate data-driven decision-making",
+      "Transparent access to global trade chains"
+    ],
+    "cta": "Start Collaboration",
+    "stats": {
+      "records": {
+        "value": "+4",
+        "label": "Million Trade Records"
+      },
+      "countries": {
+        "value": "+150",
+        "label": "Countries Covered"
+      },
+      "update": {
+        "value": "2026",
+        "label": "Latest Update"
+      }
+    },
+    "map": {
+      "ariaLabel": "Animated map of ATRIANA international trade routes",
+      "liveRoutes": "Active Trade Routes",
+      "coverage": "Global Data Coverage"
+    }
+  },
+  "ai": {
+    "badge": "ATRIANA Senior AI Assistant",
+    "titlePrefix": "Business Intelligence",
+    "brand": "ATRIANA",
+    "description": "Unlock all aspects of international trade, global market analysis, cross-border pricing, and hidden export opportunities with ATRIANA's senior trade advisor brain.",
+    "cta": "Enter Business Intelligence Panel",
+    "stats": {
+      "accuracy": {
+        "value": "98%",
+        "label": "Market Analysis Accuracy"
+      },
+      "support": {
+        "value": "24/7",
+        "label": "Online Support & Advisory"
+      }
+    },
+    "terminal": {
+      "liveBadge": "Direct Connection to Global Customs & Trade Data",
+      "userQueryTitle": "Merchant Query",
+      "userQuery": "What is the comprehensive export market analysis for handmade silk carpets regarding global value chain entry and strategic business plan structure?",
+      "aiResponseTitle": "ATRIANA Senior Analysis",
+      "aiResponseIntro": "Export potential analysis for handmade silk carpets as one of the most exquisite luxury commercial assets is presented as follows:",
+      "section1": {
+        "title": "1) Product Specifications:",
+        "item1": "- Pure silk carpet, silk warp, or pictorial carpet with authentic weave (Qom, Tabriz, Isfahan, Kashan)."
+      },
+      "section2": {
+        "title": "2) Target Market Recommendations:",
+        "item1": "- China & Hong Kong (extraordinary demand growth for luxury items)",
+        "item2": "- Europe (Germany, Italy, France, Switzerland) for collectors",
+      "item3": "- Russia (emerging high-wealth market with optimal physical accessibility)"
+      },
+      "section3": {
+        "title": "3) Strategic Export Plan Structure:",
+        "item1": "- Multilingual certification and professional high-res photography of weave and signature.",
+        "item2": "- Cross-border pricing based on raw material quality grade (natural dye and knot density).",
+        "item3": "- B2B network expansion with specialized galleries in target countries."
+      }
+    }
+  },
+  "ahp": {
+    "badge": "AHP Decision Making System",
+    "new": "NEW",
+    "title": "Finding the best export market shouldn't be based on guesswork.",
+    "description": "We are developing an intelligent system using scientific AHP methodology and your data to calculate the optimal export target.",
+    "previewBtn": "How It Works (Preview)",
+    "enterPanelBtn": "Enter AHP Calculator",
+    "features": {
+      "feat1Title": "Scientific Pairwise Comparison",
+      "feat1Desc": "Eliminating human bias in weighting",
+      "feat2Title": "Strategic Hierarchy",
+      "feat2Desc": "Simultaneous analysis of all dimensions",
+      "feat3Title": "Consistency Check (CR)",
+      "feat3Desc": "Guaranteeing logical decisions"
+    },
+    "demo": {
+      "title": "Live AHP Algorithm Simulator",
+      "subtitle": "Interactive preview of data calculation process",
+      "runBtn": "Run Live Demo",
+      "resetBtn": "Reset",
+      "step0Desc": "Click the run demo button to see how pairwise comparisons seamlessly transform into final market rankings.",
+      "step1Title": "Step 1: Pairwise Criteria Comparison",
+      "step1Sub": "Importance Ratio Weighting",
+      "step1Label": "Target country vs Home country preference:",
+      "step2Badge": "Consistency Ratio (CR) = 0.04 (Passed)",
+      "step2Desc": "Calculating eigenvector and normalizing decision matrix...",
+      "step25Text": "Calculation Successfully Completed!",
+      "step3Title": "Final Export Strategy Result",
+      "step3Sub": "Recommended by System",
+      "c1": "Home Country Factors",
+      "c2": "Firm Factors",
+      "c3": "Product Factors",
+      "c4": "Target Country Factors",
+      "s1": "Direct Export",
+      "s2": "Foreign Direct Investment (FDI)",
+      "s3": "Indirect Export"
+    },
+    "modal": {
+      "title": "What is Analytic Hierarchy Process (AHP)?",
+      "subtitle": "AHP is a scientific decision-making method helping you select the best strategy for entering international markets.",
+      "steps": {
+        "step1": {
+          "title": "1. Decision Criteria Comparison",
+          "desc": "First, compare the importance of 4 key criteria: Home country, Firm, Product, and Target country factors."
+        },
+        "step2": {
+          "title": "2. Strategic Options Evaluation",
+          "desc": "Then compare 3 strategies for each criterion: Indirect Export, Direct Export, and Foreign Direct Investment (FDI)."
+        },
+        "step3": {
+          "title": "3. Scientific Calculation & Prioritization",
+          "desc": "The AHP algorithm analyzes your input and calculates weights for each criterion."
+        },
+        "step4": {
+          "title": "4. Consistency Ratio Check (CR)",
+          "desc": "The system validates your answers. A Consistency Ratio (CR) below 0.1 ensures logical consistency."
+        },
+        "step5": {
+          "title": "5. Final Decision Output",
+          "desc": "Get a full ranking of strategies, criterion weights, and a final actionable recommendation."
+        }
+      },
+      "whyTitle": "Why AHP?",
+      "whyDesc": "This method ensures your decision is",
+      "whyHighlight": "scientific, transparent, and defensible",
+      "whyEnd": "."
+    }
+  },
+  "dataPlatform": {
+    "badge": "Why Choose Us?",
+    "title": "The First and Most Comprehensive Trade Data Platform",
+    "description": "We don't just advise; by providing direct access to 4 million data records from 150 countries worldwide, we map out your trade roadmap with real data. ATRIANA is Iran's first intelligent reference for export and import data.",
+    "stats": {
+      "recordsVal": "4 Million+",
+      "recordsLbl": "Pure Data Records",
+      "countriesVal": "150+ Countries",
+      "countriesLbl": "Trade Destination & Origin"
+    },
+    "cards": {
+      "card1Title": "Largest Database",
+      "card1Desc": "Direct access to 4 million categorized customs and trade records.",
+      "card2Title": "Global Coverage (150 Countries)",
+      "card2Desc": "Accurate monitoring of imports and exports across 150+ countries with full details.",
+      "card3Title": "Live Data (2025-2026)",
+      "card3Desc": "Most up-to-date global market data, including the recent 10-month data.",
+      "card4Title": "Intelligent Market Analysis",
+      "card4Desc": "Converting raw data into analytical charts for profitable decision-making."
+    }
+  },
+  "services": {
+    "badge": "Specialized Services 1404",
+    "mainTitle": "Smart Trade Tools",
+    "s1Title": "International Trade Dashboards",
+    "s1Desc": "Analyze raw export and import data with advanced filters and visually appealing charts.",
+    "s1Feats": "Time and location filters,Dollar and weight value display",
+    "s2Title": "Dedicated Business Intelligence",
+    "s2Desc": "Trade-focused AI connected to the database for analytical reports and commercial consulting.",
+    "s2Feats": "Import and export analytics,International trade consulting",
+    "s3Title": "HS Code Search",
+    "s3Desc": "Access the full list of tariff codes (HS Code) with tariff descriptions and related chapters.",
+    "s3Feats": "All trade records,Fast and precise search",
+    "s4Title": "Market Entry Strategy",
+    "s4Desc": "Identify and prioritize market entry strategies for international markets using AHP.",
+    "s4Feats": "Professional AHP analysis,FDI and export evaluation",
+    "s5Title": "Company Profiles",
+    "s5Desc": "Create a credible company page with full business details, licenses, and product catalogs.",
+    "s5Feats": "Digital catalog,Registration and legal info",
+    "s6Title": "Specialized Listings",
+    "s6Desc": "Publish supply and demand listings for goods or services related to international trade.",
+    "s6Feats": "Global supply and demand,MOQ and delivery management",
+    "s7Title": "Internal Messenger",
+    "s7Desc": "In-app chat system with real-time Persian-English translation for communication with non-Iranian users.",
+    "s7Feats": "Two-way automatic translation,Direct contact with traders",
+    "s8Title": "Meeting Management",
+    "s8Desc": "Online meeting management service for scheduling and running negotiations between companies.",
+    "s8Feats": "Online meetings,Coordination and scheduling"
+  },
+  "flowStory": {
+    "badge": "ATRIANA Intelligent Process",
+    "title": "With each scroll, reveal one step of turning data into trade decisions",
+    "description": "This section mirrors the video-style narrative: data flow first, specialized processing next, and finally decision-ready output for executive use.",
+    "steps": [
+      {
+        "id": "collect",
+        "eyebrow": "STEP 01",
+        "title": "Data Collection",
+        "description": "Multi-source inputs from global markets, customs records, buyer behavior, goods flows, and trade signals are unified into one structured layer.",
+        "points": [
+          "Structured aggregation of raw export and import records from multiple data sources",
+          "Data cleansing, normalization, and harmonization to remove analytical noise",
+          "Preparation of a reliable dataset for strategic analysis and executive decision-making"
+        ]
+      },
+      {
+        "id": "process",
+        "eyebrow": "STEP 02",
+        "title": "Specialized Processing",
+        "description": "After collection, ATRIANA's intelligence engine turns data into insight, from trend analysis and market comparison to detecting hidden export opportunities.",
+        "points": [
+          "Modeling market behavior and detecting recurring patterns across target countries",
+          "Analyzing value, volume, time trends, and competitive advantage by product and destination",
+          "Generating analytical layers for management dashboards and trade advisory panels"
+        ]
+      },
+      {
+        "id": "delivery",
+        "eyebrow": "STEP 03",
+        "title": "Final Delivery",
+        "description": "The final output is delivered as usable dashboards, intelligent alerts, core KPIs, and a clear executive narrative for action.",
+        "points": [
+          "Delivering visual, fast, and executive-friendly outputs for strategy meetings",
+          "Producing decision-oriented reports for export, import, and new market evaluation",
+          "Displaying key indicators for continuous monitoring and growth opportunity detection"
+        ]
+      }
+    ],
+    "kpi": {
+      "badge": "Smart Watch",
+      "title": "Smart Watch (KPIs)",
+      "description": "After the process stages, the section transitions into a KPI-focused view so the user can see the final output through live indicators, critical alerts, and decision-ready summaries.",
+      "cards": [
+        {
+          "value": "150+",
+          "label": "Markets Monitored",
+          "caption": "Broad target-country coverage for continuous monitoring of opportunities and trade changes"
+        },
+        {
+          "value": "4M+",
+          "label": "Analytical Records",
+          "caption": "Transforming raw data into practical indicators for executives, analysts, and exporters"
+        },
+        {
+          "value": "24/7",
+          "label": "Continuous Tracking",
+          "caption": "Real-time visibility into trends, opportunities, and sensitive trade signals"
+        }
+      ]
+    }
+  },
+  "dynamicMonitor": {
+    "steps": [
+      {
+        "eyebrow": "Step 01",
+        "title": "Smart KPI Monitor",
+        "description": "Track the pulse of trade with a KPI dashboard. Monitor the overall export and import status by weight and dollar value, and analyze real-time changes and annual market growth at a glance using advanced time filters by year and month."
+      },
+      {
+        "eyebrow": "Step 02",
+        "title": "Provincial Atlas & Customs",
+        "description": "An interactive heat map of Iran displays each province’s trade performance in precise detail. By clicking any geographic region, you can review customs statistics, inbound and outbound trade volumes, and top goods for that province in a structured comparison."
+      },
+      {
+        "eyebrow": "Step 03",
+        "title": "International Trade Radar",
+        "description": "A global map of trade partners clearly visualizes export destinations and import origins. Use it to measure trade balance with each country, discover new target markets, and identify potential competitors on an international scale."
+      },
+      {
+        "eyebrow": "Step 04",
+        "title": "Trend & Product Analysis",
+        "description": "Advanced line and donut charts visualize market fluctuations over time. Review the market share of HS code product groups and forecast upward or downward trade patterns through seasonal trend analysis for strategic decision-making."
+      },
+      {
+        "eyebrow": "Step 05",
+        "title": "Raw Data & Reporting",
+        "description": "Full access to raw data tables is provided with search, sorting, and multi-layer filtering. For deeper analysis and offline calculations, you can export all displayed data to Excel and review every shipment in detail."
+      }
+    ]
+  },
+  "contact": {
+    "title": "Collaboration and Consultation",
+    "subtitle": "We are ready to transform your trade",
+    "description": "To receive free consultation, demo request, or any collaboration, complete and submit your information.",
+    "contact_info": "Contact Information",
+    "email_label": "Organizational Email:",
+    "social_title": "Connect on Social Networks",
+    "qr_desc": "Scan and save contact information",
+    "form_title": "Send Message",
+    "name": "Full Name*",
+    "name_placeholder": "e.g.: Ali Ahmadi",
+    "email": "Email*",
+    "email_placeholder": "example@domain.com",
+    "mobile": "Mobile Number (Optional)",
+    "mobile_placeholder": "e.g.: 0912xxxxxxx",
+    "subject": "Message Subject*",
+    "subject_placeholder": "Please select a subject",
+    "message": "Message Body*",
+    "message_placeholder": "Please write your message with details...",
+    "submit": "Send Message"
+  },
+    "faq": {
+    "faq_title": "Frequently Asked Questions",
+    "faq_subtitle": "Answering Your Business Concerns",
+    "faq_description": "Clarifying access to the most accurate market analyses in Iran.",
+    "filter_all": "All",
+    "filter_data_analysis": "Data & Analysis",
+    "filter_ahp": "AHP Methodology",
+    "filter_features": "Features",
+    "filter_ai": "Atriana AI",
+    "q1_title": "How reliable are your suggested strategies?",
+    "q1_answer": "We do not use guesswork to provide strategies. Our system is based on the scientific AHP methodology (Analytical Hierarchy Process). This system accurately weighs different factors, prioritizes target markets, and significantly reduces your decision-making risk.",
+    "q1_tag1": "Scientific AHP Analysis",
+    "q1_tag2": "Reduce Error Risk",
+    "q2_title": "Is my specific HS Code product available in the system?",
+    "q2_answer": "Yes, our database covers the most complete archive of tariff codes (HS Code). From petrochemical and industrial products to agricultural products and special goods, all customs tariff lines are defined and analyzable in the system.",
+    "q3_title": "How often is the data updated?",
+    "q3_answer": "Our data is updated monthly, immediately after official customs publication. You always have access to the latest fixed market status, which is essential for macro-commercial planning.",
+    "q3_tag1": "Access to 7 years of data up to the current month",
+    "q4_title": "What is your advantage over raw customs Excel data?",
+    "q4_answer": "Raw customs data is usually scattered, error-prone, and uncategorized. We have refined these millions of data rows and present them in analytical charts and visual dashboards so that you understand market trends at a glance, rather than getting lost in complex Excel files.",
+    "q5_title": "Is it possible to export Excel files?",
+    "q5_answer": "Currently, all analyses are presented in the smart web dashboard environment to maintain data security and integrity. However, the ability to export Excel files is on our development roadmap and will be added in future updates.",
+    "q5_tag1": "Coming Soon",
+    "q6_title": "Are my business strategy and searches kept confidential?",
+    "q6_answer": "Yes, 100%. We know that \"target product\" and \"target market\" are your trade secrets. Our platform is designed so that no behavioral analysis of your searches is done for selling to competitors. Your information is held in trust with us.",
+    "q7_title": "What exactly is Atriana AI and what does it do?",
+    "q7_answer": "Atriana is a dedicated and independent AI system designed by the Atriana development team and is connected to the comprehensive Iranian trade database with over 17 years of customs statistics. You can ask questions in Persian, and Atriana analyzes the data instantly and provides an accurate answer with statistics and figures.",
+    "q7_tag1": "Instant Analysis",
+    "q7_tag2": "17-Year Database",
+    "q7_tag3": "Persian Response",
+    "q8_title": "What types of questions can I ask Atriana?",
+    "q8_answer": "Atriana specializes in Iran's international trade sector. You can ask questions such as: 🔹 \"What was the volume of Iranian pistachio exports to Germany in 1403?\" 🔹 \"Show the top 10 imported goods from China\" 🔹 \"Iran's trade balance with Turkey in the last 3 years\" 🔹 \"What is the information for tariff code 08025210?\" 🔹 \"How is the customs clearance process?\"",
+    "q8_tag1": "Export & Import",
+    "q8_tag2": "Tariff & HS Code",
+    "q8_tag3": "Trade Balance",
+    "q8_tag4": "Customs Clearance",
+    "q9_title": "What is the basis of Atriana's information and how accurate is it?",
+    "q9_answer": "Atriana's information is based on the comprehensive Iranian trade database, which includes two main parts: 1. Tariff Information Bank: includes all HS codes, product names, chapters, and various tariff sections. 2. Trade Statistics Bank: includes import and export statistics, dollar and rial value, weight, country of origin/destination, customs, and province. All data are extracted, refined, and structured from official customs sources and are updated monthly.",
+    "q9_tag1": "Over 99% accuracy based on official data from the Customs of the Islamic Republic of Iran",
+    "q10_title": "Do I need to buy a plan to use Atriana?",
+    "q10_answer": "Yes, you need an active plan to access Atriana AI. Various plans with different features and durations are designed to suit your needs. After logging into your user account, you can purchase your desired subscription from the Plans page and start using it immediately.",
+    "q10_tag1": "Various Plans",
+    "q10_tag2": "Instant Activation",
+    "q11_title": "Are my conversations with Atriana confidential and secure?",
+    "q11_answer": "Yes, absolutely. All your conversations with Atriana are encrypted and remain confidential. We do not share any search information or your analyses with third parties. Your commercial questions, goods, and target markets are entirely held in trust with us, and no behavioral analysis of your activities is performed.",
+    "q11_tag1": "Data Encryption",
+    "q11_tag2": "No Sharing",
+    "q11_tag3": "Full Privacy",
+    "q12_title": "Does Atriana save my conversation history?",
+    "q12_answer": "Atriana maintains a temporary memory (Session) that keeps your last messages to provide more relevant responses later in the conversation. This memory is completely cleared when your session ends or by sending the /reset command. No permanent storage of chat content is performed.",
+    "q12_tag1": "To clear memory, just send /reset",
+    "q13_title": "How fast is Atriana's response time?",
+    "q13_answer": "Atriana responds to your questions on average in 5 to 15 seconds. This time may vary depending on the complexity of the question and the volume of data that needs to be analyzed. Simple questions like tariff code information are answered faster, and complex analyses like multi-year trade balance may take slightly longer.",
+    "q13_tag1": "Fast Response",
+    "q13_tag2": "Instant Analysis",
+    "q14_title": "Does Atriana only provide statistics or also offer consultation?",
+    "q14_answer": "In addition to providing accurate trade statistics, Atriana also has analysis and consultation capabilities. For example, it can identify the upward or downward trend of a market, prioritize high-demand countries for a product, and provide practical guidance in customs clearance. Atriana is like a smart 24-hour trade consultant by your side.",
+    "q14_tag1": "Accurate Statistics",
+    "q14_tag2": "Trend Analysis",
+    "q14_tag3": "Customs Consultation",
+    "q14_tag4": "24/7 Active"
+  }
+}
