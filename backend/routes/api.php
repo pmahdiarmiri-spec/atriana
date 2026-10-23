@@ -112,3 +112,5 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum', PrmRequireAdminRoleMiddle
         Route::get('/audit-logs', [PrmSuperAdminController::class, 'getAuditLogs']);
     });
 });
+
+require __DIR__ . '/prm_companies.php';

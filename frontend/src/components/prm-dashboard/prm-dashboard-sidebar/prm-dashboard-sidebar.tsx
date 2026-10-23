@@ -4,7 +4,12 @@ import { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { PrmUserProfileData } from "@/lib/prm-settings/prm-settings-api";
 
-export type PrmDashboardMenu = "dashboard" | "tariffs" | "settings" | "support";
+export type PrmDashboardMenu =
+  | "dashboard"
+  | "tariffs"
+  | "settings"
+  | "support"
+  | "company";
 
 interface PrmDashboardSidebarProps {
   user: PrmUserProfileData | null;
@@ -25,9 +30,14 @@ export function PrmDashboardSidebar({
 }: PrmDashboardSidebarProps): ReactNode {
   const t = useTranslations("dashboard");
 
-  const prmValidLastName = user?.last_name && user.last_name !== user.mobile ? user.last_name : "";
-  const prmFullName = [user?.first_name, prmValidLastName].filter(Boolean).join(" ").trim();
-  const prmDisplayName = prmFullName || user?.first_name || user?.mobile || user?.email || "...";
+  const prmValidLastName =
+    user?.last_name && user.last_name !== user.mobile ? user.last_name : "";
+  const prmFullName = [user?.first_name, prmValidLastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  const prmDisplayName =
+    prmFullName || user?.first_name || user?.mobile || user?.email || "...";
 
   return (
     <aside className="prm-dashboard-sidebar">
@@ -119,8 +129,8 @@ export function PrmDashboardSidebar({
 
         <button
           type="button"
-          className="prm-nav-item"
-          onClick={() => onItemClick(t("menu.company"), t("menu.companyDesc"))}
+          className={`prm-nav-item ${activeMenu === "company" ? "prm-nav-item-active" : ""}`}
+          onClick={() => onMenuSelect("company")}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="4" y="2" width="16" height="20" rx="2" />

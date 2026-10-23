@@ -11,6 +11,7 @@ import { PrmDashboardComingSoonModal } from "../prm-dashboard-coming-soon-modal/
 import { PrmDashboardSettings } from "../prm-dashboard-settings/prm-dashboard-settings";
 import { PrmDashboardSupport } from "../prm-dashboard-support/prm-dashboard-support";
 import { PrmTariffSearchView } from "@/components/prm-dashboard/prm-tariff-search/prm-tariff-search-view/prm-tariff-search-view";
+import { PrmDashboardCompanyView } from "@/components/prm-dashboard/prm-dashboard-company/prm-dashboard-company-view/prm-dashboard-company-view";
 import { PrmUserProfileData } from "@/lib/prm-settings/prm-settings-api";
 import {
     prmClearAuthSession,
@@ -82,6 +83,11 @@ export function PrmDashboardPage(): ReactNode {
 
         if (id === "hs-code" || id === "tariffs" || id === "tariff-search") {
             setPrmActiveMenu("tariffs");
+            return;
+        }
+
+        if (id === "company") {
+            setPrmActiveMenu("company");
             return;
         }
 
@@ -171,6 +177,10 @@ export function PrmDashboardPage(): ReactNode {
 
                 {prmActiveMenu === "support" && (
                     <PrmDashboardSupport token={prmToken} />
+                )}
+
+                {prmActiveMenu === "company" && (
+                    <PrmDashboardCompanyView token={prmToken} />
                 )}
             </main>
 
