@@ -237,107 +237,217 @@ export function PrmCompanyStepCapacity({
 
       <span className="prm-section-title">رسانه‌ها و مدارک هویتی شرکت</span>
 
-      <div className="prm-upload-card">
-        <div className="prm-upload-info">
-          <label>لوگوی شرکت</label>
-          <span>فرمت PNG، JPG یا SVG (حداکثر ۲۰ مگابایت)</span>
-          {formData.logo_path && (
-            <span className="prm-upload-success">فایل با موفقیت ذخیره شده است</span>
-          )}
+      <div className="prm-upload-box">
+        <div className="prm-upload-main-row">
+          <div className="prm-upload-info">
+            <label>لوگوی شرکت</label>
+            <span>فرمت PNG، JPG یا SVG (حداکثر ۲۰ مگابایت)</span>
+            {formData.logo_path && (
+              <span className="prm-upload-success-chip">✓ ذخیره شده در سامانه</span>
+            )}
+          </div>
+          <div className="prm-upload-action">
+            {uploadingField === "logo" ? (
+              <div className="prm-uploading-indicator">
+                <span className="prm-radar-spinner"></span>
+                در حال بارگذاری...
+              </div>
+            ) : (
+              <label className="prm-upload-btn-label">
+                انتخاب لوگو
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={readOnly}
+                  onChange={(e) => handleFileChange("logo", e)}
+                  style={{ display: "none" }}
+                />
+              </label>
+            )}
+          </div>
         </div>
-        <label className="prm-upload-btn-label">
-          {uploadingField === "logo" ? "در حال آپلود..." : "انتخاب لوگو"}
-          <input
-            type="file"
-            accept="image/*"
-            disabled={readOnly || uploadingField !== null}
-            onChange={(e) => handleFileChange("logo", e)}
-            style={{ display: "none" }}
-          />
-        </label>
+        {formData.logo_path && (
+          <div className="prm-preview-container">
+            <img
+              src={formData.logo_path}
+              alt="Logo Preview"
+              className="prm-preview-image"
+            />
+          </div>
+        )}
       </div>
 
-      <div className="prm-upload-card">
-        <div className="prm-upload-info">
-          <label>تصویر هدر / کاور رسمی شرکت</label>
-          <span>نسبت ۱۶:۹ افقی برای پس‌زمینه پروفایل</span>
-          {formData.cover_path && (
-            <span className="prm-upload-success">کاور ثبت شده است</span>
-          )}
+      <div className="prm-upload-box">
+        <div className="prm-upload-main-row">
+          <div className="prm-upload-info">
+            <label>تصویر هدر / کاور رسمی شرکت</label>
+            <span>نسبت ۱۶:۹ افقی برای پس‌زمینه پروفایل</span>
+            {formData.cover_path && (
+              <span className="prm-upload-success-chip">✓ کاور رسمی ذخیره شد</span>
+            )}
+          </div>
+          <div className="prm-upload-action">
+            {uploadingField === "cover" ? (
+              <div className="prm-uploading-indicator">
+                <span className="prm-radar-spinner"></span>
+                در حال بارگذاری...
+              </div>
+            ) : (
+              <label className="prm-upload-btn-label">
+                انتخاب کاور
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={readOnly}
+                  onChange={(e) => handleFileChange("cover", e)}
+                  style={{ display: "none" }}
+                />
+              </label>
+            )}
+          </div>
         </div>
-        <label className="prm-upload-btn-label">
-          {uploadingField === "cover" ? "در حال آپلود..." : "انتخاب هدر"}
-          <input
-            type="file"
-            accept="image/*"
-            disabled={readOnly || uploadingField !== null}
-            onChange={(e) => handleFileChange("cover", e)}
-            style={{ display: "none" }}
-          />
-        </label>
+        {formData.cover_path && (
+          <div className="prm-preview-container">
+            <img
+              src={formData.cover_path}
+              alt="Cover Preview"
+              className="prm-cover-preview-image"
+            />
+          </div>
+        )}
       </div>
 
-      <div className="prm-upload-card">
-        <div className="prm-upload-info">
-          <label>کاتالوگ رسمی شرکت (PDF)</label>
-          <span>معرفی محصولات، تجهیزات و مشخصات فنی</span>
-          {formData.catalog_path && (
-            <span className="prm-upload-success">کاتالوگ ثبت شده است</span>
-          )}
+      <div className="prm-upload-box">
+        <div className="prm-upload-main-row">
+          <div className="prm-upload-info">
+            <label>کاتالوگ رسمی شرکت (PDF)</label>
+            <span>معرفی محصولات، تجهیزات و مشخصات فنی</span>
+            {formData.catalog_path && (
+              <span className="prm-upload-success-chip">✓ کاتالوگ ذخیره شد</span>
+            )}
+          </div>
+          <div className="prm-upload-action">
+            {uploadingField === "catalog" ? (
+              <div className="prm-uploading-indicator">
+                <span className="prm-radar-spinner"></span>
+                در حال بارگذاری...
+              </div>
+            ) : (
+              <label className="prm-upload-btn-label">
+                انتخاب کاتالوگ
+                <input
+                  type="file"
+                  accept=".pdf"
+                  disabled={readOnly}
+                  onChange={(e) => handleFileChange("catalog", e)}
+                  style={{ display: "none" }}
+                />
+              </label>
+            )}
+          </div>
         </div>
-        <label className="prm-upload-btn-label">
-          {uploadingField === "catalog" ? "در حال آپلود..." : "انتخاب فایل کاتالوگ"}
-          <input
-            type="file"
-            accept=".pdf"
-            disabled={readOnly || uploadingField !== null}
-            onChange={(e) => handleFileChange("catalog", e)}
-            style={{ display: "none" }}
-          />
-        </label>
-      </div>
-
-      <div className="prm-upload-card">
-        <div className="prm-upload-info">
-          <label>رزومه حقوقی / پروفایل رسمی (PDF)</label>
-          <span>پیشینه سازمانی، افتخارات، چارت و صلاحیت‌ها</span>
-          {formData.resume_path && (
-            <span className="prm-upload-success">رزومه ثبت شده است</span>
-          )}
-        </div>
-        <label className="prm-upload-btn-label">
-          {uploadingField === "resume" ? "در حال آپلود..." : "انتخاب رزومه"}
-          <input
-            type="file"
-            accept=".pdf"
-            disabled={readOnly || uploadingField !== null}
-            onChange={(e) => handleFileChange("resume", e)}
-            style={{ display: "none" }}
-          />
-        </label>
-      </div>
-
-      <div className="prm-upload-card prm-company-form-full">
-        <div className="prm-upload-info">
-          <label>گالری تصاویر خطوط تولید و کارخانه</label>
-          <span>امکان انتخاب همزمان چندین تصویر</span>
-          {formData.gallery_paths && formData.gallery_paths.length > 0 && (
-            <span className="prm-upload-success">
-              {formData.gallery_paths.length} تصویر بارگذاری شده است
+        {formData.catalog_path && (
+          <div className="prm-preview-container">
+            <span className="prm-pdf-badge">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+              </svg>
+              فایل کاتالوگ PDF پیوست شده است
             </span>
-          )}
+          </div>
+        )}
+      </div>
+
+      <div className="prm-upload-box">
+        <div className="prm-upload-main-row">
+          <div className="prm-upload-info">
+            <label>رزومه حقوقی / پروفایل رسمی (PDF)</label>
+            <span>پیشینه سازمانی، افتخارات، چارت و صلاحیت‌ها</span>
+            {formData.resume_path && (
+              <span className="prm-upload-success-chip">✓ رزومه ثبت شد</span>
+            )}
+          </div>
+          <div className="prm-upload-action">
+            {uploadingField === "resume" ? (
+              <div className="prm-uploading-indicator">
+                <span className="prm-radar-spinner"></span>
+                در حال بارگذاری...
+              </div>
+            ) : (
+              <label className="prm-upload-btn-label">
+                انتخاب رزومه
+                <input
+                  type="file"
+                  accept=".pdf"
+                  disabled={readOnly}
+                  onChange={(e) => handleFileChange("resume", e)}
+                  style={{ display: "none" }}
+                />
+              </label>
+            )}
+          </div>
         </div>
-        <label className="prm-upload-btn-label">
-          {uploadingField === "gallery" ? "در حال ارسال..." : "افزودن تصاویر گالری"}
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            disabled={readOnly || uploadingField !== null}
-            onChange={(e) => handleFileChange("gallery", e)}
-            style={{ display: "none" }}
-          />
-        </label>
+        {formData.resume_path && (
+          <div className="prm-preview-container">
+            <span className="prm-pdf-badge">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              فایل رزومه PDF پیوست شده است
+            </span>
+          </div>
+        )}
+      </div>
+
+      <div className="prm-upload-box prm-company-form-full">
+        <div className="prm-upload-main-row">
+          <div className="prm-upload-info">
+            <label>گالری تصاویر خطوط تولید و کارخانه</label>
+            <span>امکان انتخاب همزمان چندین تصویر</span>
+            {formData.gallery_paths && formData.gallery_paths.length > 0 && (
+              <span className="prm-upload-success-chip">
+                ✓ {formData.gallery_paths.length} تصویر بارگذاری شده
+              </span>
+            )}
+          </div>
+          <div className="prm-upload-action">
+            {uploadingField === "gallery" ? (
+              <div className="prm-uploading-indicator">
+                <span className="prm-radar-spinner"></span>
+                در حال بارگذاری تصاویر...
+              </div>
+            ) : (
+              <label className="prm-upload-btn-label">
+                افزودن تصاویر گالری
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  disabled={readOnly}
+                  onChange={(e) => handleFileChange("gallery", e)}
+                  style={{ display: "none" }}
+                />
+              </label>
+            )}
+          </div>
+        </div>
+        {formData.gallery_paths && formData.gallery_paths.length > 0 && (
+          <div className="prm-gallery-preview-grid">
+            {formData.gallery_paths.map((imgUrl, idx) => (
+              <img
+                key={idx}
+                src={imgUrl}
+                alt={`Gallery ${idx + 1}`}
+                className="prm-gallery-preview-item"
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { PrmCompanyFormData, PrmIndustry } from "@/types/prm-company";
 import { PrmCompanyStepBasic } from "./steps/prm-company-step-basic";
 import { PrmCompanyStepLegal } from "./steps/prm-company-step-legal";
@@ -30,6 +30,47 @@ const STEPS = [
   { id: 4, title: "ظرفیت و اسناد", desc: "مقیاس، مدارک و کاتالوگ" },
 ];
 
+const STEP_FIELDS: Record<number, string[]> = {
+  1: ["name_fa", "name_en", "slogan", "industry_id", "activity_type", "description"],
+  2: [
+    "legal_structure",
+    "ownership_type",
+    "registration_number",
+    "national_id",
+    "economic_code",
+    "established_year",
+  ],
+  3: [
+    "phone",
+    "mobile",
+    "email",
+    "website",
+    "fax",
+    "country",
+    "province",
+    "city",
+    "postal_code",
+    "address",
+    "social_linkedin",
+    "social_instagram",
+    "social_telegram",
+    "social_whatsapp",
+  ],
+  4: [
+    "main_products",
+    "employee_count",
+    "annual_revenue",
+    "production_capacity",
+    "certifications",
+    "major_clients",
+    "logo",
+    "cover",
+    "catalog",
+    "resume",
+    "gallery",
+  ],
+};
+
 export function PrmCompanyForm({
   formData,
   industries,
@@ -45,15 +86,42 @@ export function PrmCompanyForm({
   const [currentStep, setCurrentStep] = useState<number>(1);
   const totalSteps = STEPS.length;
 
+  useEffect(() => {
+    const errorKeys = Object.keys(errors);
+    if (errorKeys.length === 0) return;
+
+    for (let step = 1; step <= totalSteps; step++) {
+      const fields = STEP_FIELDS[step] || [];
+      const hasErrorInStep = errorKeys.some((k) => fields.includes(k));
+      if (hasErrorInStep) {
+        setCurrentStep(step);
+        setTimeout(() => {
+          const firstErrField = errorKeys.find((k) => fields.includes(k));
+          if (firstErrField) {
+            const el =
+              document.querySelector(`[name="${firstErrField}"]`) ||
+              document.querySelector(".prm-form-field-error");
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+          }
+        }, 150);
+        break;
+      }
+    }
+  }, [errors]);
+
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep((prev) => prev + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const handlePrev = () => {
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -107,7 +175,7 @@ export function PrmCompanyForm({
         </div>
       </div>
 
-      <div className="prm-wizard-content">
+      <div className="prm-wizard-content" key={`step-${currentStep}`}>
         {currentStep === 1 && (
           <PrmCompanyStepBasic
             formData={formData}

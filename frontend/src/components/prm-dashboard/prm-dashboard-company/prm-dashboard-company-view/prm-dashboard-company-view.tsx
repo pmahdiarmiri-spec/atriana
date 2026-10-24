@@ -234,7 +234,7 @@ export function PrmDashboardCompanyView({
 
   if (isLoading) {
     return (
-      <div className="prm-liquid-glass-card" style={{ textAlign: "center", padding: "60px 0" }}>
+      <div className="prm-luxury-card" style={{ textAlign: "center", padding: "60px 0", color: "#94a3b8" }}>
         در حال بارگذاری اطلاعات شرکت...
       </div>
     );
@@ -255,7 +255,7 @@ export function PrmDashboardCompanyView({
 
   return (
     <div className="prm-company-container">
-      <div className="prm-liquid-glass-card">
+      <div className="prm-luxury-card">
         <div className="prm-company-header">
           <div className="prm-company-header-title">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -270,10 +270,10 @@ export function PrmDashboardCompanyView({
       </div>
 
       {company?.expires_at && (
-        <div className="prm-liquid-glass-card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div className="prm-luxury-card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <span style={{ fontSize: "0.85rem", color: "var(--prm-text-light)" }}>تاریخ انقضای اعتبار یک‌ساله:</span>
-            <strong style={{ color: company.is_expired ? "var(--prm-accent-color)" : "var(--prm-text-dark)" }}>
+            <span style={{ fontSize: "0.85rem", color: "var(--text-light)" }}>تاریخ انقضای اعتبار یک‌ساله:</span>
+            <strong style={{ color: company.is_expired ? "var(--accent-color)" : "var(--secondary-color)" }}>
               {new Date(company.expires_at).toLocaleDateString("fa-IR")}
             </strong>
           </div>
@@ -321,7 +321,7 @@ export function PrmDashboardCompanyView({
         </div>
       )}
 
-      <div className="prm-liquid-glass-card">
+      <div className="prm-luxury-card">
         <PrmCompanyForm
           formData={formData}
           industries={industries}
