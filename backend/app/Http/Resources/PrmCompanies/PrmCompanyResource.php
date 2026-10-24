@@ -8,13 +8,24 @@ use Illuminate\Support\Facades\Storage;
 
 class PrmCompanyResource extends JsonResource
 {
+    private function resolveUrl(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        $appUrl = rtrim(config('app.url') ?? 'http://localhost:8000', '/');
+        $cleanPath = ltrim($path, '/');
+
+        return $appUrl . '/storage/' . $cleanPath;
+    }
+
     public function toArray(Request $request): array
     {
-        $logoUrl = $this->logo_path ? Storage::url($this->logo_path) : null;
-        $coverUrl = $this->cover_path ? Storage::url($this->cover_path) : null;
-        $catalogUrl = $this->catalog_path ? Storage::url($this->catalog_path) : null;
-        $resumeUrl = $this->resume_path ? Storage::url($this->resume_path) : null;
-
         $gallery = is_array($this->gallery_paths) ? array_values(array_filter($this->gallery_paths)) : [];
         $certs = is_array($this->cert_paths) ? array_values(array_filter($this->cert_paths)) : [];
 
@@ -79,12 +90,12 @@ class PrmCompanyResource extends JsonResource
             'cert_paths' => $this->cert_paths,
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
-            'gallery_images' => array_map(fn ($p) => Storage::url($p), $gallery),
-            'cert_images' => array_map(fn ($p) => Storage::url($p), $certs),
-            'catalog_file' => $catalogUrl,
-            'resume_file' => $resumeUrl,
-            'logo_url' => $logoUrl,
-            'cover_url' => $coverUrl,
+            'gallery_images' => array_map(fn ($p) => $this->resolveUrl($p), $gallery),
+            'cert_images' => array_map(fn ($p) => $this->resolveUrl($p), $certs),
+            'catalog_file' => $this->resolveUrl($this->catalog_path),
+            'resume_file' => $this->resolveUrl($this->resume_path),
+            'logo_url' => $this->resolveUrl($this->logo_path),
+            'cover_url' => $this->resolveUrl($this->cover_path),
         ];
     }
 }

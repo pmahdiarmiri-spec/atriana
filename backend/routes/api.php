@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PrmAdmin\Companies\PrmAdminCompanyController;
 use App\Http\Controllers\Api\PrmAdmin\PrmAdminAuthController;
 use App\Http\Controllers\Api\PrmAdmin\PrmSuperAdminController;
 use App\Http\Controllers\Api\PrmAuth\PrmAuthController;
@@ -102,6 +103,12 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum', PrmRequireAdminRoleMiddle
         Route::get('/{ticket}', [PrmAdminTicketController::class, 'show']);
         Route::post('/{ticket}/reply', [PrmAdminTicketController::class, 'reply']);
         Route::patch('/{ticket}/status', [PrmAdminTicketController::class, 'updateStatus']);
+    });
+
+    Route::prefix('companies')->group(function () {
+        Route::get('/', [PrmAdminCompanyController::class, 'index']);
+        Route::get('/{company}', [PrmAdminCompanyController::class, 'show']);
+        Route::post('/{company}/review', [PrmAdminCompanyController::class, 'review']);
     });
 
     Route::middleware(PrmRequireSuperAdminMiddleware::class)->group(function () {

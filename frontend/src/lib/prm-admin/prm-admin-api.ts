@@ -6,6 +6,7 @@ import {
     PrmGateSlugMetadataResponse,
     PrmPaginatedResponse,
 } from "@/types/prm-admin";
+import { PrmCompanyAdminDetails } from "@/types/prm-companies/prm-company-admin";
 import { PrmTicket, PrmTicketMessage, PrmTicketStatus } from "@/types/prm-support";
 
 const prmApiBaseUrl =
@@ -299,6 +300,60 @@ export function prmAdminUpdateTicketStatus(
         {
             method: "PATCH",
             body: JSON.stringify({ status }),
+        },
+        token,
+    );
+}
+
+export function prmAdminGetCompanies(
+    token: string,
+    params?: {
+        status?: string;
+        search?: string;
+        page?: number;
+    },
+): Promise<PrmPaginatedResponse<PrmCompanyAdminDetails>> {
+    const searchParams = new URLSearchParams();
+    if (params?.status) searchParams.append("status", params.status);
+    if (params?.search) searchParams.append("search", params.search);
+    if (params?.page) searchParams.append("page", String(params.page));
+
+    const queryString = searchParams.toString();
+    return prmAdminRequest(
+        `/v1/admin/companies${queryString ? `?${queryString}` : ""}`,
+        {
+            method: "GET",
+        },
+        token,
+    );
+}
+
+export function prmAdminGetCompany(
+    token: string,
+    companyId: number,
+): Promise<{ status: "success"; code: string; company: PrmCompanyAdminDetails }> {
+    return prmAdminRequest(
+        `/v1/admin/companies/${companyId}`,
+        {
+            method: "GET",
+        },
+        token,
+    );
+}
+
+export function prmAdminReviewCompany(
+    token: string,
+    companyId: number,
+    payload: {
+        status: string;
+        admin_message?: string;
+    },
+): Promise<{ status: "success"; code: string; company: PrmCompanyAdminDetails }> {
+    return prmAdminRequest(
+        `/v1/admin/companies/${companyId}/review`,
+        {
+            method: "POST",
+            body: JSON.stringify(payload),
         },
         token,
     );
