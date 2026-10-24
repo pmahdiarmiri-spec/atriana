@@ -26,8 +26,7 @@ return [
     'payamak' => [
         'username' => env('SMS_USERNAME'),
         'password' => env('SMS_PASSWORD'),
-        'pattern_id' => env('SMS_PATTERN_ID'),
-        'api_url' => env('SMS_API_URL', 'https://rest.payamak-panel.com/api/SendSMS/BaseServiceNumber'),
+        'api_url' => env('SMS_API_URL', 'https://rest.payamak-panel.com/api/SendSMS/SendSMS'),
+        'from' => env('SMS_FROM_NUMBER', '90005379'),
     ],
-
 ];

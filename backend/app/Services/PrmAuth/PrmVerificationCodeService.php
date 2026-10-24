@@ -6,6 +6,7 @@ use App\Enums\PrmAuth\PrmVerificationChannel;
 use App\Enums\PrmAuth\PrmVerificationPurpose;
 use App\Exceptions\PrmAuth\PrmAuthException;
 use App\Models\PrmVerificationCode;
+use App\Services\PrmNotifications\Channels\PrmAuthSmsNotificationService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ use Throwable;
 class PrmVerificationCodeService
 {
     public function __construct(
-        protected PrmSmsService $smsService,
+        protected PrmAuthSmsNotificationService $smsNotification,
         protected PrmEmailVerificationService $emailService
     ) {
     }
@@ -49,10 +50,17 @@ class PrmVerificationCodeService
             $plainCode = (string) random_int(100000, 999999);
 
             if ($channel === PrmVerificationChannel::SMS) {
-                $this->smsService->sendVerificationCode(
+                $result = $this->smsNotification->sendVerificationCode(
                     $identifier,
                     $plainCode
                 );
+
+                if (! $result->isSuccessful()) {
+                    throw new PrmAuthException(
+                        'prm_auth_sms_delivery_failed:' . $result->getErrorCode(),
+                        503
+                    );
+                }
             } else {
                 $this->emailService->sendVerificationCode(
                     $identifier,
