@@ -1,7 +1,8 @@
 "use client";
 
-import { ReactNode, ChangeEvent } from "react";
-import { PrmCompanyFormData } from "@/types/prm-company";
+import { ReactNode, ChangeEvent, useState, useEffect, useTransition } from "react";
+import { PrmCompanyFormData, PrmCountry, PrmProvince, PrmCity } from "@/types/prm-company";
+import { prmGetCountries, prmGetProvinces, prmGetCities } from "@/lib/prm-companies/prm-companies-api";
 
 interface PrmCompanyStepContactProps {
   formData: PrmCompanyFormData;
@@ -16,6 +17,138 @@ export function PrmCompanyStepContact({
   readOnly,
   onChange,
 }: PrmCompanyStepContactProps): ReactNode {
+  const [, startTransition] = useTransition();
+
+  const [countries, setCountries] = useState<PrmCountry[]>([]);
+  const [provinces, setProvinces] = useState<PrmProvince[]>([]);
+  const [cities, setCities] = useState<PrmCity[]>([]);
+
+  const [selectedCountryId, setSelectedCountryId] = useState<number | null>(null);
+  const [selectedProvinceId, setSelectedProvinceId] = useState<number | null>(null);
+
+  const [loadingCountries, setLoadingCountries] = useState<boolean>(false);
+  const [loadingProvinces, setLoadingProvinces] = useState<boolean>(false);
+  const [loadingCities, setLoadingCities] = useState<boolean>(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoadingCountries(true);
+
+    prmGetCountries()
+      .then((res) => {
+        if (!isMounted) return;
+        setCountries(res.countries || []);
+
+        const currentCountry = res.countries.find(
+          (c) => c.name_fa === (formData.country || "ایران") || c.name_en === formData.country
+        );
+
+        if (currentCountry) {
+          setSelectedCountryId(currentCountry.id);
+          if (!formData.country) {
+            onChange("country", currentCountry.name_fa);
+          }
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (isMounted) setLoadingCountries(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!selectedCountryId) {
+      setProvinces([]);
+      setSelectedProvinceId(null);
+      return;
+    }
+
+    let isMounted = true;
+    setLoadingProvinces(true);
+
+    prmGetProvinces(selectedCountryId)
+      .then((res) => {
+        if (!isMounted) return;
+        const list = res.provinces || [];
+        setProvinces(list);
+
+        if (formData.province) {
+          const matchedProvince = list.find(
+            (p) => p.name_fa === formData.province || p.name_en === formData.province
+          );
+          if (matchedProvince) {
+            setSelectedProvinceId(matchedProvince.id);
+          }
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (isMounted) setLoadingProvinces(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedCountryId]);
+
+  useEffect(() => {
+    if (!selectedProvinceId) {
+      setCities([]);
+      return;
+    }
+
+    let isMounted = true;
+    setLoadingCities(true);
+
+    prmGetCities(selectedProvinceId)
+      .then((res) => {
+        if (!isMounted) return;
+        setCities(res.cities || []);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (isMounted) setLoadingCities(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedProvinceId]);
+
+  const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const countryName = e.target.value;
+    const countryObj = countries.find((c) => c.name_fa === countryName);
+
+    startTransition(() => {
+      onChange("country", countryName);
+      onChange("province", "");
+      onChange("city", "");
+      setSelectedCountryId(countryObj ? countryObj.id : null);
+      setSelectedProvinceId(null);
+      setCities([]);
+    });
+  };
+
+  const handleProvinceChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const provName = e.target.value;
+    const provObj = provinces.find((p) => p.name_fa === provName);
+
+    startTransition(() => {
+      onChange("province", provName);
+      onChange("city", "");
+      setSelectedProvinceId(provObj ? provObj.id : null);
+    });
+  };
+
+  const handleCityChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const cityName = e.target.value;
+    onChange("city", cityName);
+  };
+
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -94,42 +227,81 @@ export function PrmCompanyStepContact({
         />
       </div>
 
-      <div className="prm-form-field">
+      <div className={`prm-form-field ${errors.country ? "prm-form-field-error" : ""}`}>
         <label>کشور محل استقرار</label>
-        <input
-          type="text"
-          name="country"
-          value={formData.country || "ایران"}
-          onChange={handleInputChange}
-          disabled={readOnly}
-          className="prm-form-input"
-        />
+        <div className="prm-liquid-select-wrapper">
+          <select
+            name="country"
+            value={formData.country || ""}
+            onChange={handleCountryChange}
+            disabled={readOnly || loadingCountries}
+            className="prm-form-input prm-liquid-select"
+          >
+            <option value="">
+              {loadingCountries ? "در حال دریافت کشورها..." : "انتخاب کشور"}
+            </option>
+            {countries.map((c) => (
+              <option key={`country-${c.id}`} value={c.name_fa}>
+                {c.name_fa}
+              </option>
+            ))}
+          </select>
+        </div>
+        {errors.country && <span className="prm-field-error-msg">{errors.country[0]}</span>}
       </div>
 
-      <div className="prm-form-field">
+      <div className={`prm-form-field ${errors.province ? "prm-form-field-error" : ""}`}>
         <label>استان</label>
-        <input
-          type="text"
-          name="province"
-          value={formData.province || ""}
-          onChange={handleInputChange}
-          disabled={readOnly}
-          className="prm-form-input"
-          placeholder="تهران / اصفهان..."
-        />
+        <div className="prm-liquid-select-wrapper">
+          <select
+            name="province"
+            value={formData.province || ""}
+            onChange={handleProvinceChange}
+            disabled={readOnly || loadingProvinces || !selectedCountryId}
+            className="prm-form-input prm-liquid-select"
+          >
+            <option value="">
+              {loadingProvinces
+                ? "در حال بارگذاری استان‌ها..."
+                : !selectedCountryId
+                ? "ابتدا کشور را انتخاب کنید"
+                : "انتخاب استان"}
+            </option>
+            {provinces.map((p) => (
+              <option key={`province-${p.id}`} value={p.name_fa}>
+                {p.name_fa}
+              </option>
+            ))}
+          </select>
+        </div>
+        {errors.province && <span className="prm-field-error-msg">{errors.province[0]}</span>}
       </div>
 
-      <div className="prm-form-field">
+      <div className={`prm-form-field ${errors.city ? "prm-form-field-error" : ""}`}>
         <label>شهر</label>
-        <input
-          type="text"
-          name="city"
-          value={formData.city || ""}
-          onChange={handleInputChange}
-          disabled={readOnly}
-          className="prm-form-input"
-          placeholder="تهران / نجف‌آباد..."
-        />
+        <div className="prm-liquid-select-wrapper">
+          <select
+            name="city"
+            value={formData.city || ""}
+            onChange={handleCityChange}
+            disabled={readOnly || loadingCities || !selectedProvinceId}
+            className="prm-form-input prm-liquid-select"
+          >
+            <option value="">
+              {loadingCities
+                ? "در حال بارگذاری شهرها..."
+                : !selectedProvinceId
+                ? "ابتدا استان را انتخاب کنید"
+                : "انتخاب شهر"}
+            </option>
+            {cities.map((ct) => (
+              <option key={`city-${ct.id}`} value={ct.name_fa}>
+                {ct.name_fa}
+              </option>
+            ))}
+          </select>
+        </div>
+        {errors.city && <span className="prm-field-error-msg">{errors.city[0]}</span>}
       </div>
 
       <div className="prm-form-field">

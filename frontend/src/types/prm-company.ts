@@ -10,6 +10,26 @@ export type PrmCompanyActivityType =
   | "distribution"
   | "trading";
 
+export interface PrmCountry {
+  id: number;
+  name_fa: string;
+  name_en: string | null;
+}
+
+export interface PrmProvince {
+  id: number;
+  country_id: number;
+  name_fa: string;
+  name_en: string | null;
+}
+
+export interface PrmCity {
+  id: number;
+  province_id: number;
+  name_fa: string;
+  name_en: string | null;
+}
+
 export interface PrmIndustry {
   id: number;
   name_fa: string;

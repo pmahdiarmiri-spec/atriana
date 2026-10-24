@@ -2,6 +2,9 @@ import {
   PrmCompany,
   PrmCompanyFormData,
   PrmIndustry,
+  PrmCountry,
+  PrmProvince,
+  PrmCity,
   PrmCompanyValidationError,
 } from "@/types/prm-company";
 
@@ -20,16 +23,19 @@ export class PrmCompanyApiError extends Error {
 
 async function prmCompanyRequest<T>(
   path: string,
-  token: string,
+  token?: string,
   options: RequestInit = {}
 ): Promise<T> {
   const isFormData = typeof FormData !== "undefined" && options.body instanceof FormData;
 
   const headers: Record<string, string> = {
     Accept: "application/json",
-    Authorization: `Bearer ${token}`,
     ...((options.headers as Record<string, string>) || {}),
   };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
   if (!isFormData) {
     headers["Content-Type"] = "application/json";
@@ -51,6 +57,30 @@ async function prmCompanyRequest<T>(
   }
 
   return data as T;
+}
+
+export function prmGetCountries(): Promise<{ status: string; countries: PrmCountry[] }> {
+  return prmCompanyRequest("/v1/locations/countries", undefined, {
+    method: "GET",
+  });
+}
+
+export function prmGetProvinces(
+  countryId?: number
+): Promise<{ status: string; provinces: PrmProvince[] }> {
+  const query = countryId ? `?country_id=${countryId}` : "";
+  return prmCompanyRequest(`/v1/locations/provinces${query}`, undefined, {
+    method: "GET",
+  });
+}
+
+export function prmGetCities(
+  provinceId?: number
+): Promise<{ status: string; cities: PrmCity[] }> {
+  const query = provinceId ? `?province_id=${provinceId}` : "";
+  return prmCompanyRequest(`/v1/locations/cities${query}`, undefined, {
+    method: "GET",
+  });
 }
 
 export function prmGetMyCompany(
