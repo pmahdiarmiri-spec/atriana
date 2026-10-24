@@ -1,0 +1,256 @@
+:root {
+  --prm-primary-color: #0f172a;
+  --prm-secondary-color: #f59e0b;
+  --prm-accent-color: #ea580c;
+  --prm-text-dark: #1e293b;
+  --prm-text-light: #64748b;
+  --prm-bg-light: #f8fafc;
+  --prm-white: #ffffff;
+}
+
+.prm-liquid-hero-wrapper {
+  position: relative;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(245, 158, 11, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 82% 70%, rgba(234, 88, 12, 0.12) 0%, transparent 50%),
+    linear-gradient(165deg, #0b1120 0%, var(--prm-primary-color) 55%, #131d36 100%);
+  border-bottom-left-radius: 2.75rem;
+  border-bottom-right-radius: 2.75rem;
+  overflow: hidden;
+  box-shadow:
+    0 25px 60px -15px rgba(15, 23, 42, 0.55),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.12);
+}
+
+.prm-liquid-hero-ambient-orb-one {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  top: -140px;
+  right: -100px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, transparent 70%);
+  filter: blur(55px);
+  pointer-events: none;
+}
+
+.prm-liquid-hero-ambient-orb-two {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  bottom: -120px;
+  left: -80px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(234, 88, 12, 0.18) 0%, transparent 70%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+.prm-liquid-glass-nav-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.95rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.11) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  backdrop-filter: blur(20px) saturate(180%) brightness(1.08);
+  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 8px 24px -6px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+  color: var(--prm-white);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prm-liquid-glass-nav-pill:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(245, 158, 11, 0.12) 100%
+  );
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow:
+    0 14px 30px -6px rgba(245, 158, 11, 0.22),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+.prm-liquid-stat-card {
+  position: relative;
+  border-radius: 1.35rem;
+  padding: 2.1rem 1.75rem;
+  background: linear-gradient(
+    145deg,
+    rgba(30, 41, 59, 0.68) 0%,
+    rgba(15, 23, 42, 0.48) 100%
+  );
+  backdrop-filter: blur(26px) saturate(190%) brightness(1.06);
+  -webkit-backdrop-filter: blur(26px) saturate(190%) brightness(1.06);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow:
+    0 20px 45px -12px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 1px 0 rgba(245, 158, 11, 0.08);
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.prm-liquid-stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(245, 158, 11, 0.16),
+    transparent 60%
+  );
+  opacity: 0.7;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.prm-liquid-stat-card:hover {
+  transform: translateY(-5px) scale(1.015);
+  border-color: rgba(245, 158, 11, 0.38);
+  box-shadow:
+    0 28px 55px -12px rgba(0, 0, 0, 0.6),
+    0 0 25px -5px rgba(245, 158, 11, 0.2),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.32);
+}
+
+.prm-liquid-cta-amber {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.9rem 1.85rem;
+  border-radius: 0.95rem;
+  background: linear-gradient(
+    135deg,
+    var(--prm-secondary-color) 0%,
+    #fbbf24 50%,
+    var(--prm-accent-color) 100%
+  );
+  background-size: 180% 180%;
+  color: var(--prm-primary-color);
+  font-weight: 800;
+  box-shadow:
+    0 14px 32px -6px rgba(245, 158, 11, 0.48),
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -2px 4px 0 rgba(234, 88, 12, 0.35);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prm-liquid-cta-amber:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 20px 38px -6px rgba(245, 158, 11, 0.65),
+    inset 0 2px 2px 0 rgba(255, 255, 255, 0.8);
+}
+
+.prm-liquid-filter-surface {
+  position: relative;
+  border-radius: 1.75rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.86) 0%,
+    rgba(248, 250, 252, 0.74) 100%
+  );
+  backdrop-filter: blur(28px) saturate(190%) brightness(1.03);
+  -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.03);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 22px 50px -14px rgba(15, 23, 42, 0.1),
+    0 4px 16px -2px rgba(15, 23, 42, 0.04),
+    inset 0 2px 2px 0 rgba(255, 255, 255, 0.95);
+}
+
+.prm-liquid-card-surface {
+  position: relative;
+  border-radius: 1.5rem;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(248, 250, 252, 0.78) 100%
+  );
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow:
+    0 14px 34px -10px rgba(15, 23, 42, 0.07),
+    0 2px 8px -2px rgba(15, 23, 42, 0.04),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 1);
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.prm-liquid-card-surface:hover {
+  transform: translateY(-6px);
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow:
+    0 26px 52px -12px rgba(15, 23, 42, 0.14),
+    0 0 24px -4px rgba(245, 158, 11, 0.15),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 1);
+}
+
+.prm-liquid-input-field {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(203, 213, 225, 0.85);
+  border-radius: 0.95rem;
+  color: var(--prm-text-dark);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: all 0.25s ease;
+}
+
+.prm-liquid-input-field:focus {
+  outline: none;
+  background: var(--prm-white);
+  border-color: var(--prm-secondary-color);
+  box-shadow:
+    0 0 0 4px rgba(245, 158, 11, 0.15),
+    inset 0 1px 2px rgba(15, 23, 42, 0.02);
+}
+
+.prm-liquid-badge-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(248, 250, 252, 0.85);
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  color: var(--prm-text-dark);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.prm-liquid-badge-chip:hover {
+  border-color: var(--prm-secondary-color);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.prm-liquid-badge-chip-active {
+  background: linear-gradient(
+    135deg,
+    var(--prm-primary-color) 0%,
+    #1e293b 100%
+  );
+  color: var(--prm-secondary-color);
+  border-color: var(--prm-secondary-color);
+  box-shadow: 0 6px 16px -4px rgba(15, 23, 42, 0.28);
+}

@@ -6,6 +6,9 @@ import {
   PrmProvince,
   PrmCity,
   PrmCompanyValidationError,
+  PrmPublicCompanyFilterParams,
+  PrmPublicCompaniesDirectoryResponse,
+  PrmPublicCompanyDetailResponse,
 } from "@/types/prm-company";
 
 const prmApiBaseUrl =
@@ -59,6 +62,39 @@ async function prmCompanyRequest<T>(
   return data as T;
 }
 
+export function prmGetPublicCompanies(
+  params: PrmPublicCompanyFilterParams = {}
+): Promise<PrmPublicCompaniesDirectoryResponse> {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "" && value !== false) {
+      searchParams.append(key, String(value));
+    }
+  });
+
+  const queryString = searchParams.toString();
+  const endpoint = `/v1/companies/public${queryString ? `?${queryString}` : ""}`;
+
+  return prmCompanyRequest<PrmPublicCompaniesDirectoryResponse>(endpoint, undefined, {
+    method: "GET",
+    cache: "no-store",
+  });
+}
+
+export function prmGetPublicCompanyDetail(
+  companyId: number | string
+): Promise<PrmPublicCompanyDetailResponse> {
+  return prmCompanyRequest<PrmPublicCompanyDetailResponse>(
+    `/v1/companies/public/${companyId}`,
+    undefined,
+    {
+      method: "GET",
+      cache: "no-store",
+    }
+  );
+}
+
 export function prmGetCountries(): Promise<{ status: string; countries: PrmCountry[] }> {
   return prmCompanyRequest("/v1/locations/countries", undefined, {
     method: "GET",
@@ -92,7 +128,7 @@ export function prmGetMyCompany(
 }
 
 export function prmGetCompanyIndustries(
-  token: string
+  token?: string
 ): Promise<{ status: string; industries: PrmIndustry[] }> {
   return prmCompanyRequest("/v1/companies/industries", token, {
     method: "GET",

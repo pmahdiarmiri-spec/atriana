@@ -140,3 +140,47 @@ export interface PrmCompanyValidationError {
   message: string;
   errors?: Record<string, string[]>;
 }
+
+export interface PrmPublicCompanyFilterParams {
+  q?: string;
+  industry_id?: number | string;
+  activity_type?: PrmCompanyActivityType | "";
+  province?: string;
+  city?: string;
+  is_knowledge_based?: boolean;
+  is_exporter?: boolean;
+  has_iso?: boolean;
+  is_startup?: boolean;
+  is_creative?: boolean;
+  is_emc?: boolean;
+  sort?: "newest" | "popular" | "oldest";
+  page?: number;
+  per_page?: number;
+}
+
+export interface PrmPublicCompaniesDirectoryResponse {
+  status: string;
+  code: string;
+  companies: PrmCompany[];
+  stats: {
+    active_companies: number;
+    covered_cities: number;
+  };
+  filters_meta: {
+    cities: string[];
+    provinces: string[];
+    industries: PrmIndustry[];
+  };
+  meta: {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+  };
+}
+
+export interface PrmPublicCompanyDetailResponse {
+  status: string;
+  code: string;
+  company: PrmCompany;
+}
