@@ -118,4 +118,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(PrmTicket::class);
     }
+
+    public function company(): HasOne
+    {
+        return $this->hasOne(PrmCompany::class);
+    }
+
+    public function advertisements(): HasMany
+    {
+        return $this->hasMany(PrmAdvertisement::class);
+    }
 }

@@ -9,7 +9,8 @@ export type PrmDashboardMenu =
   | "tariffs"
   | "settings"
   | "support"
-  | "company";
+  | "company"
+  | "ads";
 
 interface PrmDashboardSidebarProps {
   user: PrmUserProfileData | null;
@@ -142,28 +143,15 @@ export function PrmDashboardSidebar({
 
         <button
           type="button"
-          className="prm-nav-item"
-          onClick={() => onItemClick(t("menu.myAds"), t("menu.myAdsDesc"))}
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polygon points="12 2 2 7 12 12 22 7 12 2" />
-            <polyline points="2 17 12 22 22 17" />
-            <polyline points="2 12 12 17 22 12" />
-          </svg>
-          <span>{t("menu.myAds")}</span>
-        </button>
-
-        <button
-          type="button"
-          className="prm-nav-item"
-          onClick={() => onItemClick(t("menu.createAd"), t("menu.createAdDesc"))}
+          className={`prm-nav-item ${activeMenu === "ads" ? "prm-nav-item-active" : ""}`}
+          onClick={() => onMenuSelect("ads")}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="10" />
             <line x1="12" y1="8" x2="12" y2="16" />
             <line x1="8" y1="12" x2="16" y2="12" />
           </svg>
-          <span>{t("menu.createAd")}</span>
+          <span>ثبت آگهی</span>
         </button>
 
         <button
