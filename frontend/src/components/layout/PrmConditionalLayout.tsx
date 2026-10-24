@@ -11,10 +11,12 @@ export default function PrmConditionalLayout({
   children: React.ReactNode;
 }) {
   const prmPathname = usePathname() || "";
+  const prmIsCompanyDetail = /\/companies\/[^/]+/.test(prmPathname);
   const prmIsStandalone =
     prmPathname.includes("/dashboard") ||
     prmPathname.includes("/auth") ||
-    prmPathname.includes("/admin");
+    prmPathname.includes("/admin") ||
+    prmIsCompanyDetail;
 
   if (prmIsStandalone) {
     return <>{children}</>;
