@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\PrmCompanies;
 
+use App\Enums\PrmCompanies\PrmCompanyStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class PrmCompanyResource extends JsonResource
 {
@@ -29,11 +29,17 @@ class PrmCompanyResource extends JsonResource
         $gallery = is_array($this->gallery_paths) ? array_values(array_filter($this->gallery_paths)) : [];
         $certs = is_array($this->cert_paths) ? array_values(array_filter($this->cert_paths)) : [];
 
+        $isExpired = $this->isExpired();
+        $statusValue = $this->status?->value;
+        if ($this->status === PrmCompanyStatus::APPROVED && $isExpired) {
+            $statusValue = PrmCompanyStatus::EXPIRED->value;
+        }
+
         return [
             'id' => $this->id,
             'views_count' => $this->views_count,
             'user_id' => $this->user_id,
-            'status' => $this->status?->value,
+            'status' => $statusValue,
             'admin_message' => $this->admin_message,
             'name_fa' => $this->name_fa,
             'name_en' => $this->name_en,
@@ -88,6 +94,11 @@ class PrmCompanyResource extends JsonResource
             'resume_path' => $this->resume_path,
             'gallery_paths' => $this->gallery_paths,
             'cert_paths' => $this->cert_paths,
+            'submitted_at' => $this->submitted_at?->toIso8601String(),
+            'approved_at' => $this->approved_at?->toIso8601String(),
+            'rejected_at' => $this->rejected_at?->toIso8601String(),
+            'expires_at' => $this->expires_at?->toIso8601String(),
+            'is_expired' => $isExpired,
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
             'gallery_images' => array_map(fn ($p) => $this->resolveUrl($p), $gallery),

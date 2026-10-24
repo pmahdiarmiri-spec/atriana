@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\PrmCompanies\User\Industries\PrmCompanyIndustryIndexController;
+use App\Http\Controllers\Api\PrmCompanies\User\MyCompany\PrmMyCompanyRenewController;
 use App\Http\Controllers\Api\PrmCompanies\User\MyCompany\PrmMyCompanyShowController;
 use App\Http\Controllers\Api\PrmCompanies\User\MyCompany\PrmMyCompanySubmitController;
 use App\Http\Controllers\Api\PrmCompanies\User\MyCompany\PrmMyCompanyUploadController;
@@ -24,6 +25,7 @@ Route::prefix('v1/companies')->middleware('auth:sanctum')->group(function () {
     Route::put('/my/draft', PrmMyCompanyUpsertDraftController::class);
     Route::post('/my/upload', PrmMyCompanyUploadController::class);
     Route::post('/my/submit', PrmMyCompanySubmitController::class);
+    Route::post('/my/renew', PrmMyCompanyRenewController::class);
 });
 
 Route::prefix('v1/company-payments')->middleware('auth:sanctum')->group(function () {

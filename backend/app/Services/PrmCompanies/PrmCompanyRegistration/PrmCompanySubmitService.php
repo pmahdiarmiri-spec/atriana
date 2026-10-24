@@ -33,6 +33,7 @@ class PrmCompanySubmitService
 
             $company->status = PrmCompanyStatus::PENDING;
             $company->submitted_at = now();
+            $company->expires_at = now()->addYear();
             $company->save();
 
             return [

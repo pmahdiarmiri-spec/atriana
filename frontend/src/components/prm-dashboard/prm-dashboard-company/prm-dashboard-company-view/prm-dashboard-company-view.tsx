@@ -6,6 +6,7 @@ import {
   prmGetCompanyIndustries,
   prmGetCompanyPaymentQuote,
   prmGetMyCompany,
+  prmRenewCompany,
   prmSaveCompanyDraft,
   prmSubmitCompany,
   prmUploadCompanyFile,
@@ -85,6 +86,7 @@ export function PrmDashboardCompanyView({
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [quoteAmount, setQuoteAmount] = useState<number>(0);
+  const [paymentType, setPaymentType] = useState<"registration" | "renewal">("registration");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
@@ -97,7 +99,7 @@ export function PrmDashboardCompanyView({
         const [companyRes, industriesRes, quoteRes] = await Promise.all([
           prmGetMyCompany(token),
           prmGetCompanyIndustries(token),
-          prmGetCompanyPaymentQuote(token),
+          prmGetCompanyPaymentQuote(token, "registration"),
         ]);
 
         if (!isMounted) return;
@@ -185,24 +187,46 @@ export function PrmDashboardCompanyView({
 
     try {
       await handleSaveDraft();
+      const quote = await prmGetCompanyPaymentQuote(token, "registration");
+      setQuoteAmount(quote.amount_rials);
+      setPaymentType("registration");
       setIsModalOpen(true);
     } catch {
     }
   };
 
-  const handleConfirmPaymentAndSubmit = async () => {
+  const handleInitiateRenewal = async () => {
+    try {
+      setIsSaving(true);
+      const quote = await prmGetCompanyPaymentQuote(token, "renewal");
+      setQuoteAmount(quote.amount_rials);
+      setPaymentType("renewal");
+      setIsModalOpen(true);
+    } catch (err: any) {
+      setGeneralError(err.message || "دریافت استعلام هزینه تمدید با خطا مواجه شد.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleConfirmPaymentAndAction = async () => {
     setIsSubmitting(true);
     setGeneralError(null);
 
     try {
-      const res = await prmSubmitCompany(token, "fake");
-      setCompany(res.company);
+      if (paymentType === "renewal") {
+        const res = await prmRenewCompany(token, "fake");
+        setCompany(res.company);
+      } else {
+        const res = await prmSubmitCompany(token, "fake");
+        setCompany(res.company);
+      }
       setIsModalOpen(false);
     } catch (err: any) {
       if (err instanceof PrmCompanyApiError && err.errors) {
         setErrors(err.errors);
       }
-      setGeneralError(err.message || "پرداخت یا ارسال فرم با خطا مواجه شد.");
+      setGeneralError(err.message || "پرداخت یا عملیات با خطا مواجه شد.");
     } finally {
       setIsSubmitting(false);
     }
@@ -221,6 +245,14 @@ export function PrmDashboardCompanyView({
     company.status !== "draft" &&
     company.status !== "needs_edit";
 
+  const isExpiredOrNearExpiry =
+    company &&
+    (company.status === "expired" ||
+      company.is_expired ||
+      (company.status === "approved" &&
+        company.expires_at &&
+        new Date(company.expires_at).getTime() - Date.now() < 30 * 24 * 60 * 60 * 1000));
+
   return (
     <div className="prm-company-container">
       <div className="prm-liquid-glass-card">
@@ -237,6 +269,27 @@ export function PrmDashboardCompanyView({
         </div>
       </div>
 
+      {company?.expires_at && (
+        <div className="prm-liquid-glass-card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <span style={{ fontSize: "0.85rem", color: "var(--prm-text-light)" }}>تاریخ انقضای اعتبار یک‌ساله:</span>
+            <strong style={{ color: company.is_expired ? "var(--prm-accent-color)" : "var(--prm-text-dark)" }}>
+              {new Date(company.expires_at).toLocaleDateString("fa-IR")}
+            </strong>
+          </div>
+          {isExpiredOrNearExpiry && (
+            <button
+              type="button"
+              className="prm-btn-primary"
+              onClick={handleInitiateRenewal}
+              disabled={isSaving}
+            >
+              تمدید اعتبار سالانه (۳۰٪ تعرفه)
+            </button>
+          )}
+        </div>
+      )}
+
       {company?.status === "needs_edit" && company.admin_message && (
         <div className="prm-company-alert">
           <strong>پیام بازبینی ادمین:</strong>
@@ -251,6 +304,13 @@ export function PrmDashboardCompanyView({
           <span style={{ fontSize: "0.85rem", marginTop: 4 }}>
             وجه پرداخت شده به موجودی کیف پول حساب شما بازگردانده شده است.
           </span>
+        </div>
+      )}
+
+      {company?.status === "expired" && (
+        <div className="prm-company-alert prm-company-alert-danger">
+          <strong>اعتبار شرکت منقضی شده است:</strong>
+          <span>مهلت ۱ ساله نمایش شرکت به پایان رسیده است. جهت فعال‌سازی مجدد، شرکت خود را با ۳۰٪ تعرفه تمدید فرمایید.</span>
         </div>
       )}
 
@@ -279,8 +339,9 @@ export function PrmDashboardCompanyView({
       <PrmCompanyPaymentModal
         isOpen={isModalOpen}
         amountRials={quoteAmount}
+        paymentType={paymentType}
         isProcessing={isSubmitting}
-        onConfirm={handleConfirmPaymentAndSubmit}
+        onConfirm={handleConfirmPaymentAndAction}
         onClose={() => setIsModalOpen(false)}
       />
     </div>

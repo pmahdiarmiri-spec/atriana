@@ -8,4 +8,9 @@ class PrmCompanyRegistrationPriceService
     {
         return 1000000;
     }
+
+    public function getRenewalPriceRials(): int
+    {
+        return (int) round($this->getRegistrationPriceRials() * 0.30);
+    }
 }

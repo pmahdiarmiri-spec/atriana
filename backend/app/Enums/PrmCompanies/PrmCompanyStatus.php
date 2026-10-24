@@ -9,4 +9,5 @@ enum PrmCompanyStatus: string
     case APPROVED = 'approved';
     case REJECTED = 'rejected';
     case NEEDS_EDIT = 'needs_edit';
+    case EXPIRED = 'expired';
 }

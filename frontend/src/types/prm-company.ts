@@ -3,7 +3,8 @@ export type PrmCompanyStatus =
   | "pending"
   | "approved"
   | "rejected"
-  | "needs_edit";
+  | "needs_edit"
+  | "expired";
 
 export type PrmCompanyActivityType =
   | "production"
@@ -97,6 +98,11 @@ export interface PrmCompany {
   resume_path: string | null;
   gallery_paths: string[] | null;
   cert_paths: string[] | null;
+  submitted_at: string | null;
+  approved_at: string | null;
+  rejected_at: string | null;
+  expires_at: string | null;
+  is_expired: boolean;
   created_at: string | null;
   updated_at: string | null;
   gallery_images: string[];
@@ -115,6 +121,11 @@ export type PrmCompanyFormData = Omit<
   | "status"
   | "admin_message"
   | "industry"
+  | "submitted_at"
+  | "approved_at"
+  | "rejected_at"
+  | "expires_at"
+  | "is_expired"
   | "created_at"
   | "updated_at"
   | "gallery_images"

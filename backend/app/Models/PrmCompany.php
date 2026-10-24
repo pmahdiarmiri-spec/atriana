@@ -72,6 +72,7 @@ class PrmCompany extends Model
         'submitted_at',
         'approved_at',
         'rejected_at',
+        'expires_at',
     ];
 
     protected function casts(): array
@@ -96,6 +97,7 @@ class PrmCompany extends Model
             'submitted_at' => 'datetime',
             'approved_at' => 'datetime',
             'rejected_at' => 'datetime',
+            'expires_at' => 'datetime',
         ];
     }
 
@@ -107,5 +109,10 @@ class PrmCompany extends Model
     public function industry(): BelongsTo
     {
         return $this->belongsTo(PrmIndustry::class, 'industry_id');
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->expires_at !== null && $this->expires_at->isPast();
     }
 }

@@ -130,9 +130,10 @@ export function prmUploadCompanyFile(
 }
 
 export function prmGetCompanyPaymentQuote(
-  token: string
-): Promise<{ status: string; amount_rials: number }> {
-  return prmCompanyRequest("/v1/company-payments/my/quote", token, {
+  token: string,
+  type: "registration" | "renewal" = "registration"
+): Promise<{ status: string; amount_rials: number; type: string }> {
+  return prmCompanyRequest(`/v1/company-payments/my/quote?type=${type}`, token, {
     method: "GET",
   });
 }
@@ -142,6 +143,16 @@ export function prmSubmitCompany(
   paymentMethod: "fake" = "fake"
 ): Promise<{ status: string; company: PrmCompany; payment: any }> {
   return prmCompanyRequest("/v1/companies/my/submit", token, {
+    method: "POST",
+    body: JSON.stringify({ payment_method: paymentMethod }),
+  });
+}
+
+export function prmRenewCompany(
+  token: string,
+  paymentMethod: "fake" = "fake"
+): Promise<{ status: string; company: PrmCompany; payment: any }> {
+  return prmCompanyRequest("/v1/companies/my/renew", token, {
     method: "POST",
     body: JSON.stringify({ payment_method: paymentMethod }),
   });

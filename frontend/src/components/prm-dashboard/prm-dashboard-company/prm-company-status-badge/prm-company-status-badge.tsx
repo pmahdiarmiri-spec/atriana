@@ -10,9 +10,10 @@ interface PrmCompanyStatusBadgeProps {
 const statusMap: Record<PrmCompanyStatus, { label: string; className: string }> = {
   draft: { label: "پیش‌نویس", className: "prm-status-draft" },
   pending: { label: "در انتظار بررسی ادمین", className: "prm-status-pending" },
-  approved: { label: "تایید شده", className: "prm-status-approved" },
+  approved: { label: "تایید شده (فعال)", className: "prm-status-approved" },
   rejected: { label: "رد شده", className: "prm-status-rejected" },
   needs_edit: { label: "نیازمند ویرایش", className: "prm-status-needs_edit" },
+  expired: { label: "منقضی شده (نیازمند تمدید)", className: "prm-status-rejected" },
 };
 
 export function PrmCompanyStatusBadge({ status }: PrmCompanyStatusBadgeProps): ReactNode {
