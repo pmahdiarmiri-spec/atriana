@@ -1,7 +1,9 @@
 import {
     PrmAdminAuthResponse,
+    PrmAdminOtpChallengeResponse,
     PrmAdminUser,
     PrmAuditLog,
+    PrmGateSlugMetadataResponse,
     PrmPaginatedResponse,
 } from "@/types/prm-admin";
 import { PrmTicket, PrmTicketMessage, PrmTicketStatus } from "@/types/prm-support";
@@ -91,12 +93,29 @@ export function prmAdminGateLogin(
     gateSlug: string,
     identifier: string,
     password: string,
-): Promise<PrmAdminAuthResponse> {
-    return prmAdminRequest<PrmAdminAuthResponse>(
+): Promise<PrmAdminOtpChallengeResponse> {
+    return prmAdminRequest<PrmAdminOtpChallengeResponse>(
         `/v1/prm-gate/${encodeURIComponent(gateSlug)}/login`,
         {
             method: "POST",
             body: JSON.stringify({ identifier, password }),
+        },
+    );
+}
+
+export function prmAdminGateVerifyOtp(
+    gateSlug: string,
+    challengeToken: string,
+    otpCode: string,
+): Promise<PrmAdminAuthResponse> {
+    return prmAdminRequest<PrmAdminAuthResponse>(
+        `/v1/prm-gate/${encodeURIComponent(gateSlug)}/verify-otp`,
+        {
+            method: "POST",
+            body: JSON.stringify({
+                challenge_token: challengeToken,
+                otp_code: otpCode,
+            }),
         },
     );
 }
@@ -115,11 +134,7 @@ export function prmGetAdminProfile(token: string): Promise<{
     );
 }
 
-export function prmGetGateSlug(token: string): Promise<{
-    status: "success";
-    code: string;
-    gate_slug: string;
-}> {
+export function prmGetGateSlug(token: string): Promise<PrmGateSlugMetadataResponse & { gate_slug: string }> {
     return prmAdminRequest(
         "/v1/admin/gate/slug",
         {
@@ -129,11 +144,7 @@ export function prmGetGateSlug(token: string): Promise<{
     );
 }
 
-export function prmRegenerateGateSlug(token: string): Promise<{
-    status: "success";
-    code: string;
-    new_gate_slug: string;
-}> {
+export function prmRegenerateGateSlug(token: string): Promise<PrmGateSlugMetadataResponse & { new_gate_slug: string }> {
     return prmAdminRequest(
         "/v1/admin/gate/regenerate",
         {

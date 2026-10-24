@@ -90,6 +90,7 @@ Route::prefix('v1/support')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('v1/prm-gate/{gate_slug}')->middleware(PrmVerifyAdminGateMiddleware::class)->group(function () {
     Route::post('/login', [PrmAdminAuthController::class, 'login']);
+    Route::post('/verify-otp', [PrmAdminAuthController::class, 'verifyOtp']);
 });
 
 Route::prefix('v1/admin')->middleware(['auth:sanctum', PrmRequireAdminRoleMiddleware::class])->group(function () {

@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Api\PrmAdmin;
 
 use App\Actions\PrmAdmin\PrmAdminAuthenticateAction;
+use App\Actions\PrmAdmin\PrmAdminVerifyOtpAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PrmAdmin\PrmAdminLoginRequest;
+use App\Http\Requests\PrmAdmin\PrmAdminVerifyOtpRequest;
+use App\Models\PrmAdminAuditLog;
+use App\Models\User;
+use App\Services\PrmAdmin\PrmAdminSecurityTelemetryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -19,7 +24,31 @@ class PrmAdminAuthController extends Controller
             identifier: $request->string('identifier')->toString(),
             password: $request->string('password')->toString(),
             ipAddress: $request->ip(),
-            userAgent: $request->userAgent()
+            userAgent: $request->userAgent(),
+            gateSlug: $gate_slug
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 'prm_admin_otp_required',
+            'requires_otp' => true,
+            'challenge_token' => $result['challenge_token'],
+            'masked_mobile' => $result['masked_mobile'],
+            'expires_in' => $result['expires_in'],
+        ]);
+    }
+
+    public function verifyOtp(
+        PrmAdminVerifyOtpRequest $request,
+        PrmAdminVerifyOtpAction $verifyOtpAction,
+        ?string $gate_slug = null
+    ): JsonResponse {
+        $result = $verifyOtpAction->execute(
+            challengeToken: $request->string('challenge_token')->toString(),
+            otpCode: $request->string('otp_code')->toString(),
+            ipAddress: $request->ip(),
+            userAgent: $request->userAgent(),
+            gateSlug: $gate_slug
         );
 
         return response()->json([
@@ -41,9 +70,25 @@ class PrmAdminAuthController extends Controller
         ]);
     }
 
-    public function logout(Request $request): JsonResponse
+    public function logout(Request $request, PrmAdminSecurityTelemetryService $telemetryService): JsonResponse
     {
-        $request->user()->currentAccessToken()->delete();
+        $user = $request->user();
+
+        if ($user) {
+            PrmAdminAuditLog::query()->create([
+                'user_id' => $user->id,
+                'action' => 'admin_logged_out',
+                'target_type' => User::class,
+                'target_id' => $user->id,
+                'payload' => [
+                    'telemetry' => $telemetryService->captureContext($request),
+                ],
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+
+            $user->currentAccessToken()?->delete();
+        }
 
         return response()->json([
             'status' => 'success',

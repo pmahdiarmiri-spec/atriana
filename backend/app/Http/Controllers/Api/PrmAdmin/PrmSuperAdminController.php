@@ -16,21 +16,45 @@ class PrmSuperAdminController extends Controller
 {
     public function getGateSlug(PrmGateKeeperService $gateKeeperService): JsonResponse
     {
+        $metadata = $gateKeeperService->getSlugMetadata();
+
         return response()->json([
             'status' => 'success',
             'code' => 'prm_admin_gate_slug_retrieved',
-            'gate_slug' => $gateKeeperService->getCurrentSlug(),
+            'gate_slug' => $metadata['slug'],
+            'expires_at' => $metadata['expires_at'],
+            'remaining_seconds' => $metadata['remaining_seconds'],
+            'ttl_minutes' => $metadata['ttl_minutes'],
+            'is_one_time' => $metadata['is_one_time'],
         ]);
     }
 
-    public function regenerateGateSlug(PrmGateKeeperService $gateKeeperService): JsonResponse
+    public function regenerateGateSlug(Request $request, PrmGateKeeperService $gateKeeperService): JsonResponse
     {
         $newSlug = $gateKeeperService->regenerateSlug();
+        $metadata = $gateKeeperService->getSlugMetadata();
+
+        PrmAdminAuditLog::query()->create([
+            'user_id' => $request->user()?->id,
+            'action' => 'admin_gate_slug_regenerated',
+            'target_type' => null,
+            'target_id' => null,
+            'payload' => [
+                'expires_at' => $metadata['expires_at'],
+                'ttl_minutes' => $metadata['ttl_minutes'],
+            ],
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
 
         return response()->json([
             'status' => 'success',
             'code' => 'prm_admin_gate_slug_regenerated',
             'new_gate_slug' => $newSlug,
+            'expires_at' => $metadata['expires_at'],
+            'remaining_seconds' => $metadata['remaining_seconds'],
+            'ttl_minutes' => $metadata['ttl_minutes'],
+            'is_one_time' => $metadata['is_one_time'],
         ]);
     }
 
@@ -90,7 +114,7 @@ class PrmSuperAdminController extends Controller
     public function getAuditLogs(Request $request): JsonResponse
     {
         $logs = PrmAdminAuditLog::query()
-            ->with('user:id,name,email,role')
+            ->with('user:id,name,email,mobile,role,last_login_at,last_login_ip')
             ->latest()
             ->paginate((int) ($request->input('per_page', 25)));
 

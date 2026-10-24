@@ -15,7 +15,7 @@ class PrmVerifyAdminGateMiddleware
 
     public function handle(Request $request, Closure $next): Response
     {
-        $gateSlug = (string) $request->route('gate_slug');
+        $gateSlug = rawurldecode(trim((string) $request->route('gate_slug')));
 
         if (! $this->gateKeeperService->validateSlug($gateSlug)) {
             return response()->json([
