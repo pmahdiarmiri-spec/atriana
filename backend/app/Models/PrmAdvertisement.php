@@ -31,6 +31,7 @@ class PrmAdvertisement extends Model
         'title',
         'title_en',
         'slug',
+        'image_path',
         'province',
         'city',
         'address',
@@ -117,13 +118,17 @@ class PrmAdvertisement extends Model
     public static function generateUniqueSlug(string $title): string
     {
         $base = Str::slug($title, '-', null);
+
         if (empty($base)) {
             $base = 'ad';
         }
+
         $slug = $base . '-' . Str::random(6);
+
         while (static::where('slug', $slug)->exists()) {
             $slug = $base . '-' . Str::random(6);
         }
+
         return $slug;
     }
 

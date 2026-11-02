@@ -1,9 +1,9 @@
-import { api } from '@/lib/api';
+import { api } from "@/lib/api";
 
-export type PrmAdNature = 'goods' | 'services';
-export type PrmAdType = 'offer' | 'demand';
-export type PrmAdOrigin = 'domestic' | 'export' | 'import';
-export type PrmAdPriceType = 'fixed' | 'agreement' | 'call';
+export type PrmAdNature = "goods" | "services";
+export type PrmAdType = "offer" | "demand";
+export type PrmAdOrigin = "domestic" | "export" | "import";
+export type PrmAdPriceType = "fixed" | "agreement" | "call";
 
 export interface PrmAdvertisementItem {
     id: number;
@@ -19,6 +19,8 @@ export interface PrmAdvertisementItem {
     title: string;
     title_en: string | null;
     slug: string;
+    image_path: string | null;
+    image_url: string | null;
     province: string | null;
     city: string | null;
     address: string | null;
@@ -41,7 +43,7 @@ export interface PrmAdvertisementItem {
     licenses: string | null;
     phone: string | null;
     show_phone: boolean;
-    status: 'pending' | 'approved' | 'rejected' | 'expired';
+    status: "pending" | "approved" | "rejected" | "expired";
     admin_note: string | null;
     payment_status: string;
     request_verified_badge: boolean;
@@ -106,6 +108,7 @@ export interface PrmAdvertisementPayload {
     payment_terms?: string;
     quality_grade?: string;
     video_link?: string;
+    image?: File | null;
     company_name?: string;
     business_type?: string;
     activity_type?: string;
@@ -168,28 +171,49 @@ export interface PrmAdvertisementMetaResponse {
 }
 
 export async function prmGetAdvertisementsMeta(token: string): Promise<PrmAdvertisementMetaResponse> {
-    const response = await api.get('/v1/advertisements/meta', {
+    const response = await api.get("/v1/advertisements/meta", {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     });
+
     return response.data;
 }
 
 export async function prmGetMyAdvertisements(token: string): Promise<PrmAdvertisementItem[]> {
-    const response = await api.get('/v1/advertisements/my', {
+    const response = await api.get("/v1/advertisements/my", {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     });
+
     return response.data.data;
 }
 
-export async function prmCreateAdvertisement(token: string, payload: PrmAdvertisementPayload): Promise<PrmAdvertisementItem> {
-    const response = await api.post('/v1/advertisements/my', payload, {
+export async function prmCreateAdvertisement(
+    token: string,
+    payload: PrmAdvertisementPayload,
+): Promise<PrmAdvertisementItem> {
+    const formData = new FormData();
+
+    Object.entries(payload).forEach(([key, value]) => {
+        if (value === undefined || value === null) {
+            return;
+        }
+
+        if (value instanceof File) {
+            formData.append(key, value);
+            return;
+        }
+
+        formData.append(key, String(value));
+    });
+
+    const response = await api.post("/v1/advertisements/my", formData, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     });
+
     return response.data.advertisement;
 }

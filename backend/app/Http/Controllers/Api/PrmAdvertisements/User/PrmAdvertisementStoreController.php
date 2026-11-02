@@ -16,6 +16,9 @@ class PrmAdvertisementStoreController extends Controller
     {
         $user = $request->user();
         $validated = $request->validated();
+        $image = $validated['image'] ?? null;
+
+        unset($validated['image']);
 
         $company = PrmCompany::query()
             ->where('user_id', $user->id)
@@ -32,20 +35,29 @@ class PrmAdvertisementStoreController extends Controller
                     'message' => 'پروفایل شرکتی شما ثبت نشده است. ابتدا شرکت خود را ثبت کنید یا این گزینه را غیرفعال نمایید.',
                 ], 422);
             }
+
             $companyId = $company->id;
             $validated['company_name'] = $company->name_fa ?: $company->name_en;
+
             if (empty($validated['phone']) && !empty($company->phone)) {
                 $validated['phone'] = $company->phone;
             }
+
             if (empty($validated['province']) && !empty($company->province)) {
                 $validated['province'] = $company->province;
             }
+
             if (empty($validated['city']) && !empty($company->city)) {
                 $validated['city'] = $company->city;
             }
+
             if (empty($validated['address']) && !empty($company->address)) {
                 $validated['address'] = $company->address;
             }
+        }
+
+        if ($image) {
+            $validated['image_path'] = $image->store('prm-advertisements', 'public');
         }
 
         $validated['user_id'] = $user->id;

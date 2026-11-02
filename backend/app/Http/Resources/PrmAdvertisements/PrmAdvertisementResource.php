@@ -4,6 +4,7 @@ namespace App\Http\Resources\PrmAdvertisements;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class PrmAdvertisementResource extends JsonResource
 {
@@ -23,6 +24,8 @@ class PrmAdvertisementResource extends JsonResource
             'title' => $this->title,
             'title_en' => $this->title_en,
             'slug' => $this->slug,
+            'image_path' => $this->image_path,
+            'image_url' => $this->image_path ? Storage::disk('public')->url($this->image_path) : null,
             'province' => $this->province,
             'city' => $this->city,
             'address' => $this->address,

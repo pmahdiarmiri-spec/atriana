@@ -42,6 +42,7 @@ class PrmStoreAdvertisementRequest extends FormRequest
             'payment_terms' => ['nullable', 'string', 'max:128'],
             'quality_grade' => ['nullable', 'string', 'max:64'],
             'video_link' => ['nullable', 'string', 'max:500'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'company_name' => ['nullable', 'string', 'max:191'],
             'business_type' => ['nullable', 'string', 'max:128'],
             'activity_type' => ['nullable', 'string', 'max:128'],
