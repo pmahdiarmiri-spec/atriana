@@ -1,0 +1,329 @@
+.prm-tf-charts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.prm-tf-charts-grid .prm-tf-chart-card {
+    min-width: 0;
+    overflow: visible;
+    isolation: isolate;
+}
+
+.prm-tf-charts-grid .prm-tf-chart-card:hover {
+    z-index: 2;
+}
+
+.prm-tf-charts-grid .prm-tf-chart-wide {
+    grid-column: 1 / -1;
+}
+
+.prm-tf-chart-header h2 {
+    margin: 0;
+}
+
+.prm-tf-chart-empty,
+.prm-tf-chart-hint {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--prm-text-light);
+}
+
+.prm-tf-plot-scroll {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-color: var(--prm-secondary-color) #e2e8f0;
+}
+
+.prm-tf-vertical-plot {
+    display: flex;
+    align-items: stretch;
+    width: max-content;
+    min-width: 100%;
+    min-height: 300px;
+    gap: 0.75rem;
+    padding: 0.5rem 0.2rem 0.8rem;
+}
+
+.prm-tf-vertical-item {
+    width: 128px;
+    min-width: 128px;
+    min-height: 292px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--prm-text-dark);
+    cursor: pointer;
+    text-align: center;
+}
+
+.prm-tf-vertical-value {
+    width: 100%;
+    min-height: 2.8rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    line-height: 1.25;
+}
+
+.prm-tf-vertical-track {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    height: 200px;
+    background: repeating-linear-gradient(
+        to top,
+        transparent 0,
+        transparent 48px,
+        rgba(148, 163, 184, 0.18) 49px,
+        transparent 50px
+    );
+    border-bottom: 1px solid rgba(100, 116, 139, 0.55);
+}
+
+.prm-tf-vertical-fill {
+    display: block;
+    width: 62%;
+    min-height: 0;
+    border-radius: 0.7rem 0.7rem 0 0;
+    background: linear-gradient(160deg, var(--prm-secondary-color), var(--prm-accent-color));
+    box-shadow: inset 2px 0 3px rgba(255, 255, 255, 0.3), 0 5px 16px rgba(234, 88, 12, 0.15);
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.prm-tf-vertical-item:hover .prm-tf-vertical-fill,
+.prm-tf-vertical-item:focus-visible .prm-tf-vertical-fill {
+    filter: brightness(1.12);
+    transform: scaleX(1.08);
+}
+
+.prm-tf-vertical-label {
+    padding-top: 0.45rem;
+    width: 100%;
+    font-size: 0.72rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
+}
+
+.prm-tf-vertical-item:focus-visible,
+.prm-tf-annual-bar:focus-visible,
+.prm-tf-donut-segment:focus-visible {
+    outline: 2px solid var(--prm-accent-color);
+    outline-offset: 3px;
+}
+
+.prm-tf-floating-tooltip {
+    position: fixed;
+    z-index: 99999;
+    width: min(320px, calc(100vw - 16px));
+    max-height: min(75vh, 460px);
+    overflow-y: auto;
+    pointer-events: none;
+    padding: 0.9rem;
+    border-radius: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(15, 23, 42, 0.96);
+    box-shadow: 0 16px 44px rgba(15, 23, 42, 0.28), inset 0 1px rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 0.76rem;
+}
+
+.prm-tf-floating-title {
+    display: block;
+    margin-bottom: 0.6rem;
+    color: #f59e0b;
+    overflow-wrap: anywhere;
+}
+
+.prm-tf-floating-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.8rem;
+    margin-top: 0.45rem;
+}
+
+.prm-tf-floating-line > span,
+.prm-tf-floating-line > b {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.prm-tf-floating-line > b {
+    text-align: left;
+    font-weight: 700;
+}
+
+.prm-tf-donut-layout {
+    display: grid;
+    grid-template-columns: minmax(160px, 210px) minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+}
+
+.prm-tf-donut {
+    width: 100%;
+    max-width: 210px;
+    overflow: visible;
+}
+
+.prm-tf-donut-segment {
+    cursor: pointer;
+    transition: stroke-width 0.2s ease, filter 0.2s ease;
+}
+
+.prm-tf-donut-segment:hover,
+.prm-tf-donut-segment:focus-visible {
+    stroke-width: 31px;
+    filter: brightness(1.12);
+}
+
+.prm-tf-donut-center {
+    fill: #0f172a;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.prm-tf-donut-caption {
+    fill: #64748b;
+    font-size: 10px;
+}
+
+.prm-tf-donut-legend {
+    min-width: 0;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.prm-tf-donut-legend-row {
+    display: grid;
+    grid-template-columns: 0.7rem minmax(0, 1fr) minmax(0, auto);
+    align-items: start;
+    gap: 0.5rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+    font-size: 0.73rem;
+}
+
+.prm-tf-donut-swatch {
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-top: 0.2rem;
+    border-radius: 50%;
+}
+
+.prm-tf-donut-name,
+.prm-tf-donut-legend-row b {
+    overflow-wrap: anywhere;
+}
+
+.prm-tf-annual-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.prm-tf-annual-key {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.prm-tf-annual-key::before {
+    content: "";
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 0.2rem;
+    background: currentColor;
+}
+
+.prm-tf-annual-usd {
+    color: #2563eb;
+}
+
+.prm-tf-annual-rial {
+    color: #ea580c;
+}
+
+.prm-tf-annual-weight {
+    color: #059669;
+}
+
+.prm-tf-annual-plot {
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+    gap: 0.9rem;
+    padding: 0.5rem;
+}
+
+.prm-tf-annual-group {
+    width: 140px;
+    flex: 0 0 140px;
+    text-align: center;
+}
+
+.prm-tf-annual-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.45rem;
+    height: 210px;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.55);
+}
+
+.prm-tf-annual-bar {
+    width: 30px;
+    border: 0;
+    border-radius: 0.45rem 0.45rem 0 0;
+    cursor: pointer;
+    background: currentColor;
+    box-shadow: inset 1px 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.prm-tf-annual-bar:hover,
+.prm-tf-annual-bar:focus-visible {
+    filter: brightness(1.15);
+}
+
+.prm-tf-annual-year {
+    display: block;
+    padding-top: 0.55rem;
+    font-size: 0.8rem;
+    color: var(--prm-primary-color);
+}
+
+@media (max-width: 1050px) {
+    .prm-tf-charts-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 620px) {
+    .prm-tf-donut-layout {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+    }
+
+    .prm-tf-donut-legend {
+        width: 100%;
+    }
+}
+
+@media print {
+    .prm-tf-floating-tooltip,
+    .prm-tf-loading-overlay {
+        display: none;
+    }
+
+    .prm-tf-plot-scroll,
+    .prm-tf-donut-legend {
+        overflow: visible;
+        max-height: none;
+    }
+}

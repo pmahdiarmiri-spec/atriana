@@ -1,0 +1,66 @@
+.prm-tf-header-metrics {
+    width: 100%;
+    border-top: 1px solid rgba(148, 163, 184, 0.22);
+    padding-top: 1rem;
+}
+
+.prm-tf-header-metrics .prm-tf-metrics-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.prm-tf-header-metrics .prm-tf-stat-card {
+    min-width: 0;
+    align-items: flex-start;
+    padding: 1rem;
+    background: rgba(248, 250, 252, 0.7);
+    overflow: visible;
+}
+
+.prm-tf-stat-index {
+    color: var(--prm-accent-color);
+    font-weight: 800;
+    font-size: 0.7rem;
+}
+
+.prm-tf-header-metrics .prm-tf-stat-body {
+    min-width: 0;
+    flex: 1;
+    gap: 0.3rem;
+}
+
+.prm-tf-header-metrics .prm-tf-stat-val {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    font-size: clamp(0.84rem, 1.2vw, 1.15rem);
+    line-height: 1.65;
+}
+
+.prm-tf-stat-unit {
+    color: var(--prm-text-light);
+    font-size: 0.7rem;
+}
+
+.prm-tf-results {
+    position: relative;
+    min-height: 12rem;
+}
+
+.prm-tf-error {
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(192, 0, 0, 0.3);
+    border-radius: 0.75rem;
+    color: #c00000;
+    background: #fff5f5;
+}
+
+@media (max-width: 1000px) {
+    .prm-tf-header-metrics .prm-tf-metrics-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 560px) {
+    .prm-tf-header-metrics .prm-tf-metrics-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

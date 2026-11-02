@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     prmDownloadTradeFlowCsv,
     prmGetTradeFlowCharts,
@@ -19,7 +19,12 @@ import { PrmTradeFlowPlanBadge } from "../prm-tradeflow-plan-badge/prm-tradeflow
 import { PrmTradeFlowFilters } from "../prm-tradeflow-filters/prm-tradeflow-filters";
 import { PrmTradeFlowMetrics } from "../prm-tradeflow-metrics/prm-tradeflow-metrics";
 import { PrmTradeFlowCharts } from "../prm-tradeflow-charts/prm-tradeflow-charts";
+import { PrmTradeFlowTable } from "../prm-tradeflow-detail/prm-tradeflow-table";
+import { PrmTariffTree } from "../prm-tradeflow-detail/prm-tariff-tree";
 import "@/styles/dashboard/prm-tradeflow.css";
+import "@/styles/dashboard/prm-tradeflow-metrics.css";
+import "@/styles/dashboard/prm-tradeflow-charts.css";
+import "@/styles/dashboard/prm-tradeflow-detail.css";
 
 const PRM_DEFAULT_FILTERS: PrmTradeFlowFilterState = {
     trade_type: "all",
@@ -37,13 +42,64 @@ const PRM_DEFAULT_FILTERS: PrmTradeFlowFilterState = {
     metric: "dolar",
 };
 
+const prmInitialRequests = new Map<
+    string,
+    Promise<[PrmPlanStatusData, PrmTradeFlowFilterOptions]>
+>();
+
+const prmAnalyticsRequests = new Map<
+    string,
+    Promise<[PrmTradeFlowSummaryData, PrmTradeFlowChartsData]>
+>();
+
+function prmGetInitialData(token: string) {
+    const current = prmInitialRequests.get(token);
+
+    if (current) return current;
+
+    const request = Promise.all([
+        prmGetTradeFlowPlanStatus(token),
+        prmGetTradeFlowFilterOptions(token),
+    ]);
+
+    prmInitialRequests.set(token, request);
+
+    void request.finally(() => {
+        if (prmInitialRequests.get(token) === request) {
+            prmInitialRequests.delete(token);
+        }
+    }).catch(() => undefined);
+
+    return request;
+}
+
+function prmGetAnalyticsData(filters: PrmTradeFlowFilterState, token: string) {
+    const key = JSON.stringify([token, filters]);
+    const current = prmAnalyticsRequests.get(key);
+
+    if (current) return current;
+
+    const request = Promise.all([
+        prmGetTradeFlowSummary(filters, token),
+        prmGetTradeFlowCharts(filters, token),
+    ]);
+
+    prmAnalyticsRequests.set(key, request);
+
+    void request.finally(() => {
+        if (prmAnalyticsRequests.get(key) === request) {
+            prmAnalyticsRequests.delete(key);
+        }
+    }).catch(() => undefined);
+
+    return request;
+}
+
 interface PrmTradeFlowViewProps {
     token: string;
 }
 
-export function PrmTradeFlowView({ token }: PrmTradeFlowViewProps): ReactNode {
-    const dashboardRef = useRef<HTMLDivElement>(null);
-
+export function PrmTradeFlowView({ token }: PrmTradeFlowViewProps) {
     const [plan, setPlan] = useState<PrmPlanStatusData | null>(null);
     const [options, setOptions] = useState<PrmTradeFlowFilterOptions>({
         years: [],
@@ -59,96 +115,104 @@ export function PrmTradeFlowView({ token }: PrmTradeFlowViewProps): ReactNode {
     });
 
     const [filters, setFilters] = useState<PrmTradeFlowFilterState>(() => {
-        if (typeof window !== "undefined") {
+        if (typeof window === "undefined") return PRM_DEFAULT_FILTERS;
+
+        try {
             const saved = localStorage.getItem("prm_tradeflow_last_filters");
-            if (saved) {
-                try {
-                    return JSON.parse(saved);
-                } catch {}
-            }
+
+            return saved
+                ? { ...PRM_DEFAULT_FILTERS, ...JSON.parse(saved) }
+                : PRM_DEFAULT_FILTERS;
+        } catch {
+            return PRM_DEFAULT_FILTERS;
         }
-        return PRM_DEFAULT_FILTERS;
     });
 
     const [summary, setSummary] = useState<PrmTradeFlowSummaryData | null>(null);
     const [charts, setCharts] = useState<PrmTradeFlowChartsData | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isExporting, setIsExporting] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         localStorage.setItem("prm_tradeflow_last_filters", JSON.stringify(filters));
     }, [filters]);
 
     useEffect(() => {
-        async function loadInitials() {
-            try {
-                const [planData, optsData] = await Promise.all([
-                    prmGetTradeFlowPlanStatus(token),
-                    prmGetTradeFlowFilterOptions(token),
-                ]);
+        let active = true;
+
+        prmGetInitialData(token)
+            .then(([planData, optionsData]) => {
+                if (!active) return;
                 setPlan(planData);
-                setOptions(optsData);
-            } catch {}
-        }
-        loadInitials();
+                setOptions(optionsData);
+            })
+            .catch(() => {
+                if (active) setError("دریافت گزینه‌های فیلتر یا وضعیت پلن ناموفق بود.");
+            });
+
+        return () => {
+            active = false;
+        };
     }, [token]);
 
     useEffect(() => {
-        const handler = setTimeout(() => {
-            fetchData();
-        }, 350);
+        let active = true;
 
-        return () => clearTimeout(handler);
+        const timer = window.setTimeout(() => {
+            setIsLoading(true);
+            setError("");
+
+            prmGetAnalyticsData(filters, token)
+                .then(([summaryData, chartsData]) => {
+                    if (!active) return;
+                    setSummary(summaryData);
+                    setCharts(chartsData);
+                })
+                .catch(() => {
+                    if (active) setError("دریافت آمار ناموفق بود؛ دوباره تلاش کنید.");
+                })
+                .finally(() => {
+                    if (active) setIsLoading(false);
+                });
+        }, filters.tariff ? 450 : 200);
+
+        return () => {
+            active = false;
+            window.clearTimeout(timer);
+        };
     }, [filters, token]);
 
-    async function fetchData() {
-        setIsLoading(true);
-        try {
-            const [sumData, chartsData] = await Promise.all([
-                prmGetTradeFlowSummary(filters, token),
-                prmGetTradeFlowCharts(filters, token),
-            ]);
-            setSummary(sumData);
-            setCharts(chartsData);
-        } catch {
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
     const handleFilterChange = (updated: Partial<PrmTradeFlowFilterState>) => {
-        setFilters((prev) => ({ ...prev, ...updated }));
-    };
-
-    const handleReset = () => {
-        setFilters(PRM_DEFAULT_FILTERS);
+        setFilters(previous => ({ ...previous, ...updated }));
     };
 
     const handleExportCsv = async () => {
         setIsExporting(true);
+        setError("");
+
         try {
             const blob = await prmDownloadTradeFlowCsv(filters, token);
             const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `tradeflow-report-${new Date().toISOString().slice(0, 10)}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
+            const anchor = document.createElement("a");
+
+            anchor.href = url;
+            anchor.download = `tradeflow-report-${new Date().toISOString().slice(0, 10)}.csv`;
+
+            document.body.appendChild(anchor);
+            anchor.click();
+            anchor.remove();
+            window.setTimeout(() => window.URL.revokeObjectURL(url), 1000);
         } catch {
+            setError("دریافت فایل CSV ناموفق بود.");
         } finally {
             setIsExporting(false);
         }
     };
 
-    const handlePrintPdf = () => {
-        window.print();
-    };
-
     return (
-        <div className="prm-tf-container" ref={dashboardRef}>
-            <div className="prm-tf-header-card prm-liquid-glass">
+        <div className="prm-tf-container">
+            <header className="prm-tf-header-card prm-liquid-glass">
                 <div className="prm-tf-header-info">
                     <div className="prm-tf-header-icon">
                         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.2">
@@ -165,55 +229,54 @@ export function PrmTradeFlowView({ token }: PrmTradeFlowViewProps): ReactNode {
 
                 <div className="prm-tf-actions">
                     <PrmTradeFlowPlanBadge plan={plan} />
-
                     <button
                         type="button"
                         className="prm-btn-glass"
                         onClick={handleExportCsv}
                         disabled={isExporting}
                     >
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                            <polyline points="7 10 12 15 17 10" />
-                            <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
                         <span>خروجی اکسل / CSV</span>
                     </button>
-
                     <button
                         type="button"
                         className="prm-btn-glass"
-                        onClick={handlePrintPdf}
+                        onClick={() => window.print()}
                     >
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
-                            <polyline points="6 9 6 2 18 2 18 9" />
-                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                            <rect x="6" y="14" width="12" height="8" />
-                        </svg>
                         <span>خروجی PDF / پرینت</span>
                     </button>
                 </div>
-            </div>
+
+                <div className="prm-tf-header-metrics">
+                    <PrmTradeFlowMetrics summary={summary} />
+                </div>
+            </header>
 
             <PrmTradeFlowFilters
                 filters={filters}
                 options={options}
                 onChange={handleFilterChange}
-                onReset={handleReset}
+                onReset={() => setFilters(PRM_DEFAULT_FILTERS)}
             />
 
-            <div style={{ position: "relative" }}>
+            {error && <div className="prm-tf-error" role="alert">{error}</div>}
+
+            <div className="prm-tf-results">
                 {isLoading && (
-                    <div className="prm-tf-loading-overlay">
+                    <div className="prm-tf-loading-overlay" role="status" aria-label="در حال بارگذاری آمار">
                         <div className="prm-tf-spinner" />
                     </div>
                 )}
-
-                <PrmTradeFlowMetrics summary={summary} />
-
-                <div style={{ marginTop: "1.5rem" }}>
-                    <PrmTradeFlowCharts charts={charts} metric={filters.metric} />
-                </div>
+                <PrmTradeFlowCharts charts={charts} metric={filters.metric} />
+                <PrmTariffTree
+                    key={`tree-${JSON.stringify(filters)}`}
+                    filters={filters}
+                    token={token}
+                />
+                <PrmTradeFlowTable
+                    key={`table-${JSON.stringify(filters)}`}
+                    filters={filters}
+                    token={token}
+                />
             </div>
         </div>
     );

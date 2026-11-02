@@ -1,77 +1,130 @@
-import { api } from "@/lib/api";
 import {
     PrmPlanStatusData,
+    PrmSortDirection,
+    PrmTableSort,
+    PrmTableTab,
+    PrmTariffTreeData,
     PrmTradeFlowChartsData,
     PrmTradeFlowFilterOptions,
     PrmTradeFlowFilterState,
     PrmTradeFlowSummaryData,
+    PrmTradeFlowTableData,
 } from "./prm-tradeflow-types";
 
-function prmCleanFilters(filters: PrmTradeFlowFilterState): Record<string, any> {
-    const payload: Record<string, any> = {};
-
-    Object.entries(filters).forEach(([key, value]) => {
-        if (value !== "" && value !== undefined && value !== null) {
-            payload[key] = value;
-        }
-    });
-
-    return payload;
+function prmGetBaseUrl(): string {
+    const rawUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    return rawUrl.replace(/\/api\/?$/, "").replace(/\/+$/, "");
 }
 
-export async function prmGetTradeFlowPlanStatus(token: string): Promise<PrmPlanStatusData> {
-    const response = await api.get("/v1/tradeflow/plan-status", {
-        headers: { Authorization: `Bearer ${token}` },
+async function prmFetchJson<T>(
+    endpoint: string,
+    token: string,
+    options: RequestInit = {}
+): Promise<T> {
+    const baseUrl = prmGetBaseUrl();
+    const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+    const url = `${baseUrl}${cleanEndpoint}`;
+
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            ...(options.headers || {}),
+        },
     });
-    return response.data.data;
+
+    if (!response.ok) {
+        throw new Error(`PRM API Error: ${response.status}`);
+    }
+
+    const json = await response.json();
+    return json.data as T;
 }
 
-export async function prmGetTradeFlowFilterOptions(token: string): Promise<PrmTradeFlowFilterOptions> {
-    const response = await api.get("/v1/tradeflow/options", {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data.data;
+export async function prmGetTradeFlowPlanStatus(
+    token: string
+): Promise<PrmPlanStatusData> {
+    return prmFetchJson<PrmPlanStatusData>("/api/v1/tradeflow/plan-status", token);
+}
+
+export async function prmGetTradeFlowFilterOptions(
+    token: string
+): Promise<PrmTradeFlowFilterOptions> {
+    return prmFetchJson<PrmTradeFlowFilterOptions>("/api/v1/tradeflow/options", token);
 }
 
 export async function prmGetTradeFlowSummary(
     filters: PrmTradeFlowFilterState,
-    token: string,
+    token: string
 ): Promise<PrmTradeFlowSummaryData> {
-    const response = await api.post(
-        "/v1/tradeflow/summary",
-        prmCleanFilters(filters),
-        {
-            headers: { Authorization: `Bearer ${token}` },
-        },
-    );
-    return response.data.data;
+    return prmFetchJson<PrmTradeFlowSummaryData>("/api/v1/tradeflow/summary", token, {
+        method: "POST",
+        body: JSON.stringify(filters),
+    });
 }
 
 export async function prmGetTradeFlowCharts(
     filters: PrmTradeFlowFilterState,
-    token: string,
+    token: string
 ): Promise<PrmTradeFlowChartsData> {
-    const response = await api.post(
-        "/v1/tradeflow/charts",
-        prmCleanFilters(filters),
-        {
-            headers: { Authorization: `Bearer ${token}` },
-        },
-    );
-    return response.data.data;
+    return prmFetchJson<PrmTradeFlowChartsData>("/api/v1/tradeflow/charts", token, {
+        method: "POST",
+        body: JSON.stringify(filters),
+    });
+}
+
+export async function prmGetTradeFlowTable(
+    filters: PrmTradeFlowFilterState,
+    token: string,
+    tab: PrmTableTab,
+    page: number,
+    sortBy: PrmTableSort | null,
+    sortDir: PrmSortDirection
+): Promise<PrmTradeFlowTableData> {
+    return prmFetchJson<PrmTradeFlowTableData>("/api/v1/tradeflow/table", token, {
+        method: "POST",
+        body: JSON.stringify({
+            ...filters,
+            tab,
+            page,
+            ...(sortBy ? { sort_by: sortBy, sort_dir: sortDir } : {}),
+        }),
+    });
+}
+
+export async function prmGetTariffTree(
+    filters: PrmTradeFlowFilterState,
+    token: string,
+    prefix: string
+): Promise<PrmTariffTreeData> {
+    return prmFetchJson<PrmTariffTreeData>("/api/v1/tradeflow/tariff-tree", token, {
+        method: "POST",
+        body: JSON.stringify({
+            ...filters,
+            ...(prefix ? { prefix } : {}),
+        }),
+    });
 }
 
 export async function prmDownloadTradeFlowCsv(
     filters: PrmTradeFlowFilterState,
-    token: string,
+    token: string
 ): Promise<Blob> {
-    const response = await api.post(
-        "/v1/tradeflow/export/csv",
-        prmCleanFilters(filters),
-        {
-            headers: { Authorization: `Bearer ${token}` },
-            responseType: "blob",
+    const baseUrl = prmGetBaseUrl();
+    const response = await fetch(`${baseUrl}/api/v1/tradeflow/export/csv`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
         },
-    );
-    return response.data;
+        body: JSON.stringify(filters),
+    });
+
+    if (!response.ok) {
+        throw new Error(`PRM Export Error: ${response.status}`);
+    }
+
+    return response.blob();
 }

@@ -27,5 +27,7 @@ Route::prefix('v1/tradeflow')->middleware('auth:sanctum')->group(function () {
     Route::get('/options', [PrmTradeFlowFilterController::class, 'options']);
     Route::post('/summary', [PrmTradeFlowAnalyticsController::class, 'summary']);
     Route::post('/charts', [PrmTradeFlowAnalyticsController::class, 'charts']);
+    Route::post('/table', [PrmTradeFlowAnalyticsController::class, 'table']);
+    Route::post('/tariff-tree', [PrmTradeFlowAnalyticsController::class, 'tariffTree']);
     Route::post('/export/csv', [PrmTradeFlowExportController::class, 'exportCsv']);
 });

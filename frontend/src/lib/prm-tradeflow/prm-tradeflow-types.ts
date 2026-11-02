@@ -1,5 +1,23 @@
 export type PrmTradeType = "all" | "import" | "export";
 export type PrmMetricType = "dolar" | "rial" | "weight";
+export type PrmExactValue = string | number;
+export type PrmTableTab =
+    | "tariffs"
+    | "countries"
+    | "customs"
+    | "provinces"
+    | "annual"
+    | "monthly";
+export type PrmTableSort =
+    | "label"
+    | "tariff_code"
+    | "description"
+    | "country"
+    | "total_usd"
+    | "total_rial"
+    | "total_weight"
+    | "record_count";
+export type PrmSortDirection = "asc" | "desc";
 
 export interface PrmFilterSelectOption {
     id: number | string;
@@ -37,33 +55,69 @@ export interface PrmTradeFlowFilterState {
 
 export interface PrmTradeFlowSummaryData {
     total_records: number;
-    total_usd: number;
-    total_rial: number;
-    total_weight: number;
+    total_usd: PrmExactValue;
+    total_rial: PrmExactValue;
+    total_weight: PrmExactValue;
     unique_tariffs: number;
     unique_countries: number;
+    unique_provinces: number;
     unique_customs: number;
 }
 
 export interface PrmChartBarItem {
     label: string;
-    value: number;
+    value: PrmExactValue;
     description?: string;
 }
 
-export interface PrmTimelineItem {
+export interface PrmAnnualItem {
     year: number;
-    month: number;
-    metric_value: number;
+    usd: PrmExactValue;
+    rial: PrmExactValue;
+    weight: PrmExactValue;
 }
 
 export interface PrmTradeFlowChartsData {
-    timeline: PrmTimelineItem[];
+    annual: PrmAnnualItem[];
+    continents: PrmChartBarItem[];
     top_countries: PrmChartBarItem[];
     top_tariffs: PrmChartBarItem[];
-    top_provinces: PrmChartBarItem[];
     top_customs: PrmChartBarItem[];
-    by_trade_type: PrmChartBarItem[];
+    top_provinces: PrmChartBarItem[];
+    regions: PrmChartBarItem[];
+    unions: PrmChartBarItem[];
+    seasons: PrmChartBarItem[];
+}
+
+export interface PrmTradeFlowTableRow {
+    label: string;
+    tariff_code: string | null;
+    description: string | null;
+    country: string | null;
+    total_usd: PrmExactValue;
+    total_rial: PrmExactValue;
+    total_weight: PrmExactValue;
+    record_count: number;
+}
+
+export interface PrmTradeFlowTableData {
+    rows: PrmTradeFlowTableRow[];
+    page: number;
+    per_page: number;
+    total: number;
+    last_page: number;
+}
+
+export interface PrmTariffTreeNode {
+    code: string;
+    value: PrmExactValue;
+    record_count: number;
+}
+
+export interface PrmTariffTreeData {
+    prefix: string;
+    depth: number;
+    nodes: PrmTariffTreeNode[];
 }
 
 export interface PrmPlanStatusData {

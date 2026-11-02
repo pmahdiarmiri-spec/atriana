@@ -27,6 +27,11 @@ class PrmTradeFlowFilterRequest extends FormRequest
             'section_id' => ['nullable', 'integer'],
             'season' => ['nullable', 'string', 'max:50'],
             'metric' => ['nullable', 'string', 'in:dolar,rial,weight'],
+            'tab' => ['nullable', 'string', 'in:tariffs,countries,customs,provinces,annual,monthly'],
+            'page' => ['nullable', 'integer', 'min:1', 'max:100000'],
+            'sort_by' => ['nullable', 'string', 'in:label,tariff_code,description,country,total_usd,total_rial,total_weight,record_count'],
+            'sort_dir' => ['nullable', 'string', 'in:asc,desc'],
+            'prefix' => ['nullable', 'string', 'regex:/^(?:[0-9]{2}|[0-9]{4}|[0-9]{6})$/'],
         ];
     }
 }

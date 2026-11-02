@@ -1,0 +1,213 @@
+.prm-tf-detail-card {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.93), rgba(248, 250, 252, 0.76));
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(145%);
+    -webkit-backdrop-filter: blur(20px) saturate(145%);
+    color: var(--prm-text-dark, #1e293b);
+}
+
+.prm-tf-detail-card::before {
+    position: absolute;
+    top: 0;
+    right: 7%;
+    left: 7%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.65), transparent);
+    content: "";
+}
+
+.prm-tf-detail-heading h2 {
+    margin: 0 0 7px;
+    color: var(--prm-primary-color, #0f172a);
+    font-size: 1.2rem;
+}
+
+.prm-tf-detail-heading p,
+.prm-tf-tree-note {
+    margin: 0 0 18px;
+    color: var(--prm-text-light, #64748b);
+    font-size: 0.86rem;
+}
+
+.prm-tf-detail-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.prm-tf-detail-tab,
+.prm-tf-pagination button,
+.prm-tf-tree-navigation button {
+    border: 1px solid rgba(15, 23, 42, 0.13);
+    border-radius: 11px;
+    padding: 9px 13px;
+    background: rgba(255, 255, 255, 0.78);
+    color: var(--prm-primary-color, #0f172a);
+    cursor: pointer;
+}
+
+.prm-tf-detail-tab:hover,
+.prm-tf-pagination button:not(:disabled):hover,
+.prm-tf-tree-navigation button:hover {
+    border-color: var(--prm-secondary-color, #f59e0b);
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.14);
+}
+
+.prm-tf-detail-tab-active {
+    border-color: var(--prm-primary-color, #0f172a);
+    background: var(--prm-primary-color, #0f172a);
+    color: #fff;
+}
+
+.prm-tf-table-scroll {
+    overflow-x: auto;
+}
+
+.prm-tf-detail-table {
+    width: 100%;
+    min-width: 970px;
+    border-collapse: collapse;
+    text-align: right;
+}
+
+.prm-tf-detail-table th,
+.prm-tf-detail-table td {
+    padding: 13px 11px;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.09);
+    white-space: nowrap;
+}
+
+.prm-tf-detail-table th {
+    background: rgba(15, 23, 42, 0.06);
+    color: var(--prm-primary-color, #0f172a);
+}
+
+.prm-tf-detail-table tbody tr:hover {
+    background: rgba(245, 158, 11, 0.055);
+}
+
+.prm-tf-detail-table td:nth-child(3) {
+    min-width: 220px;
+    max-width: 340px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.prm-tf-sort-button {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.prm-tf-sort-button:focus-visible,
+.prm-tf-tree-tile:focus-visible {
+    outline: 3px solid var(--prm-secondary-color, #f59e0b);
+    outline-offset: -3px;
+}
+
+.prm-tf-table-footer,
+.prm-tf-tree-navigation,
+.prm-tf-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.prm-tf-table-footer {
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.prm-tf-pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.prm-tf-tree-navigation {
+    margin-bottom: 13px;
+}
+
+.prm-tf-treemap {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    overflow: hidden;
+    border-radius: 15px;
+    background: rgba(15, 23, 42, 0.055);
+}
+
+.prm-tf-tree-tile {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 5px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    padding: 7px;
+    color: #fff;
+    text-align: right;
+    cursor: pointer;
+    transition: filter 160ms ease, box-shadow 160ms ease;
+}
+
+.prm-tf-tree-tile:hover {
+    z-index: 1;
+    filter: brightness(1.14);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.prm-tf-tree-tile:disabled {
+    cursor: default;
+}
+
+.prm-tf-tree-tile small {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.prm-tf-tree-note {
+    margin: 12px 0 0;
+}
+
+.prm-tf-detail-status {
+    padding: 14px;
+    color: var(--prm-text-light, #64748b);
+}
+
+.prm-tf-detail-error {
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(192, 0, 0, 0.08);
+    color: #c00000;
+}
+
+.prm-tf-empty-cell {
+    text-align: center;
+}
+
+@media (max-width: 640px) {
+    .prm-tf-detail-card {
+        padding: 16px;
+    }
+
+    .prm-tf-table-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

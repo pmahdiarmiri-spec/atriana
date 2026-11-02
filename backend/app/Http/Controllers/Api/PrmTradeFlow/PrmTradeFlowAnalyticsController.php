@@ -34,4 +34,20 @@ class PrmTradeFlowAnalyticsController extends Controller
             'data' => $charts,
         ]);
     }
+
+    public function table(PrmTradeFlowFilterRequest $request): JsonResponse
+    {
+        return response()->json([
+            'status' => 'success',
+            'data' => $this->queryService->getDetailTable($request->validated()),
+        ]);
+    }
+
+    public function tariffTree(PrmTradeFlowFilterRequest $request): JsonResponse
+    {
+        return response()->json([
+            'status' => 'success',
+            'data' => $this->queryService->getTariffTree($request->validated()),
+        ]);
+    }
 }
