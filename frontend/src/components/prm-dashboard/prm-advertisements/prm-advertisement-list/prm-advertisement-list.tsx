@@ -2,17 +2,20 @@
 
 import { ReactNode } from "react";
 import { PrmAdvertisementItem } from "@/lib/prm-advertisements/prm-advertisements-api";
+import { PrmAdvertisementStatus } from "../prm-advertisement-status/prm-advertisement-status";
 
 interface PrmAdvertisementListProps {
     advertisements: PrmAdvertisementItem[];
     isLoading: boolean;
     onCreateClick: () => void;
+    onDetailsClick: (advertisement: PrmAdvertisementItem) => void;
 }
 
 export function PrmAdvertisementList({
     advertisements,
     isLoading,
     onCreateClick,
+    onDetailsClick,
 }: PrmAdvertisementListProps): ReactNode {
     if (isLoading) {
         return (
@@ -38,43 +41,49 @@ export function PrmAdvertisementList({
         );
     }
 
-    const prmGetStatusBadge = (status: PrmAdvertisementItem["status"]) => {
-        switch (status) {
-            case "approved":
-                return <span className="prm-ad-badge prm-ad-badge-approved">تایید شده</span>;
-            case "rejected":
-                return <span className="prm-ad-badge prm-ad-badge-rejected">رد شده</span>;
-            case "expired":
-                return <span className="prm-ad-badge prm-ad-badge-expired">منقضی</span>;
-            default:
-                return <span className="prm-ad-badge prm-ad-badge-pending">در انتظار بررسی</span>;
-        }
-    };
-
     return (
         <div className="prm-ads-list-grid">
             {advertisements.map((ad) => (
-                <div key={ad.id} className="prm-ad-card">
-                    <div className="prm-ad-card-head">
-                        <h3>{ad.title}</h3>
-                        {prmGetStatusBadge(ad.status)}
-                    </div>
-                    <p className="prm-ad-desc">{ad.description}</p>
-                    <div className="prm-ad-meta-row">
-                        <span className="prm-ad-pill">{ad.nature === "goods" ? "کالا" : "خدمات"}</span>
-                        <span className="prm-ad-pill">{ad.category}</span>
-                        {ad.price ? (
-                            <span className="prm-ad-pill">
-                                {Number(ad.price).toLocaleString("fa-IR")} {ad.currency === "toman" ? "تومان" : ad.currency}
-                            </span>
+                <article key={ad.id} className="prm-ad-card prm-ad-card-gallery">
+                    <div className="prm-ad-card-cover">
+                        {ad.image_url ? (
+                            <img src={ad.image_url} alt={`تصویر اصلی ${ad.title}`} loading="lazy" />
                         ) : (
-                            <span className="prm-ad-pill">توافقی</span>
+                            <span className="prm-ad-card-placeholder">بدون تصویر</span>
                         )}
-                        {ad.use_company_profile && (
-                            <span className="prm-ad-pill">پروفایل شرکتی</span>
-                        )}
+                        <PrmAdvertisementStatus status={ad.status} />
                     </div>
-                </div>
+                    <div className="prm-ad-card-body">
+                        <div className="prm-ad-card-head">
+                            <h3>{ad.title}</h3>
+                        </div>
+                        <p className="prm-ad-desc">{ad.description}</p>
+                        <div className="prm-ad-meta-row">
+                            <span className="prm-ad-pill">{ad.nature === "goods" ? "کالا" : "خدمات"}</span>
+                            <span className="prm-ad-pill">{ad.category}</span>
+                            {ad.price_type === "fixed" && ad.price !== null ? (
+                                <span className="prm-ad-pill">
+                                    {Number(ad.price).toLocaleString("fa-IR")} {ad.currency === "toman" ? "تومان" : ad.currency}
+                                </span>
+                            ) : (
+                                <span className="prm-ad-pill">
+                                    {ad.price_type === "call" ? "استعلام تلفنی" : "توافقی"}
+                                </span>
+                            )}
+                            {ad.use_company_profile && (
+                                <span className="prm-ad-pill">پروفایل شرکتی</span>
+                            )}
+                        </div>
+                        <button
+                            type="button"
+                            className="prm-btn-secondary prm-ad-details-button"
+                            onClick={() => onDetailsClick(ad)}
+                            aria-label={`مشاهده جزئیات آگهی ${ad.title}`}
+                        >
+                            مشاهده جزئیات
+                        </button>
+                    </div>
+                </article>
             ))}
         </div>
     );

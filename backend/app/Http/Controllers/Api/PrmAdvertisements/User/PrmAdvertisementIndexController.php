@@ -15,6 +15,7 @@ class PrmAdvertisementIndexController extends Controller
         $user = $request->user();
 
         $query = PrmAdvertisement::query()
+            ->with('images')
             ->where('user_id', $user->id)
             ->latest('id');
 

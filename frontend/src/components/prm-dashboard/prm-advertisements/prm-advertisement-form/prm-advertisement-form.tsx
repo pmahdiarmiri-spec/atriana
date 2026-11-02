@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { CSSProperties, FormEvent, ReactNode } from "react";
+import type { ChangeEvent, CSSProperties, FormEvent, ReactNode } from "react";
 import { PrmSearchableSelect } from "@/components/layout/prm-searchable-select";
 import {
     PrmAdvertisementPayload,
@@ -157,8 +157,9 @@ export function PrmAdvertisementForm({
     const [prmPhone, setPrmPhone] = useState<string>("");
     const [prmShowPhone, setPrmShowPhone] = useState<boolean>(true);
     const [prmUseCompanyProfile, setPrmUseCompanyProfile] = useState<boolean>(hasCompany);
-    const [prmImage, setPrmImage] = useState<File | null>(null);
-    const [prmImagePreview, setPrmImagePreview] = useState<string | null>(null);
+    const [prmImages, setPrmImages] = useState<File[]>([]);
+    const [prmImagePreviews, setPrmImagePreviews] = useState<string[]>([]);
+    const [prmPrimaryImageIndex, setPrmPrimaryImageIndex] = useState<number>(0);
     const [prmError, setPrmError] = useState<string>("");
 
     useEffect(() => {
@@ -174,18 +175,13 @@ export function PrmAdvertisementForm({
     }, [prmNature]);
 
     useEffect(() => {
-        if (!prmImage) {
-            setPrmImagePreview(null);
-            return;
-        }
-
-        const previewUrl = URL.createObjectURL(prmImage);
-        setPrmImagePreview(previewUrl);
+        const previewUrls = prmImages.map((file) => URL.createObjectURL(file));
+        setPrmImagePreviews(previewUrls);
 
         return () => {
-            URL.revokeObjectURL(previewUrl);
+            previewUrls.forEach((url) => URL.revokeObjectURL(url));
         };
-    }, [prmImage]);
+    }, [prmImages]);
 
     const prmCategoriesList =
         prmNature === "goods" ? prmGoodsCategoriesFa : prmServicesCategoriesFa;
@@ -249,7 +245,8 @@ export function PrmAdvertisementForm({
             phone: prmPhone.trim() || undefined,
             show_phone: prmShowPhone,
             use_company_profile: prmUseCompanyProfile,
-            image: prmImage,
+            images: prmImages,
+            primary_image_index: prmImages.length > 0 ? prmPrimaryImageIndex : undefined,
         };
 
         try {
@@ -276,28 +273,44 @@ export function PrmAdvertisementForm({
         }
     };
 
-    const prmHandleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0] ?? null;
+    const prmHandleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const selectedFiles = Array.from(event.target.files ?? []);
+        event.target.value = "";
 
-        if (!file) {
-            setPrmImage(null);
+        if (selectedFiles.length === 0) {
             return;
         }
 
-        if (!file.type.startsWith("image/")) {
-            setPrmError("لطفاً یک فایل تصویری انتخاب کنید.");
-            event.target.value = "";
+        if (prmImages.length + selectedFiles.length > 10) {
+            setPrmError("برای هر آگهی حداکثر ۱۰ تصویر می‌توانید انتخاب کنید.");
             return;
         }
 
-        if (file.size > 5 * 1024 * 1024) {
-            setPrmError("حجم تصویر نباید بیشتر از ۵ مگابایت باشد.");
-            event.target.value = "";
+        const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+        if (selectedFiles.some((file) => !allowedTypes.includes(file.type))) {
+            setPrmError("فرمت مجاز تصاویر فقط JPG، PNG و WebP است.");
+            return;
+        }
+
+        if (selectedFiles.some((file) => file.size > 5 * 1024 * 1024)) {
+            setPrmError("حجم هر تصویر نباید بیشتر از ۵ مگابایت باشد.");
             return;
         }
 
         setPrmError("");
-        setPrmImage(file);
+        setPrmImages((current) => [...current, ...selectedFiles]);
+    };
+
+    const prmHandleRemoveImage = (index: number) => {
+        setPrmImages((current) => current.filter((_, imageIndex) => imageIndex !== index));
+        setPrmPrimaryImageIndex((current) => {
+            if (current === index) {
+                return 0;
+            }
+
+            return current > index ? current - 1 : current;
+        });
     };
 
     const prmFieldGridStyle: CSSProperties = {
@@ -677,42 +690,44 @@ export function PrmAdvertisementForm({
                 <section className="prm-ads-step-panel">
                     <div className="prm-form-grid" style={prmFieldGridStyle}>
                         <div className="prm-form-field prm-form-group-full">
-                            <label htmlFor="prm-ad-image">تصویر آگهی (حداکثر ۵ مگابایت)</label>
+                            <label htmlFor="prm-ad-images">تصاویر آگهی؛ حداکثر ۱۰ تصویر، هرکدام تا ۵ مگابایت</label>
                             <input
-                                id="prm-ad-image"
+                                id="prm-ad-images"
                                 type="file"
                                 className="prm-form-input"
                                 accept="image/jpeg,image/png,image/webp"
+                                multiple
                                 onChange={prmHandleImageChange}
                             />
-                            {prmImagePreview && (
-                                <div
-                                    className="prm-ad-image-preview"
-                                    style={{
-                                        marginTop: 14,
-                                        maxWidth: 360,
-                                    }}
-                                >
-                                    <img
-                                        src={prmImagePreview}
-                                        alt="پیش‌نمایش تصویر آگهی"
-                                        style={{
-                                            border: "1px solid rgba(100, 116, 139, 0.24)",
-                                            borderRadius: 14,
-                                            display: "block",
-                                            maxHeight: 260,
-                                            objectFit: "contain",
-                                            width: "100%",
-                                        }}
-                                    />
-                                    <button
-                                        type="button"
-                                        className="prm-btn-secondary"
-                                        onClick={() => setPrmImage(null)}
-                                        style={{ marginTop: 8 }}
-                                    >
-                                        حذف تصویر
-                                    </button>
+                            <p className="prm-ad-upload-hint">
+                                می‌توانید چند تصویر انتخاب کنید؛ سپس روی «انتخاب به‌عنوان تصویر اصلی» بزنید.
+                            </p>
+                            {prmImagePreviews.length > 0 && (
+                                <div className="prm-ad-upload-grid">
+                                    {prmImagePreviews.map((url, index) => (
+                                        <div key={url} className="prm-ad-upload-item">
+                                            <img src={url} alt={`پیش‌نمایش تصویر ${index + 1}`} />
+                                            <div className="prm-ad-upload-item-actions">
+                                                <button
+                                                    type="button"
+                                                    className="prm-btn-secondary"
+                                                    onClick={() => setPrmPrimaryImageIndex(index)}
+                                                    aria-pressed={prmPrimaryImageIndex === index}
+                                                >
+                                                    {prmPrimaryImageIndex === index
+                                                        ? "تصویر اصلی"
+                                                        : "انتخاب به‌عنوان تصویر اصلی"}
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="prm-btn-secondary"
+                                                    onClick={() => prmHandleRemoveImage(index)}
+                                                >
+                                                    حذف
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             )}
                         </div>

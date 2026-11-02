@@ -5,6 +5,14 @@ export type PrmAdType = "offer" | "demand";
 export type PrmAdOrigin = "domestic" | "export" | "import";
 export type PrmAdPriceType = "fixed" | "agreement" | "call";
 
+export interface PrmAdvertisementImage {
+    id: number;
+    path: string;
+    url: string;
+    position: number;
+    is_primary: boolean;
+}
+
 export interface PrmAdvertisementItem {
     id: number;
     user_id: number;
@@ -21,6 +29,7 @@ export interface PrmAdvertisementItem {
     slug: string;
     image_path: string | null;
     image_url: string | null;
+    images: PrmAdvertisementImage[];
     province: string | null;
     city: string | null;
     address: string | null;
@@ -109,6 +118,8 @@ export interface PrmAdvertisementPayload {
     quality_grade?: string;
     video_link?: string;
     image?: File | null;
+    images?: File[];
+    primary_image_index?: number;
     company_name?: string;
     business_type?: string;
     activity_type?: string;
@@ -170,7 +181,9 @@ export interface PrmAdvertisementMetaResponse {
     };
 }
 
-export async function prmGetAdvertisementsMeta(token: string): Promise<PrmAdvertisementMetaResponse> {
+export async function prmGetAdvertisementsMeta(
+    token: string,
+): Promise<PrmAdvertisementMetaResponse> {
     const response = await api.get("/v1/advertisements/meta", {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -180,7 +193,9 @@ export async function prmGetAdvertisementsMeta(token: string): Promise<PrmAdvert
     return response.data;
 }
 
-export async function prmGetMyAdvertisements(token: string): Promise<PrmAdvertisementItem[]> {
+export async function prmGetMyAdvertisements(
+    token: string,
+): Promise<PrmAdvertisementItem[]> {
     const response = await api.get("/v1/advertisements/my", {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -198,6 +213,13 @@ export async function prmCreateAdvertisement(
 
     Object.entries(payload).forEach(([key, value]) => {
         if (value === undefined || value === null) {
+            return;
+        }
+
+        if (key === "images" && Array.isArray(value)) {
+            value.forEach((file, index) => {
+                formData.append(`images[${index}]`, file);
+            });
             return;
         }
 

@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { PrmAdvertisementList } from "../prm-advertisement-list/prm-advertisement-list";
+import { PrmAdvertisementDetail } from "../prm-advertisement-detail/prm-advertisement-detail";
 import { PrmAdvertisementForm } from "../prm-advertisement-form/prm-advertisement-form";
 import {
     PrmAdvertisementItem,
@@ -11,6 +12,7 @@ import {
     prmGetMyAdvertisements,
 } from "@/lib/prm-advertisements/prm-advertisements-api";
 import "@/styles/dashboard/prm-advertisements.css";
+import "@/styles/dashboard/prm-advertisements-gallery.css";
 
 interface PrmAdvertisementsViewProps {
     token: string;
@@ -27,18 +29,24 @@ export function PrmAdvertisementsView({
     const [prmIsSubmitting, setPrmIsSubmitting] = useState<boolean>(false);
     const [prmHasCompany, setPrmHasCompany] = useState<boolean>(false);
     const [prmCompanyName, setPrmCompanyName] = useState<string | null>(null);
+    const [prmSelectedAdId, setPrmSelectedAdId] = useState<number | null>(null);
+    const [prmLoadError, setPrmLoadError] = useState<string>("");
 
     const prmFetchData = async () => {
         setPrmIsLoading(true);
+        setPrmLoadError("");
+
         try {
             const [adsData, metaData] = await Promise.all([
                 prmGetMyAdvertisements(token),
                 prmGetAdvertisementsMeta(token),
             ]);
+
             setPrmAds(adsData);
             setPrmHasCompany(metaData.has_company);
             setPrmCompanyName(metaData.company?.name_fa || metaData.company?.name_en || null);
         } catch {
+            setPrmLoadError("دریافت آگهی‌ها با مشکل مواجه شد. دوباره تلاش کنید.");
         } finally {
             setPrmIsLoading(false);
         }
@@ -46,12 +54,13 @@ export function PrmAdvertisementsView({
 
     useEffect(() => {
         if (token) {
-            prmFetchData();
+            void prmFetchData();
         }
     }, [token]);
 
     const prmHandleCreateSubmit = async (payload: PrmAdvertisementPayload) => {
         setPrmIsSubmitting(true);
+
         try {
             await prmCreateAdvertisement(token, payload);
             setPrmShowForm(false);
@@ -61,6 +70,8 @@ export function PrmAdvertisementsView({
         }
     };
 
+    const prmSelectedAd = prmAds.find((ad) => ad.id === prmSelectedAdId) ?? null;
+
     return (
         <div className="prm-ads-container">
             <div className="prm-ads-header">
@@ -69,7 +80,7 @@ export function PrmAdvertisementsView({
                     <p>مدیریت و ثبت آگهی‌های عرضه و تقاضای کالا و خدمات با قابلیت اتصال به پروفایل شرکتی</p>
                 </div>
                 <div className="prm-ads-actions">
-                    {!prmShowForm ? (
+                    {!prmShowForm && !prmSelectedAd ? (
                         <button
                             type="button"
                             className="prm-btn-primary"
@@ -86,7 +97,10 @@ export function PrmAdvertisementsView({
                         <button
                             type="button"
                             className="prm-btn-secondary"
-                            onClick={() => setPrmShowForm(false)}
+                            onClick={() => {
+                                setPrmShowForm(false);
+                                setPrmSelectedAdId(null);
+                            }}
                         >
                             <span>مشاهده آگهی‌های من</span>
                         </button>
@@ -103,11 +117,25 @@ export function PrmAdvertisementsView({
                     onSubmit={prmHandleCreateSubmit}
                     onGoToCompany={onGoToCompany}
                 />
+            ) : prmSelectedAd ? (
+                <PrmAdvertisementDetail
+                    key={prmSelectedAd.id}
+                    advertisement={prmSelectedAd}
+                    onBack={() => setPrmSelectedAdId(null)}
+                />
+            ) : prmLoadError ? (
+                <div className="prm-ads-empty" role="alert">
+                    <p>{prmLoadError}</p>
+                    <button type="button" className="prm-btn-secondary" onClick={() => void prmFetchData()}>
+                        تلاش دوباره
+                    </button>
+                </div>
             ) : (
                 <PrmAdvertisementList
                     advertisements={prmAds}
                     isLoading={prmIsLoading}
                     onCreateClick={() => setPrmShowForm(true)}
+                    onDetailsClick={(ad) => setPrmSelectedAdId(ad.id)}
                 />
             )}
         </div>

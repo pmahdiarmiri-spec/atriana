@@ -1,0 +1,275 @@
+.prm-ads-container .prm-ad-card-gallery {
+    overflow: hidden;
+}
+
+.prm-ads-container .prm-ad-card-cover {
+    position: relative;
+    display: grid;
+    min-height: 190px;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+}
+
+.prm-ads-container .prm-ad-card-cover > img {
+    width: 100%;
+    height: 210px;
+    display: block;
+    object-fit: cover;
+}
+
+.prm-ads-container .prm-ad-card-placeholder {
+    color: #94a3b8;
+}
+
+.prm-ads-container .prm-ad-card-cover .prm-ad-status {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+
+.prm-ads-container .prm-ad-card-body {
+    padding-top: 16px;
+}
+
+.prm-ads-container .prm-ad-details-button {
+    margin-top: 16px;
+    width: 100%;
+}
+
+.prm-ads-container .prm-ad-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-weight: 700;
+    backdrop-filter: blur(16px) saturate(150%);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.prm-ads-container .prm-ad-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 10px currentColor;
+}
+
+.prm-ads-container .prm-ad-badge-pending.prm-ad-status {
+    color: #fbbf24;
+    background: rgba(69, 45, 11, 0.88);
+}
+
+.prm-ads-container .prm-ad-badge-approved.prm-ad-status {
+    color: #86efac;
+    background: rgba(10, 57, 35, 0.88);
+}
+
+.prm-ads-container .prm-ad-badge-rejected.prm-ad-status {
+    color: #fca5a5;
+    background: rgba(78, 23, 31, 0.88);
+}
+
+.prm-ads-container .prm-ad-badge-expired.prm-ad-status {
+    color: #cbd5e1;
+    background: rgba(30, 41, 59, 0.9);
+}
+
+.prm-ads-container .prm-ad-detail {
+    display: grid;
+    gap: 22px;
+    color: #e2e8f0;
+}
+
+.prm-ads-container .prm-ad-detail > .prm-btn-secondary {
+    justify-self: start;
+}
+
+.prm-ads-container .prm-ad-detail-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.prm-ads-container .prm-ad-detail-heading h2 {
+    margin: 0;
+    color: #ffffff;
+}
+
+.prm-ads-container .prm-ad-detail-heading p {
+    margin: 8px 0 0;
+    color: #94a3b8;
+}
+
+.prm-ads-container .prm-ad-detail-notice,
+.prm-ads-container .prm-ad-detail-section {
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.86), rgba(15, 23, 42, 0.94));
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.13);
+}
+
+.prm-ads-container .prm-ad-detail-notice p {
+    margin: 12px 0 0;
+}
+
+.prm-ads-container .prm-ad-detail-notice-rejected {
+    border-color: rgba(248, 113, 113, 0.5);
+}
+
+.prm-ads-container .prm-ad-detail-notice-approved {
+    border-color: rgba(74, 222, 128, 0.4);
+}
+
+.prm-ads-container .prm-ad-detail-notice-pending {
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.prm-ads-container .prm-ad-detail-main-image {
+    display: grid;
+    height: min(55vw, 460px);
+    min-height: 240px;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    background: #0f172a;
+    color: #94a3b8;
+}
+
+.prm-ads-container .prm-ad-detail-main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.prm-ads-container .prm-ad-detail-thumbnails {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.prm-ads-container .prm-ad-detail-thumbnail {
+    width: 84px;
+    height: 72px;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background: #0f172a;
+}
+
+.prm-ads-container .prm-ad-detail-thumbnail-active {
+    border-color: #f59e0b;
+}
+
+.prm-ads-container .prm-ad-detail-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.prm-ads-container .prm-ad-detail-section h3 {
+    margin: 0 0 16px;
+    color: #fbbf24;
+}
+
+.prm-ads-container .prm-ad-detail-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+    gap: 16px;
+    margin: 0;
+}
+
+.prm-ads-container .prm-ad-detail-fields > div {
+    min-width: 0;
+}
+
+.prm-ads-container .prm-ad-detail-fields dt {
+    margin-bottom: 5px;
+    color: #94a3b8;
+}
+
+.prm-ads-container .prm-ad-detail-fields dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.prm-ads-container .prm-ad-detail-description {
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.9;
+}
+
+.prm-ads-container .prm-ad-detail-description + .prm-ad-detail-description {
+    margin-top: 16px;
+}
+
+.prm-ads-container .prm-ad-detail-video {
+    justify-self: start;
+}
+
+.prm-ads-container .prm-ad-upload-hint {
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.prm-ads-container .prm-ad-upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.prm-ads-container .prm-ad-upload-item {
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.6);
+}
+
+.prm-ads-container .prm-ad-upload-item img {
+    display: block;
+    width: 100%;
+    height: 140px;
+    border-radius: 9px;
+    object-fit: cover;
+}
+
+.prm-ads-container .prm-ad-upload-item-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.prm-ads-container .prm-ad-upload-item-actions button {
+    flex: 1 1 auto;
+    font-size: 0.78rem;
+}
+
+.prm-ads-container .prm-ad-upload-item-actions button[aria-pressed="true"] {
+    border-color: #f59e0b;
+    color: #fbbf24;
+}
+
+@media (max-width: 600px) {
+    .prm-ads-container .prm-ad-detail-notice,
+    .prm-ads-container .prm-ad-detail-section {
+        padding: 16px;
+    }
+
+    .prm-ads-container .prm-ad-detail-main-image {
+        height: 280px;
+    }
+}

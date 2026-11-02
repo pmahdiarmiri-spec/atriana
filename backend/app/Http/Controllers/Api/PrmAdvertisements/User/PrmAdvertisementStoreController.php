@@ -9,6 +9,10 @@ use App\Http\Resources\PrmAdvertisements\PrmAdvertisementResource;
 use App\Models\PrmAdvertisement;
 use App\Models\PrmCompany;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use RuntimeException;
+use Throwable;
 
 class PrmAdvertisementStoreController extends Controller
 {
@@ -16,9 +20,27 @@ class PrmAdvertisementStoreController extends Controller
     {
         $user = $request->user();
         $validated = $request->validated();
-        $image = $validated['image'] ?? null;
+        $files = $validated['images'] ?? [];
 
-        unset($validated['image']);
+        if (!$files && isset($validated['image'])) {
+            $files = [$validated['image']];
+        }
+
+        $primaryIndex = (int) ($validated['primary_image_index'] ?? 0);
+
+        if ($files && !array_key_exists($primaryIndex, $files)) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 'prm_invalid_primary_image',
+                'message' => 'تصویر اصلی باید یکی از تصاویر انتخاب‌شده باشد.',
+            ], 422);
+        }
+
+        unset(
+            $validated['image'],
+            $validated['images'],
+            $validated['primary_image_index']
+        );
 
         $company = PrmCompany::query()
             ->where('user_id', $user->id)
@@ -56,10 +78,6 @@ class PrmAdvertisementStoreController extends Controller
             }
         }
 
-        if ($image) {
-            $validated['image_path'] = $image->store('prm-advertisements', 'public');
-        }
-
         $validated['user_id'] = $user->id;
         $validated['company_id'] = $companyId;
         $validated['use_company_profile'] = $useCompany;
@@ -70,7 +88,49 @@ class PrmAdvertisementStoreController extends Controller
         $validated['has_verified_badge'] = false;
         $validated['is_laddered'] = false;
 
-        $advertisement = PrmAdvertisement::create($validated);
+        $storedPaths = [];
+
+        try {
+            $advertisement = DB::transaction(function () use (
+                $validated,
+                $files,
+                $primaryIndex,
+                &$storedPaths
+            ): PrmAdvertisement {
+                $advertisement = PrmAdvertisement::create($validated);
+
+                foreach ($files as $index => $file) {
+                    $path = $file->store('prm-advertisements', 'public');
+
+                    if (!$path) {
+                        throw new RuntimeException('Unable to store advertisement image.');
+                    }
+
+                    $storedPaths[] = $path;
+
+                    $advertisement->images()->create([
+                        'path' => $path,
+                        'position' => $index,
+                    ]);
+
+                    if ($index === $primaryIndex) {
+                        $advertisement->image_path = $path;
+                    }
+                }
+
+                if ($advertisement->isDirty('image_path')) {
+                    $advertisement->save();
+                }
+
+                return $advertisement->load('images');
+            });
+        } catch (Throwable $exception) {
+            if ($storedPaths) {
+                Storage::disk('public')->delete($storedPaths);
+            }
+
+            throw $exception;
+        }
 
         return response()->json([
             'status' => 'success',

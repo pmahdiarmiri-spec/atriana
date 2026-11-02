@@ -10,6 +10,7 @@ use App\Enums\PrmAdvertisements\PrmAdvertisementType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class PrmAdvertisement extends Model
@@ -140,5 +141,12 @@ class PrmAdvertisement extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(PrmCompany::class, 'company_id');
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(PrmAdvertisementImage::class, 'advertisement_id')
+            ->orderBy('position')
+            ->orderBy('id');
     }
 }

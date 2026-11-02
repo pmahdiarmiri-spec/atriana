@@ -10,6 +10,16 @@ class PrmAdvertisementResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $images = $this->relationLoaded('images')
+            ? $this->images->map(fn ($image): array => [
+                'id' => $image->id,
+                'path' => $image->path,
+                'url' => Storage::disk('public')->url($image->path),
+                'position' => $image->position,
+                'is_primary' => $image->path === $this->image_path,
+            ])->values()->all()
+            : [];
+
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
@@ -26,6 +36,7 @@ class PrmAdvertisementResource extends JsonResource
             'slug' => $this->slug,
             'image_path' => $this->image_path,
             'image_url' => $this->image_path ? Storage::disk('public')->url($this->image_path) : null,
+            'images' => $images,
             'province' => $this->province,
             'city' => $this->city,
             'address' => $this->address,
