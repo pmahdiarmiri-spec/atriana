@@ -2,10 +2,12 @@
 
 import { ReactNode } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { PrmUserProfileData } from "@/lib/prm-settings/prm-settings-api";
 
 export type PrmDashboardMenu =
   | "dashboard"
+  | "tradeflow"
   | "tariffs"
   | "settings"
   | "support"
@@ -30,6 +32,7 @@ export function PrmDashboardSidebar({
   isLoggingOut,
 }: PrmDashboardSidebarProps): ReactNode {
   const t = useTranslations("dashboard");
+  const router = useRouter();
 
   const prmValidLastName =
     user?.last_name && user.last_name !== user.mobile ? user.last_name : "";
@@ -39,6 +42,18 @@ export function PrmDashboardSidebar({
     .trim();
   const prmDisplayName =
     prmFullName || user?.first_name || user?.mobile || user?.email || "...";
+
+  const prmHandleNavigateToTradeFlow = (): void => {
+    router.push("/dashboard/tradeflow");
+  };
+
+  const prmHandleNavigateToDashboard = (): void => {
+    if (activeMenu === "tradeflow") {
+      router.push("/dashboard");
+      return;
+    }
+    onMenuSelect("dashboard");
+  };
 
   return (
     <aside className="prm-dashboard-sidebar">
@@ -71,7 +86,7 @@ export function PrmDashboardSidebar({
         <button
           type="button"
           className={`prm-nav-item ${activeMenu === "dashboard" ? "prm-nav-item-active" : ""}`}
-          onClick={() => onMenuSelect("dashboard")}
+          onClick={prmHandleNavigateToDashboard}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="3" width="7" height="7" rx="1.5" />
@@ -80,6 +95,19 @@ export function PrmDashboardSidebar({
             <rect x="3" y="14" width="7" height="7" rx="1.5" />
           </svg>
           <span>{t("menu.dashboard")}</span>
+        </button>
+
+        <button
+          type="button"
+          className={`prm-nav-item ${activeMenu === "tradeflow" ? "prm-nav-item-active" : ""}`}
+          onClick={prmHandleNavigateToTradeFlow}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          <span>داشبورد جریان تجارت</span>
         </button>
 
         <button

@@ -1,0 +1,84 @@
+.prm-tf-standalone-wrapper {
+    min-height: 100vh;
+    background-color: var(--prm-bg-light);
+    display: flex;
+    flex-direction: column;
+}
+
+.prm-tf-standalone-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 2rem;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+}
+
+.prm-tf-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--prm-text-dark);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.prm-tf-back-btn:hover {
+    background: var(--prm-white);
+    border-color: rgba(203, 213, 225, 1);
+    transform: translateX(3px);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+.prm-tf-back-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.prm-tf-back-btn:hover svg {
+    transform: translateX(2px);
+}
+
+.prm-tf-standalone-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.prm-tf-user-badge {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--prm-text-light);
+    background: rgba(241, 245, 249, 0.8);
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+}
+
+.prm-tf-standalone-content {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .prm-tf-standalone-navbar {
+        padding: 0.75rem 1rem;
+    }
+
+    .prm-tf-standalone-content {
+        padding: 1rem;
+    }
+}

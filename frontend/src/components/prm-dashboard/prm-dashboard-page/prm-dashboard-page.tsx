@@ -82,6 +82,11 @@ export function PrmDashboardPage(): ReactNode {
             return;
         }
 
+        if (id === "tradeflow" || id === "custom-dashboard") {
+            router.push("/dashboard/tradeflow");
+            return;
+        }
+
         if (id === "hs-code" || id === "tariffs" || id === "tariff-search") {
             setPrmActiveMenu("tariffs");
             return;

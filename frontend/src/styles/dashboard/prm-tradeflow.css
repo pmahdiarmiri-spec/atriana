@@ -1,0 +1,421 @@
+.prm-tf-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    padding-bottom: 3rem;
+}
+
+.prm-liquid-glass {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 1.25rem;
+    box-shadow:
+        0 10px 30px -5px rgba(15, 23, 42, 0.05),
+        0 20px 25px -5px rgba(15, 23, 42, 0.03),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -1px 2px 0 rgba(15, 23, 42, 0.05);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.prm-liquid-glass:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow:
+        0 15px 35px -5px rgba(15, 23, 42, 0.08),
+        0 25px 30px -5px rgba(15, 23, 42, 0.05),
+        inset 0 1px 2px 0 rgba(255, 255, 255, 0.9);
+}
+
+.prm-tf-header-card {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.prm-tf-header-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.prm-tf-header-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.875rem;
+    background: linear-gradient(135deg, var(--prm-primary-color), #1e293b);
+    color: var(--prm-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 16px -4px rgba(15, 23, 42, 0.25);
+}
+
+.prm-tf-header-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--prm-primary-color);
+    margin: 0;
+}
+
+.prm-tf-header-sub {
+    font-size: 0.85rem;
+    color: var(--prm-text-light);
+    margin-top: 0.25rem;
+}
+
+.prm-tf-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.prm-btn-glass {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.125rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--prm-text-dark);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+}
+
+.prm-btn-glass:hover {
+    background: var(--prm-white);
+    border-color: var(--prm-secondary-color);
+    color: var(--prm-primary-color);
+    transform: translateY(-1px);
+}
+
+.prm-btn-glass-primary {
+    background: linear-gradient(135deg, var(--prm-primary-color), #1e293b);
+    color: var(--prm-white);
+    border: none;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+
+.prm-btn-glass-primary:hover {
+    background: linear-gradient(135deg, #1e293b, var(--prm-primary-color));
+    color: var(--prm-white);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
+}
+
+.prm-tf-plan-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #b45309;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.prm-tf-plan-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background-color: var(--prm-secondary-color);
+    box-shadow: 0 0 8px var(--prm-secondary-color);
+}
+
+.prm-tf-filters-panel {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.prm-tf-trade-type-tabs {
+    display: inline-flex;
+    background: rgba(241, 245, 249, 0.8);
+    padding: 0.25rem;
+    border-radius: 0.875rem;
+    width: fit-content;
+    border: 1px solid rgba(203, 213, 225, 0.6);
+}
+
+.prm-tf-tab-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.625rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    color: var(--prm-text-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.prm-tf-tab-btn-active {
+    background: var(--prm-white);
+    color: var(--prm-primary-color);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.prm-tf-metric-tabs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.prm-tf-metric-btn {
+    padding: 0.45rem 1rem;
+    border-radius: 0.625rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid rgba(203, 213, 225, 0.6);
+    background: rgba(255, 255, 255, 0.5);
+    color: var(--prm-text-dark);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.prm-tf-metric-btn-active {
+    background: rgba(234, 88, 12, 0.1);
+    border-color: var(--prm-accent-color);
+    color: var(--prm-accent-color);
+}
+
+.prm-tf-filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.prm-tf-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.prm-tf-field-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--prm-text-dark);
+}
+
+.prm-tf-select,
+.prm-tf-input {
+    width: 100%;
+    padding: 0.55rem 0.85rem;
+    border-radius: 0.625rem;
+    border: 1px solid rgba(203, 213, 225, 0.8);
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--prm-text-dark);
+    font-size: 0.825rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.prm-tf-select:focus,
+.prm-tf-input:focus {
+    border-color: var(--prm-secondary-color);
+    background: var(--prm-white);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+.prm-tf-metrics-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.prm-tf-stat-card {
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.prm-tf-stat-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--prm-white);
+}
+
+.prm-tf-stat-icon-usd {
+    background: linear-gradient(135deg, #10b981, #047857);
+}
+
+.prm-tf-stat-icon-rial {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.prm-tf-stat-icon-weight {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.prm-tf-stat-icon-records {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+}
+
+.prm-tf-stat-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.prm-tf-stat-val {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--prm-primary-color);
+    direction: ltr;
+    text-align: right;
+}
+
+.prm-tf-stat-lbl {
+    font-size: 0.75rem;
+    color: var(--prm-text-light);
+    font-weight: 600;
+}
+
+.prm-tf-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 1.5rem;
+}
+
+.prm-tf-chart-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.prm-tf-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+}
+
+.prm-tf-chart-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--prm-primary-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.prm-tf-bars-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.prm-tf-bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.prm-tf-bar-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+}
+
+.prm-tf-bar-label {
+    font-weight: 600;
+    color: var(--prm-text-dark);
+}
+
+.prm-tf-bar-val {
+    color: var(--prm-text-light);
+    font-weight: 700;
+    direction: ltr;
+}
+
+.prm-tf-bar-track {
+    width: 100%;
+    height: 0.6rem;
+    background: rgba(226, 232, 240, 0.7);
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.prm-tf-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--prm-secondary-color), var(--prm-accent-color));
+    border-radius: 9999px;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prm-tf-timeline-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    height: 200px;
+    padding-top: 1.5rem;
+    overflow-x: auto;
+}
+
+.prm-tf-timeline-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    min-width: 2.5rem;
+    gap: 0.5rem;
+}
+
+.prm-tf-timeline-bar {
+    width: 1.25rem;
+    background: linear-gradient(180deg, var(--prm-accent-color), var(--prm-secondary-color));
+    border-radius: 0.35rem 0.35rem 0 0;
+    transition: height 0.5s ease;
+}
+
+.prm-tf-timeline-lbl {
+    font-size: 0.65rem;
+    color: var(--prm-text-light);
+    white-space: nowrap;
+}
+
+.prm-tf-loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    border-radius: 1.25rem;
+}
+
+.prm-tf-spinner {
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 3px solid rgba(245, 158, 11, 0.2);
+    border-top-color: var(--prm-secondary-color);
+    border-radius: 50%;
+    animation: prm-spin 0.8s linear infinite;
+}
+
+@keyframes prm-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
