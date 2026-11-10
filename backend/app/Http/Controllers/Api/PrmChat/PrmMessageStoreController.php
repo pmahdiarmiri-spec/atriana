@@ -10,6 +10,9 @@ use App\Models\PrmChat\PrmConversation;
 use App\Models\PrmChat\PrmMessage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use RuntimeException;
+use Throwable;
 
 class PrmMessageStoreController extends Controller
 {
@@ -17,7 +20,6 @@ class PrmMessageStoreController extends Controller
     {
         $user = $request->user();
         $validated = $request->validated();
-
         $conversation = PrmConversation::query()->findOrFail($id);
 
         if (!$conversation->isParticipant($user->id)) {
@@ -28,22 +30,56 @@ class PrmMessageStoreController extends Controller
             ], 403);
         }
 
-        $message = DB::transaction(function () use ($conversation, $user, $validated) {
-            $msg = PrmMessage::create([
-                'conversation_id' => $conversation->id,
-                'sender_id' => $user->id,
-                'body' => $validated['body'],
-                'created_at' => now(),
-            ]);
+        $file = $request->file('file');
+        $path = null;
 
-            $conversation->update([
-                'last_message_at' => now(),
-            ]);
+        try {
+            if ($file) {
+                $path = $file->store('prm-chat/' . $conversation->id, 'local');
 
-            return $msg;
-        });
+                if (!is_string($path)) {
+                    throw new RuntimeException('Chat attachment could not be stored.');
+                }
+            }
 
-        $message->load('sender');
+            $message = DB::transaction(function () use ($conversation, $user, $validated, $file, $path): PrmMessage {
+                $sentAt = now();
+
+                $message = PrmMessage::create([
+                    'conversation_id' => $conversation->id,
+                    'sender_id' => $user->id,
+                    'body' => $validated['body'] ?? null,
+                    'created_at' => $sentAt,
+                ]);
+
+                if ($file && $path) {
+                    $name = basename(str_replace('\\', '/', $file->getClientOriginalName()));
+
+                    $message->attachment()->create([
+                        'kind' => $validated['kind'],
+                        'disk' => 'local',
+                        'path' => $path,
+                        'name' => mb_substr($name, 0, 255),
+                        'mime' => $file->getMimeType(),
+                        'size' => $file->getSize(),
+                    ]);
+                }
+
+                $conversation->update([
+                    'last_message_at' => $sentAt,
+                ]);
+
+                return $message;
+            });
+        } catch (Throwable $exception) {
+            if ($path !== null) {
+                Storage::disk('local')->delete($path);
+            }
+
+            throw $exception;
+        }
+
+        $message->load(['sender', 'attachment']);
 
         broadcast(new PrmMessageSentEvent($message))->toOthers();
 

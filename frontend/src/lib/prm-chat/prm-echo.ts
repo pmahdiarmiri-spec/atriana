@@ -8,9 +8,9 @@ declare global {
     }
 }
 
-export function prmInitEcho(token: string): Echo {
+export function prmInitEcho(token: string): Echo | null {
     if (typeof window === "undefined") {
-        return null as unknown as Echo;
+        return null;
     }
 
     window.Pusher = Pusher;
@@ -23,7 +23,7 @@ export function prmInitEcho(token: string): Echo {
 
     return new Echo({
         broadcaster: "reverb",
-        key: key,
+        key,
         wsHost: host,
         wsPort: port,
         wssPort: port,

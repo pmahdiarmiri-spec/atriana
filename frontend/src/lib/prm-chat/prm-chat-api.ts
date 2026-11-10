@@ -1,10 +1,21 @@
 import { api } from "@/lib/api";
 
+export type PrmChatAttachmentKind = "image" | "pdf" | "video" | "voice";
+
+export interface PrmChatAttachment {
+    id: number;
+    kind: PrmChatAttachmentKind;
+    name: string;
+    mime: string;
+    size: number;
+}
+
 export interface PrmChatMessage {
     id: number;
     conversation_id: number;
     sender_id: number;
-    body: string;
+    body: string | null;
+    attachment: PrmChatAttachment | null;
     read_at: string | null;
     created_at: string;
     sender_name: string;
@@ -38,6 +49,7 @@ export async function prmGetConversations(token: string): Promise<PrmChatConvers
             Authorization: `Bearer ${token}`,
         },
     });
+
     return response.data.data;
 }
 
@@ -50,6 +62,7 @@ export async function prmGetConversationDetails(
             Authorization: `Bearer ${token}`,
         },
     });
+
     return response.data;
 }
 
@@ -62,7 +75,7 @@ export async function prmInitiateConversation(
         "/v1/chat/conversations/initiate",
         {
             advertisement_id: advertisementId,
-            message: message,
+            message,
         },
         {
             headers: {
@@ -70,6 +83,7 @@ export async function prmInitiateConversation(
             },
         },
     );
+
     return response.data.data;
 }
 
@@ -77,17 +91,57 @@ export async function prmSendMessage(
     token: string,
     conversationId: number,
     body: string,
+    file?: File,
+    kind?: PrmChatAttachmentKind,
 ): Promise<PrmChatMessage> {
+    const endpoint = `/v1/chat/conversations/${conversationId}/messages`;
+
+    if (file) {
+        if (!kind) {
+            throw new Error("نوع پیوست مشخص نیست.");
+        }
+
+        const formData = new FormData();
+
+        if (body.trim()) {
+            formData.append("body", body.trim());
+        }
+
+        formData.append("kind", kind);
+        formData.append("file", file);
+
+        const response = await api.post(endpoint, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": undefined,
+            },
+        });
+
+        return response.data.data;
+    }
+
     const response = await api.post(
-        `/v1/chat/conversations/${conversationId}/messages`,
-        { body },
+        endpoint,
+        { body: body.trim() },
         {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         },
     );
+
     return response.data.data;
+}
+
+export async function prmGetAttachmentBlob(token: string, attachmentId: number): Promise<Blob> {
+    const response = await api.get(`/v1/chat/attachments/${attachmentId}`, {
+        responseType: "blob",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    return response.data;
 }
 
 export async function prmMarkConversationAsRead(

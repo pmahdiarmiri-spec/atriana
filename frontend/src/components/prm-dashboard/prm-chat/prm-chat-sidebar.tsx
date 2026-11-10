@@ -16,6 +16,28 @@ export function PrmChatSidebar({
     onSelect,
     isLoading,
 }: PrmChatSidebarProps) {
+    const preview = (conversation: PrmChatConversation): string => {
+        const message = conversation.last_message;
+
+        if (!message) {
+            return "پیامی وجود ندارد";
+        }
+
+        if (message.body) {
+            return message.body;
+        }
+
+        const map: Record<string, string> = {
+            image: "تصویر",
+            pdf: "فایل PDF",
+            video: "ویدیو",
+            voice: "ویس",
+        };
+
+        const kind = message.attachment?.kind ?? "";
+        return map[kind] ?? "پیوست";
+    };
+
     return (
         <aside className="prm-chat-sidebar-card">
             <div className="border-b border-slate-100/80 p-5">
@@ -23,7 +45,7 @@ export function PrmChatSidebar({
                 <p className="mt-1 text-xs text-[var(--prm-text-light)]">مذاکرات اختصاصی خریداران و فروشندگان</p>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-3 space-y-2">
+            <div className="flex-1 space-y-2 overflow-y-auto p-3">
                 {isLoading ? (
                     <div className="flex h-40 items-center justify-center text-xs text-slate-400">
                         در حال بارگذاری گفتگوها...
@@ -36,38 +58,39 @@ export function PrmChatSidebar({
                         گفتگویی یافت نشد.
                     </div>
                 ) : (
-                    conversations.map((conv) => {
-                        const isSelected = conv.id === selectedId;
+                    conversations.map((conversation) => {
+                        const isSelected = conversation.id === selectedId;
+
                         return (
                             <div
-                                key={conv.id}
-                                onClick={() => onSelect(conv.id)}
+                                key={conversation.id}
+                                onClick={() => onSelect(conversation.id)}
                                 className={`group relative cursor-pointer overflow-hidden rounded-2xl p-4 transition-all duration-300 ${
                                     isSelected
                                         ? "bg-[var(--prm-primary-color)] text-white shadow-lg shadow-slate-900/10"
-                                        : "bg-white/60 hover:bg-white/90 text-slate-700 border border-white/60"
+                                        : "border border-white/60 bg-white/60 text-slate-700 hover:bg-white/90"
                                 }`}
                             >
                                 <div className="flex items-center justify-between gap-2">
                                     <h4 className={`truncate text-xs font-black ${isSelected ? "text-white" : "text-[var(--prm-text-dark)]"}`}>
-                                        {conv.other_user?.name || "کاربر ناشناس"}
+                                        {conversation.other_user?.name || "کاربر ناشناس"}
                                     </h4>
-                                    {conv.unread_count > 0 && (
+                                    {conversation.unread_count > 0 && (
                                         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--prm-secondary-color)] text-[10px] font-black text-slate-950">
-                                            {conv.unread_count}
+                                            {conversation.unread_count}
                                         </span>
                                     )}
                                 </div>
 
-                                {conv.advertisement && (
+                                {conversation.advertisement && (
                                     <div className="mt-1.5 flex items-center gap-1.5 text-[11px] opacity-75">
                                         <span className="font-bold text-[var(--prm-secondary-color)]">آگهی:</span>
-                                        <span className="truncate">{conv.advertisement.title}</span>
+                                        <span className="truncate">{conversation.advertisement.title}</span>
                                     </div>
                                 )}
 
                                 <p className={`mt-2 truncate text-xs ${isSelected ? "text-slate-300" : "text-slate-500"}`}>
-                                    {conv.last_message?.body || "پیامی وجود ندارد"}
+                                    {preview(conversation)}
                                 </p>
                             </div>
                         );

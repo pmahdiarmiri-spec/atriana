@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use RuntimeException;
 
 class PrmMessage extends Model
@@ -42,7 +43,12 @@ class PrmMessage extends Model
 
         static::updating(function ($message) {
             $dirty = $message->getDirty();
-            if (array_key_exists('body', $dirty) || array_key_exists('sender_id', $dirty) || array_key_exists('conversation_id', $dirty)) {
+
+            if (
+                array_key_exists('body', $dirty) ||
+                array_key_exists('sender_id', $dirty) ||
+                array_key_exists('conversation_id', $dirty)
+            ) {
                 throw new RuntimeException('Mutating stored message contents is strictly forbidden.');
             }
         });
@@ -56,5 +62,10 @@ class PrmMessage extends Model
     public function sender(): BelongsTo
     {
         return $this->belongsTo(User::class, 'sender_id');
+    }
+
+    public function attachment(): HasOne
+    {
+        return $this->hasOne(PrmMessageAttachment::class, 'message_id');
     }
 }

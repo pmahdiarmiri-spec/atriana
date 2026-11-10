@@ -28,7 +28,7 @@ class PrmConversationShowController extends Controller
         }
 
         $messages = $conversation->messages()
-            ->with('sender')
+            ->with(['sender', 'attachment'])
             ->orderBy('id', 'asc')
             ->get();
 

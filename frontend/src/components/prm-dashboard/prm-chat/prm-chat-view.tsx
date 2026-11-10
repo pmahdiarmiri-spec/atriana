@@ -26,37 +26,62 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
     const convIdParam = searchParams.get("convId");
 
     const [conversations, setConversations] = useState<PrmChatConversation[]>([]);
-    const [selectedId, setSelectedId] = useState<number | null>(convIdParam ? Number(convIdParam) : null);
+    const [selectedId, setSelectedId] = useState<number | null>(
+        convIdParam ? Number(convIdParam) : null,
+    );
     const [messages, setMessages] = useState<PrmChatMessage[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const init = async () => {
+        let active = true;
+
+        const initialize = async () => {
             setIsLoading(true);
+
             try {
                 const list = await prmGetConversations(token);
-                setConversations(list);
+
+                if (!active) {
+                    return;
+                }
 
                 if (adIdParam) {
-                    const existing = list.find(c => c.advertisement_id === Number(adIdParam));
+                    const existing = list.find(
+                        (conversation) => conversation.advertisement_id === Number(adIdParam),
+                    );
+
                     if (existing) {
+                        setConversations(list);
                         setSelectedId(existing.id);
                     } else {
-                        const newConv = await prmInitiateConversation(token, Number(adIdParam));
-                        setConversations(prev => [newConv, ...prev]);
-                        setSelectedId(newConv.id);
+                        const conversation = await prmInitiateConversation(token, Number(adIdParam));
+
+                        if (active) {
+                            setConversations([conversation, ...list]);
+                            setSelectedId(conversation.id);
+                        }
                     }
-                } else if (!selectedId && list.length > 0) {
-                    setSelectedId(list[0].id);
+                } else {
+                    setConversations(list);
+                    setSelectedId(
+                        convIdParam ? Number(convIdParam) : list[0]?.id ?? null,
+                    );
                 }
             } catch (error) {
                 console.error("Chat Init Error:", error);
             } finally {
-                setIsLoading(false);
+                if (active) {
+                    setIsLoading(false);
+                }
             }
         };
-        init();
-    }, [adIdParam, token]);
+
+        void initialize();
+
+        return () => {
+            active = false;
+        };
+    }, [adIdParam, convIdParam, token]);
 
     useEffect(() => {
         if (!selectedId) {
@@ -64,46 +89,116 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
             return;
         }
 
+        let active = true;
+        setMessages([]);
+
         const loadDetails = async () => {
             try {
                 const data = await prmGetConversationDetails(token, selectedId);
-                setMessages(data.messages);
+
+                if (!active) {
+                    return;
+                }
+
+                setMessages((previous) => {
+                    const byId = new Map<number, PrmChatMessage>();
+
+                    for (const message of data.messages) {
+                        byId.set(message.id, message);
+                    }
+
+                    for (const message of previous) {
+                        byId.set(message.id, message);
+                    }
+
+                    return [...byId.values()].sort((a, b) => a.id - b.id);
+                });
+
                 await prmMarkConversationAsRead(token, selectedId);
-                setConversations((prev) =>
-                    prev.map((c) => (c.id === selectedId ? { ...c, unread_count: 0 } : c))
-                );
+
+                if (active) {
+                    setConversations((previous) =>
+                        previous.map((conversation) =>
+                            conversation.id === selectedId
+                                ? { ...conversation, unread_count: 0 }
+                                : conversation,
+                        ),
+                    );
+                }
             } catch (error) {
                 console.error("Load Details Error:", error);
             }
         };
-        loadDetails();
+
+        void loadDetails();
+
+        return () => {
+            active = false;
+        };
     }, [selectedId, token]);
 
     useEffect(() => {
-        if (!selectedId) return;
+        if (!selectedId) {
+            return;
+        }
+
         const echo = prmInitEcho(token);
-        if (!echo) return;
-        const channel = echo.private(`prm-conversation.${selectedId}`);
-        channel.listen(".PrmMessageSent", (e: { message: PrmChatMessage }) => {
-            setMessages((prev) => {
-                if (prev.some((m) => m.id === e.message.id)) return prev;
-                return [...prev, e.message];
-            });
-            if (e.message.sender_id !== currentUserId) {
-                prmMarkConversationAsRead(token, selectedId);
+
+        if (!echo) {
+            return;
+        }
+
+        const channelName = `prm-conversation.${selectedId}`;
+        const channel = echo.private(channelName);
+
+        channel.listen(".PrmMessageSent", (event: { message: PrmChatMessage }) => {
+            setMessages((previous) =>
+                previous.some((message) => message.id === event.message.id)
+                    ? previous
+                    : [...previous, event.message].sort((a, b) => a.id - b.id),
+            );
+
+            setConversations((previous) =>
+                previous.map((conversation) =>
+                    conversation.id === selectedId
+                        ? {
+                              ...conversation,
+                              last_message: event.message,
+                              last_message_at: event.message.created_at,
+                          }
+                        : conversation,
+                ),
+            );
+
+            if (event.message.sender_id !== currentUserId) {
+                void prmMarkConversationAsRead(token, selectedId).catch(console.error);
             }
         });
-        return () => { channel.stopListening(".PrmMessageSent"); echo.leave(`prm-conversation.${selectedId}`); };
+
+        return () => {
+            channel.stopListening(".PrmMessageSent");
+            echo.leave(channelName);
+            echo.disconnect();
+        };
     }, [selectedId, token, currentUserId]);
 
-    const handleMessageSent = (newMessage: PrmChatMessage) => {
-        setMessages((prev) => [...prev, newMessage]);
-        setConversations((prev) =>
-            prev.map((c) =>
-                c.id === selectedId
-                    ? { ...c, last_message: newMessage, last_message_at: newMessage.created_at }
-                    : c
-            )
+    const handleMessageSent = (message: PrmChatMessage) => {
+        setMessages((previous) =>
+            previous.some((item) => item.id === message.id)
+                ? previous
+                : [...previous, message].sort((a, b) => a.id - b.id),
+        );
+
+        setConversations((previous) =>
+            previous.map((conversation) =>
+                conversation.id === message.conversation_id
+                    ? {
+                          ...conversation,
+                          last_message: message,
+                          last_message_at: message.created_at,
+                      }
+                    : conversation,
+            ),
         );
     };
 
@@ -119,8 +214,9 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
                 <div className="prm-chat-loader">درحال بارگذاری...</div>
             ) : (
                 <PrmChatWindow
+                    key={selectedId ?? "empty"}
                     token={token}
-                    conversation={conversations.find((c) => c.id === selectedId) || null}
+                    conversation={conversations.find((conversation) => conversation.id === selectedId) || null}
                     messages={messages}
                     currentUserId={currentUserId}
                     onMessageSent={handleMessageSent}
