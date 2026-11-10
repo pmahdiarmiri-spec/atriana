@@ -1,9 +1,16 @@
 <?php
 
+use App\Http\Controllers\Api\PrmAdvertisements\Public\PrmAdvertisementPublicIndexController;
+use App\Http\Controllers\Api\PrmAdvertisements\Public\PrmAdvertisementPublicShowController;
 use App\Http\Controllers\Api\PrmAdvertisements\User\PrmAdvertisementIndexController;
 use App\Http\Controllers\Api\PrmAdvertisements\User\PrmAdvertisementMetaController;
 use App\Http\Controllers\Api\PrmAdvertisements\User\PrmAdvertisementStoreController;
 use Illuminate\Support\Facades\Route;
+
+Route::prefix('v1/advertisements')->group(function () {
+    Route::get('/', PrmAdvertisementPublicIndexController::class);
+    Route::get('/{slug}', PrmAdvertisementPublicShowController::class)->where('slug', '[A-Za-z0-9\-]+');
+});
 
 Route::prefix('v1/advertisements')->middleware('auth:sanctum')->group(function () {
     Route::get('/meta', PrmAdvertisementMetaController::class);
