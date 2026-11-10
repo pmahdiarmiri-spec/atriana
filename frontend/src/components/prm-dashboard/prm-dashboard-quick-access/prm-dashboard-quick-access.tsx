@@ -95,35 +95,9 @@ export function PrmDashboardQuickAccess({
             ),
         },
         {
-            id: "export",
-            title: t("menu.export"),
-            description: t("menu.exportDesc"),
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                    <path d="M12 18v-6" />
-                    <path d="m9 15 3-3 3 3" />
-                </svg>
-            ),
-        },
-        {
-            id: "import",
-            title: t("menu.import"),
-            description: t("menu.importDesc"),
-            icon: (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                    <path d="M12 12v6" />
-                    <path d="m9 15 3 3 3-3" />
-                </svg>
-            ),
-        },
-        {
-            id: "custom-dashboard",
-            title: t("menu.customDashboard"),
-            description: t("menu.customDashboardDesc"),
+            id: "tradeflow",
+            title: "داشبوردهای تجارت",
+            description: "انتخاب داشبورد تخصصی آتریانا، صادرات یا واردات",
             icon: (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <line x1="18" y1="20" x2="18" y2="10" />
