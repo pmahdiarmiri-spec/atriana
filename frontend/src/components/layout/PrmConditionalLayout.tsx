@@ -12,6 +12,7 @@ export default function PrmConditionalLayout({
 }) {
   const prmPathname = usePathname() || "";
   const prmIsCompanyDetail = /\/companies\/[^/]+/.test(prmPathname);
+  const prmIsAdsRoute = /\/ads(\/.*)?$/.test(prmPathname);
   const prmIsStandalone =
     prmPathname.includes("/dashboard") ||
     prmPathname.includes("/auth") ||
@@ -20,6 +21,15 @@ export default function PrmConditionalLayout({
 
   if (prmIsStandalone) {
     return <>{children}</>;
+  }
+
+  if (prmIsAdsRoute) {
+    return (
+      <>
+        <main className="flex-grow">{children}</main>
+        <Footer />
+      </>
+    );
   }
 
   return (

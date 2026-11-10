@@ -1,0 +1,33 @@
+.prm-ads-page {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--prm-bg-light);
+}
+
+.prm-ads-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 24px 32px;
+}
+
+.prm-ads-hero {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.prm-ads-filterbar {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.prm-ads-grid {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (min-width: 1536px) {
+    .prm-ads-container {
+        padding: 32px 48px;
+    }
+}
