@@ -19,6 +19,8 @@ export type PrmTableSort =
     | "record_count";
 export type PrmSortDirection = "asc" | "desc";
 
+export type PrmTradeFlowViewMode = "hub" | "custom" | "pbi_import" | "pbi_export";
+
 export interface PrmFilterSelectOption {
     id: number | string;
     name: string;
@@ -127,4 +129,10 @@ export interface PrmPlanStatusData {
     is_mock: boolean;
     can_export: boolean;
     can_filter: boolean;
+    can_view_powerbi?: boolean;
+}
+
+export interface PrmPowerBiReportsData {
+    import: string;
+    export: string;
 }

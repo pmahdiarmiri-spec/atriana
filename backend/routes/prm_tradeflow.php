@@ -24,6 +24,7 @@ Route::get('/v1/tradeflow-schema-overview', function () {
 
 Route::prefix('v1/tradeflow')->middleware('auth:sanctum')->group(function () {
     Route::get('/plan-status', [PrmTradeFlowPlanController::class, 'status']);
+    Route::get('/powerbi-reports', [PrmTradeFlowPlanController::class, 'powerBiReports']);
     Route::get('/options', [PrmTradeFlowFilterController::class, 'options']);
     Route::post('/summary', [PrmTradeFlowAnalyticsController::class, 'summary']);
     Route::post('/charts', [PrmTradeFlowAnalyticsController::class, 'charts']);

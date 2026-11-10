@@ -1,5 +1,6 @@
 import {
     PrmPlanStatusData,
+    PrmPowerBiReportsData,
     PrmSortDirection,
     PrmTableSort,
     PrmTableTab,
@@ -47,6 +48,12 @@ export async function prmGetTradeFlowPlanStatus(
     token: string
 ): Promise<PrmPlanStatusData> {
     return prmFetchJson<PrmPlanStatusData>("/api/v1/tradeflow/plan-status", token);
+}
+
+export async function prmGetPowerBiReports(
+    token: string
+): Promise<PrmPowerBiReportsData> {
+    return prmFetchJson<PrmPowerBiReportsData>("/api/v1/tradeflow/powerbi-reports", token);
 }
 
 export async function prmGetTradeFlowFilterOptions(

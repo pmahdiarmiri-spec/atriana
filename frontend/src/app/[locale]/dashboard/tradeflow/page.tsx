@@ -4,10 +4,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { PrmTradeFlowView } from "@/components/prm-dashboard/prm-tradeflow/prm-tradeflow-view/prm-tradeflow-view";
 import { PrmUserProfileData } from "@/lib/prm-settings/prm-settings-api";
-import {
-    prmClearAuthSession,
-    prmGetAuthSession,
-} from "@/lib/prm-auth/prm-auth-storage";
+import { prmGetAuthSession } from "@/lib/prm-auth/prm-auth-storage";
 import "@/styles/dashboard/prm-tradeflow-standalone.css";
 
 export default function PrmTradeFlowRoute(): ReactNode {
