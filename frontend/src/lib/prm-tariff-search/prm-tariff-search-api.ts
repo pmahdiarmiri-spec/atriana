@@ -1,7 +1,7 @@
 import { PrmAuthApiError } from "@/lib/prm-auth/prm-auth-api";
 
 const prmApiBaseUrl =
-  process.env.NEXT_PUBLIC_PRM_API_URL ?? "http://localhost:8000/api";
+  process.env.NEXT_PUBLIC_PRM_API_URL ?? "http://api.atriana.test/api";
 
 interface PrmApiErrorResponse {
   status?: "error";
