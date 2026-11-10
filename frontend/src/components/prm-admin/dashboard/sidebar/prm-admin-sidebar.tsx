@@ -78,6 +78,12 @@ export const PrmAdminSidebar: React.FC<PrmAdminSidebarProps> = ({
             permission: 'ads.manage',
         },
         {
+            title: locale === 'fa' ? 'گفتگوهای آگهی‌ها' : 'Advertisement Chats',
+            href: `/${locale}/admin/ads/chats`,
+            icon: MessageSquare,
+            permission: 'ads.manage',
+        },
+        {
             title: locale === 'fa' ? 'مدیریت شرکت‌ها' : 'Companies',
             href: `/${locale}/admin/companies`,
             icon: Building2,
@@ -213,7 +219,7 @@ export const PrmAdminSidebar: React.FC<PrmAdminSidebarProps> = ({
                     onClick={handleLogout}
                     className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium text-red-400 hover:bg-red-500/10 transition-colors"
                 >
-                    <LogOut className="w-4 h-4 shrink-0" />
+                    <LogOut className="w-4 h-4" />
                     <span>
                         {locale === 'fa' ? 'خروج امن' : 'Secure Logout'}
                     </span>
@@ -222,5 +228,5 @@ export const PrmAdminSidebar: React.FC<PrmAdminSidebarProps> = ({
         </aside>
     );
 };
-
+ 
 export default PrmAdminSidebar;
