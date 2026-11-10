@@ -20,12 +20,17 @@ interface PrmChatViewProps {
     currentUserId: number;
 }
 
-export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
+export function PrmChatView({
+    token,
+    currentUserId,
+}: PrmChatViewProps) {
     const searchParams = useSearchParams();
     const adIdParam = searchParams.get("adId");
     const convIdParam = searchParams.get("convId");
 
-    const [conversations, setConversations] = useState<PrmChatConversation[]>([]);
+    const [conversations, setConversations] = useState<
+        PrmChatConversation[]
+    >([]);
     const [selectedId, setSelectedId] = useState<number | null>(
         convIdParam ? Number(convIdParam) : null,
     );
@@ -47,14 +52,20 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
 
                 if (adIdParam) {
                     const existing = list.find(
-                        (conversation) => conversation.advertisement_id === Number(adIdParam),
+                        (conversation) =>
+                            conversation.advertisement_id ===
+                            Number(adIdParam),
                     );
 
                     if (existing) {
                         setConversations(list);
                         setSelectedId(existing.id);
                     } else {
-                        const conversation = await prmInitiateConversation(token, Number(adIdParam));
+                        const conversation =
+                            await prmInitiateConversation(
+                                token,
+                                Number(adIdParam),
+                            );
 
                         if (active) {
                             setConversations([conversation, ...list]);
@@ -64,7 +75,9 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
                 } else {
                     setConversations(list);
                     setSelectedId(
-                        convIdParam ? Number(convIdParam) : list[0]?.id ?? null,
+                        convIdParam
+                            ? Number(convIdParam)
+                            : list[0]?.id ?? null,
                     );
                 }
             } catch (error) {
@@ -94,7 +107,10 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
 
         const loadDetails = async () => {
             try {
-                const data = await prmGetConversationDetails(token, selectedId);
+                const data = await prmGetConversationDetails(
+                    token,
+                    selectedId,
+                );
 
                 if (!active) {
                     return;
@@ -111,7 +127,9 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
                         byId.set(message.id, message);
                     }
 
-                    return [...byId.values()].sort((a, b) => a.id - b.id);
+                    return [...byId.values()].sort(
+                        (first, second) => first.id - second.id,
+                    );
                 });
 
                 await prmMarkConversationAsRead(token, selectedId);
@@ -120,7 +138,10 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
                     setConversations((previous) =>
                         previous.map((conversation) =>
                             conversation.id === selectedId
-                                ? { ...conversation, unread_count: 0 }
+                                ? {
+                                      ...conversation,
+                                      unread_count: 0,
+                                  }
                                 : conversation,
                         ),
                     );
@@ -151,29 +172,40 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
         const channelName = `prm-conversation.${selectedId}`;
         const channel = echo.private(channelName);
 
-        channel.listen(".PrmMessageSent", (event: { message: PrmChatMessage }) => {
-            setMessages((previous) =>
-                previous.some((message) => message.id === event.message.id)
-                    ? previous
-                    : [...previous, event.message].sort((a, b) => a.id - b.id),
-            );
+        channel.listen(
+            ".PrmMessageSent",
+            (event: { message: PrmChatMessage }) => {
+                setMessages((previous) =>
+                    previous.some(
+                        (message) => message.id === event.message.id,
+                    )
+                        ? previous
+                        : [...previous, event.message].sort(
+                              (first, second) => first.id - second.id,
+                          ),
+                );
 
-            setConversations((previous) =>
-                previous.map((conversation) =>
-                    conversation.id === selectedId
-                        ? {
-                              ...conversation,
-                              last_message: event.message,
-                              last_message_at: event.message.created_at,
-                          }
-                        : conversation,
-                ),
-            );
+                setConversations((previous) =>
+                    previous.map((conversation) =>
+                        conversation.id === selectedId
+                            ? {
+                                  ...conversation,
+                                  last_message: event.message,
+                                  last_message_at:
+                                      event.message.created_at,
+                              }
+                            : conversation,
+                    ),
+                );
 
-            if (event.message.sender_id !== currentUserId) {
-                void prmMarkConversationAsRead(token, selectedId).catch(console.error);
-            }
-        });
+                if (event.message.sender_id !== currentUserId) {
+                    void prmMarkConversationAsRead(
+                        token,
+                        selectedId,
+                    ).catch(console.error);
+                }
+            },
+        );
 
         return () => {
             channel.stopListening(".PrmMessageSent");
@@ -186,7 +218,9 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
         setMessages((previous) =>
             previous.some((item) => item.id === message.id)
                 ? previous
-                : [...previous, message].sort((a, b) => a.id - b.id),
+                : [...previous, message].sort(
+                      (first, second) => first.id - second.id,
+                  ),
         );
 
         setConversations((previous) =>
@@ -210,13 +244,19 @@ export function PrmChatView({ token, currentUserId }: PrmChatViewProps) {
                 onSelect={setSelectedId}
                 isLoading={isLoading}
             />
+
             {isLoading ? (
                 <div className="prm-chat-loader">درحال بارگذاری...</div>
             ) : (
                 <PrmChatWindow
                     key={selectedId ?? "empty"}
                     token={token}
-                    conversation={conversations.find((conversation) => conversation.id === selectedId) || null}
+                    conversation={
+                        conversations.find(
+                            (conversation) =>
+                                conversation.id === selectedId,
+                        ) || null
+                    }
                     messages={messages}
                     currentUserId={currentUserId}
                     onMessageSent={handleMessageSent}

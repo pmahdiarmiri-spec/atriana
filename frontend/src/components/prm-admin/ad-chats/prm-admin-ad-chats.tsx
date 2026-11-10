@@ -15,6 +15,7 @@ import {
     PrmAdminAdChatMeta,
     PrmAdminAdChatUser,
 } from "@/types/prm-admin-ad-chats";
+import { PrmAdminChatModeration } from "./prm-admin-chat-moderation";
 
 interface PrmAdminAdChatsProps {
     locale: string;
@@ -394,6 +395,13 @@ export default function PrmAdminAdChats({
                     {error}
                 </div>
             )}
+<PrmAdminChatModeration
+    conversationId={selectedConversationId}
+    onChanged={() => {
+        setRevision((value) => value + 1);
+        setDetailRevision((value) => value + 1);
+    }}
+/>
 
             <div className="grid gap-4 xl:grid-cols-[minmax(220px,1fr)_minmax(260px,1.1fr)_minmax(350px,1.8fr)]">
                 <section className={card}>

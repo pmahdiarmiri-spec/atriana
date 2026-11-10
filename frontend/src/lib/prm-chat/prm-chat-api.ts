@@ -43,7 +43,9 @@ export interface PrmChatConversation {
     created_at: string;
 }
 
-export async function prmGetConversations(token: string): Promise<PrmChatConversation[]> {
+export async function prmGetConversations(
+    token: string,
+): Promise<PrmChatConversation[]> {
     const response = await api.get("/v1/chat/conversations", {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -56,7 +58,10 @@ export async function prmGetConversations(token: string): Promise<PrmChatConvers
 export async function prmGetConversationDetails(
     token: string,
     id: number,
-): Promise<{ conversation: PrmChatConversation; messages: PrmChatMessage[] }> {
+): Promise<{
+    conversation: PrmChatConversation;
+    messages: PrmChatMessage[];
+}> {
     const response = await api.get(`/v1/chat/conversations/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -122,7 +127,9 @@ export async function prmSendMessage(
 
     const response = await api.post(
         endpoint,
-        { body: body.trim() },
+        {
+            body: body.trim(),
+        },
         {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -133,7 +140,10 @@ export async function prmSendMessage(
     return response.data.data;
 }
 
-export async function prmGetAttachmentBlob(token: string, attachmentId: number): Promise<Blob> {
+export async function prmGetAttachmentBlob(
+    token: string,
+    attachmentId: number,
+): Promise<Blob> {
     const response = await api.get(`/v1/chat/attachments/${attachmentId}`, {
         responseType: "blob",
         headers: {
