@@ -17,5 +17,5 @@ Route::prefix('v1/advertisements')->group(function () {
     });
 
     Route::get('/{slug}', PrmAdvertisementPublicShowController::class)
-        ->where('slug', '[A-Za-z0-9\-]+');
+        ->where('slug', '[^\/]+');
 });

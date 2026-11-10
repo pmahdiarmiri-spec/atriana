@@ -12,9 +12,14 @@ class PrmAdvertisementPublicShowController extends Controller
 {
     public function __invoke(string $slug): JsonResponse
     {
+        $decodedSlug = urldecode($slug);
+
         $advertisement = PrmAdvertisement::query()
             ->with('images')
-            ->where('slug', $slug)
+            ->where(function ($query) use ($slug, $decodedSlug) {
+                $query->where('slug', $decodedSlug)
+                    ->orWhere('slug', $slug);
+            })
             ->where('status', PrmAdvertisementStatus::APPROVED->value)
             ->first();
 
