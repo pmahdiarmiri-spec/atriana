@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import type { PrmPublicAdvertisement } from "@/lib/prm-advertisements/prm-advertisements-public-api";
 import PrmAdGallery from "./prm-ad-gallery";
 import PrmAdInfoGrid from "./prm-ad-info-grid";
-import PrmAdChatModal from "./prm-ad-chat-modal";
+import { prmGetAuthSession } from "@/lib/prm-auth/prm-auth-storage";
+import { prmInitiateConversation } from "@/lib/prm-chat/prm-chat-api";
 
 interface PrmAdDetailViewProps {
   advertisement: PrmPublicAdvertisement;
@@ -21,11 +22,33 @@ export default function PrmAdDetailView({
   advertisement,
 }: PrmAdDetailViewProps) {
   const params = useParams();
+  const router = useRouter();
   const locale = (params?.locale as string) || "fa";
-  const [chatOpen, setChatOpen] = useState(false);
   const [showPhone, setShowPhone] = useState(false);
+  const [isStartingChat, setIsStartingChat] = useState(false);
 
   const isOffer = advertisement.type === "offer";
+
+  const handleStartChat = async () => {
+    const session = prmGetAuthSession();
+    const destinationPath = `/${locale}/dashboard?menu=messages&adId=${advertisement.id}`;
+
+    if (!session?.token) {
+      const loginUrl = `/${locale}/auth?redirect=${encodeURIComponent(destinationPath)}`;
+      router.push(loginUrl);
+      return;
+    }
+
+    try {
+      setIsStartingChat(true);
+      const conversation = await prmInitiateConversation(session.token, advertisement.id);
+      router.push(`/${locale}/dashboard?menu=messages&convId=${conversation.id}`);
+    } catch {
+      router.push(destinationPath);
+    } finally {
+      setIsStartingChat(false);
+    }
+  };
 
   return (
     <div className="prm-ad-detail-view min-h-screen bg-[var(--prm-bg-light)] pb-16">
@@ -153,8 +176,9 @@ export default function PrmAdDetailView({
                 <button
                   type="button"
                   id="prm-btn-start-chat"
-                  onClick={() => setChatOpen(true)}
-                  className="prm-btn-primary group relative flex h-13 w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-amber-400 via-[var(--prm-secondary-color)] to-amber-500 py-3.5 text-sm font-black text-[var(--prm-primary-color)] shadow-[0_15px_30px_-10px_rgba(245,158,11,0.65)] transition-all hover:scale-[1.02] active:scale-95"
+                  onClick={handleStartChat}
+                  disabled={isStartingChat}
+                  className="prm-btn-primary group relative flex h-13 w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-gradient-to-r from-amber-400 via-[var(--prm-secondary-color)] to-amber-500 py-3.5 text-sm font-black text-[var(--prm-primary-color)] shadow-[0_15px_30px_-10px_rgba(245,158,11,0.65)] transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
                 >
                   <span
                     className="pointer-events-none absolute inset-x-0 top-0 h-px opacity-90"
@@ -175,7 +199,7 @@ export default function PrmAdDetailView({
                   >
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
-                  ارسال پیام به آگهی‌دهنده
+                  {isStartingChat ? "در حال اتصال..." : "ارسال پیام به آگهی‌دهنده"}
                 </button>
 
                 {advertisement.phone ? (
@@ -232,12 +256,6 @@ export default function PrmAdDetailView({
           </div>
         </div>
       </div>
-
-      <PrmAdChatModal
-        advertisement={advertisement}
-        isOpen={chatOpen}
-        onClose={() => setChatOpen(false)}
-      />
     </div>
   );
 }

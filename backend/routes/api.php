@@ -124,3 +124,4 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum', PrmRequireAdminRoleMiddle
 require __DIR__ . '/prm_companies.php';
 require __DIR__ . '/prm_advertisements.php';
 require __DIR__ . '/prm_tradeflow.php';
+require __DIR__ . '/prm_chat.php';

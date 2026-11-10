@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 import { PrmDashboardSidebar, PrmDashboardMenu } from "../prm-dashboard-sidebar/prm-dashboard-sidebar";
 import { PrmDashboardHeader } from "../prm-dashboard-header/prm-dashboard-header";
 import { PrmDashboardStats } from "../prm-dashboard-stats/prm-dashboard-stats";
@@ -13,6 +14,7 @@ import { PrmDashboardSupport } from "../prm-dashboard-support/prm-dashboard-supp
 import { PrmTariffSearchView } from "@/components/prm-dashboard/prm-tariff-search/prm-tariff-search-view/prm-tariff-search-view";
 import { PrmDashboardCompanyView } from "@/components/prm-dashboard/prm-dashboard-company/prm-dashboard-company-view/prm-dashboard-company-view";
 import { PrmAdvertisementsView } from "@/components/prm-dashboard/prm-advertisements/prm-advertisements-view/prm-advertisements-view";
+import { PrmChatView } from "@/components/prm-dashboard/prm-chat/prm-chat-view";
 import { PrmUserProfileData } from "@/lib/prm-settings/prm-settings-api";
 import {
     prmClearAuthSession,
@@ -23,6 +25,7 @@ import "@/styles/dashboard/prm-dashboard.css";
 
 export function PrmDashboardPage(): ReactNode {
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     const [prmUser, setPrmUser] = useState<PrmUserProfileData | null>(null);
     const [prmToken, setPrmToken] = useState<string>("");
@@ -51,8 +54,14 @@ export function PrmDashboardPage(): ReactNode {
 
         setPrmToken(prmSession.token);
         setPrmUser(prmSession.user);
+
+        const menuParam = searchParams.get("menu");
+        if (menuParam === "messages") {
+            setPrmActiveMenu("messages" as PrmDashboardMenu);
+        }
+
         setPrmIsLoading(false);
-    }, [router]);
+    }, [router, searchParams]);
 
     const prmHandleOpenModal = (
         title: string,
@@ -99,6 +108,11 @@ export function PrmDashboardPage(): ReactNode {
 
         if (id === "ads" || id === "create-ad" || id === "my-ads") {
             setPrmActiveMenu("ads");
+            return;
+        }
+
+        if (id === "messages") {
+            setPrmActiveMenu("messages" as PrmDashboardMenu);
             return;
         }
 
@@ -198,6 +212,13 @@ export function PrmDashboardPage(): ReactNode {
                     <PrmAdvertisementsView
                         token={prmToken}
                         onGoToCompany={() => setPrmActiveMenu("company")}
+                    />
+                )}
+
+                {prmActiveMenu === ("messages" as PrmDashboardMenu) && prmUser && (
+                    <PrmChatView
+                        token={prmToken}
+                        currentUserId={prmUser.id}
                     />
                 )}
             </main>
