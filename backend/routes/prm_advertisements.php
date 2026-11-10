@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1/advertisements')->group(function () {
     Route::get('/', PrmAdvertisementPublicIndexController::class);
-    Route::get('/{slug}', PrmAdvertisementPublicShowController::class)->where('slug', '[A-Za-z0-9\-]+');
-});
 
-Route::prefix('v1/advertisements')->middleware('auth:sanctum')->group(function () {
-    Route::get('/meta', PrmAdvertisementMetaController::class);
-    Route::get('/my', PrmAdvertisementIndexController::class);
-    Route::post('/my', PrmAdvertisementStoreController::class);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/meta', PrmAdvertisementMetaController::class);
+        Route::get('/my', PrmAdvertisementIndexController::class);
+        Route::post('/my', PrmAdvertisementStoreController::class);
+    });
+
+    Route::get('/{slug}', PrmAdvertisementPublicShowController::class)
+        ->where('slug', '[A-Za-z0-9\-]+');
 });
