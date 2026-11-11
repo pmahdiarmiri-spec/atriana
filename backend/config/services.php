@@ -29,4 +29,10 @@ return [
         'api_url' => env('SMS_API_URL', 'https://rest.payamak-panel.com/api/SendSMS/SendSMS'),
         'from' => env('SMS_FROM_NUMBER', '90005379'),
     ],
+    'livekit' => [
+        'url' => env('LIVEKIT_URL'),
+        'key' => env('LIVEKIT_API_KEY'),
+        'secret' => env('LIVEKIT_API_SECRET'),
+    ],
+
 ];

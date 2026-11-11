@@ -12,7 +12,8 @@ export type PrmDashboardMenu =
   | "settings"
   | "support"
   | "company"
-  | "ads";
+  | "ads"
+  | "meetings";
 
 interface PrmDashboardSidebarProps {
   user: PrmUserProfileData | null;
@@ -184,8 +185,8 @@ export function PrmDashboardSidebar({
 
         <button
           type="button"
-          className="prm-nav-item"
-          onClick={() => onItemClick(t("menu.meetings"), t("menu.meetingsDesc"))}
+          className={`prm-nav-item ${activeMenu === "meetings" ? "prm-nav-item-active" : ""}`}
+          onClick={() => onMenuSelect("meetings")}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11" />

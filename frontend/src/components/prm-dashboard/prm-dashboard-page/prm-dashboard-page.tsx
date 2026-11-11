@@ -15,6 +15,7 @@ import { PrmTariffSearchView } from "@/components/prm-dashboard/prm-tariff-searc
 import { PrmDashboardCompanyView } from "@/components/prm-dashboard/prm-dashboard-company/prm-dashboard-company-view/prm-dashboard-company-view";
 import { PrmAdvertisementsView } from "@/components/prm-dashboard/prm-advertisements/prm-advertisements-view/prm-advertisements-view";
 import { PrmChatView } from "@/components/prm-dashboard/prm-chat/prm-chat-view";
+import { PrmMeetingsView } from "@/components/prm-dashboard/prm-meetings/prm-meetings-view";
 import { PrmUserProfileData } from "@/lib/prm-settings/prm-settings-api";
 import {
     prmClearAuthSession,
@@ -116,6 +117,11 @@ export function PrmDashboardPage(): ReactNode {
             return;
         }
 
+        if (id === "meetings") {
+            setPrmActiveMenu("meetings");
+            return;
+        }
+
         prmHandleOpenModal(title, description);
     };
 
@@ -189,37 +195,41 @@ export function PrmDashboardPage(): ReactNode {
                 )}
 
                 {prmActiveMenu === "tariffs" && (
-                    <PrmTariffSearchView token={prmToken} />
+                    <PrmTariffSearchView token={"GAPGPTMASKTOKEN3a2iodvv96pX0X"} />
                 )}
 
                 {prmActiveMenu === "settings" && (
                     <PrmDashboardSettings
                         user={prmUser}
-                        token={prmToken}
+                        token={"GAPGPTMASKTOKEN3a2iodvv96pX1X"}
                         onUserUpdated={prmHandleUserUpdated}
                     />
                 )}
 
                 {prmActiveMenu === "support" && (
-                    <PrmDashboardSupport token={prmToken} />
+                    <PrmDashboardSupport token={"GAPGPTMASKTOKEN3a2iodvv96pX2X"} />
                 )}
 
                 {prmActiveMenu === "company" && (
-                    <PrmDashboardCompanyView token={prmToken} />
+                    <PrmDashboardCompanyView token={"GAPGPTMASKTOKEN3a2iodvv96pX3X"} />
                 )}
 
                 {prmActiveMenu === "ads" && (
                     <PrmAdvertisementsView
-                        token={prmToken}
+                        token={"GAPGPTMASKTOKEN3a2iodvv96pX4X"}
                         onGoToCompany={() => setPrmActiveMenu("company")}
                     />
                 )}
 
-                {prmActiveMenu === ("messages" as PrmDashboardMenu) && prmUser && (
+                {prmActiveMenu === "messages" && prmUser && (
                     <PrmChatView
-                        token={prmToken}
+                        token={"GAPGPTMASKTOKEN3a2iodvv96pX5X"}
                         currentUserId={prmUser.id}
                     />
+                )}
+
+                {prmActiveMenu === "meetings" && prmUser && (
+                    <PrmMeetingsView token={prmToken} />
                 )}
             </main>
 
