@@ -195,35 +195,35 @@ export function PrmDashboardPage(): ReactNode {
                 )}
 
                 {prmActiveMenu === "tariffs" && (
-                    <PrmTariffSearchView token={"GAPGPTMASKTOKEN3a2iodvv96pX0X"} />
+                    <PrmTariffSearchView token={prmToken} />
                 )}
 
                 {prmActiveMenu === "settings" && (
                     <PrmDashboardSettings
                         user={prmUser}
-                        token={"GAPGPTMASKTOKEN3a2iodvv96pX1X"}
+                        token={prmToken}
                         onUserUpdated={prmHandleUserUpdated}
                     />
                 )}
 
                 {prmActiveMenu === "support" && (
-                    <PrmDashboardSupport token={"GAPGPTMASKTOKEN3a2iodvv96pX2X"} />
+                    <PrmDashboardSupport token={prmToken} />
                 )}
 
                 {prmActiveMenu === "company" && (
-                    <PrmDashboardCompanyView token={"GAPGPTMASKTOKEN3a2iodvv96pX3X"} />
+                    <PrmDashboardCompanyView token={prmToken} />
                 )}
 
                 {prmActiveMenu === "ads" && (
                     <PrmAdvertisementsView
-                        token={"GAPGPTMASKTOKEN3a2iodvv96pX4X"}
+                        token={prmToken}
                         onGoToCompany={() => setPrmActiveMenu("company")}
                     />
                 )}
 
                 {prmActiveMenu === "messages" && prmUser && (
                     <PrmChatView
-                        token={"GAPGPTMASKTOKEN3a2iodvv96pX5X"}
+                        token={prmToken}
                         currentUserId={prmUser.id}
                     />
                 )}
