@@ -70,6 +70,24 @@ export function PrmCompanyStepBasic({
       </div>
 
       <div className="prm-form-field">
+        <label>مدل کسب‌وکار</label>
+        <select
+          name="business_model"
+          value={formData.business_model || ""}
+          onChange={handleInputChange}
+          disabled={readOnly}
+          className="prm-form-select"
+        >
+          <option value="">انتخاب مدل کسب‌وکار</option>
+          <option value="B2B">B2B (Business to Business)</option>
+          <option value="B2C">B2C (Business to Consumer)</option>
+          <option value="B2B2C">B2B2C (Business to Business to Consumer)</option>
+          <option value="B2G">B2G (Business to Government)</option>
+          <option value="C2C">C2C (Consumer to Consumer)</option>
+        </select>
+      </div>
+
+      <div className="prm-form-field">
         <label>صنعت / حوزه تخصصی فعالیت</label>
         <select
           name="industry_id"

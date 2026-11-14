@@ -26,6 +26,27 @@ class PrmCompanySubmitService
             abort(422, 'نام فارسی شرکت الزامی است.');
         }
 
+        $badgeFields = [
+            'is_knowledge_based',
+            'is_creative',
+            'is_startup',
+            'is_exporter',
+            'has_iso',
+            'is_emc',
+        ];
+
+        $hasBadge = false;
+        foreach ($badgeFields as $field) {
+            if ($company->{$field}) {
+                $hasBadge = true;
+                break;
+            }
+        }
+
+        if ($hasBadge && empty($company->cert_paths)) {
+            abort(422, 'با توجه به انتخاب نشان‌های ویژه، بارگذاری حداقل یک مدرک معتبر در بخش گواهینامه‌ها الزامی است.');
+        }
+
         $amount = $this->priceService->getRegistrationPriceRials();
 
         return DB::transaction(function () use ($company, $amount) {

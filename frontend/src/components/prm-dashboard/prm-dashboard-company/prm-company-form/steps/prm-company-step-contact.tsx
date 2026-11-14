@@ -201,15 +201,15 @@ export function PrmCompanyStepContact({
       </div>
 
       <div className={`prm-form-field ${errors.website ? "prm-form-field-error" : ""}`}>
-        <label>آدرس وب‌سایت</label>
+        <label>آدرس وب‌سایت (بدون نیاز به درج اجباری https)</label>
         <input
-          type="url"
+          type="text"
           name="website"
           value={formData.website || ""}
           onChange={handleInputChange}
           disabled={readOnly}
           className="prm-form-input"
-          placeholder="https://company.com"
+          placeholder="company.com یا https://company.com"
         />
         {errors.website && <span className="prm-field-error-msg">{errors.website[0]}</span>}
       </div>

@@ -58,6 +58,7 @@ class PrmCompanyResource extends JsonResource
             'registration_number' => $this->registration_number,
             'national_id' => $this->national_id,
             'economic_code' => $this->economic_code,
+            'tariff_code' => $this->tariff_code,
             'established_year' => $this->established_year,
             'legal_structure' => $this->legal_structure,
             'ownership_type' => $this->ownership_type,

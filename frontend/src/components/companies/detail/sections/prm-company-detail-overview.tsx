@@ -10,6 +10,14 @@ interface PrmCompanyDetailOverviewProps {
 export default function PrmCompanyDetailOverview({
   company,
 }: PrmCompanyDetailOverviewProps) {
+  const products = company.main_products
+    ? company.main_products.split(",").map((s) => s.trim()).filter(Boolean)
+    : [];
+
+  const partners = company.major_clients
+    ? company.major_clients.split("|").map((s) => s.trim()).filter(Boolean)
+    : [];
+
   return (
     <div
       id="prm-company-detail-overview"
@@ -26,25 +34,39 @@ export default function PrmCompanyDetailOverview({
         </p>
       </div>
 
-      {company.main_products && (
+      {products.length > 0 && (
         <div className="pt-5 border-t border-slate-200/80">
           <h3 className="text-base font-extrabold text-[var(--prm-text-dark)] mb-3">
-            محصولات و خدمات کلیدی
+            محصولات و پکیج‌های شاخص
           </h3>
-          <p className="text-sm text-[var(--prm-text-dark)] leading-7 whitespace-pre-line">
-            {company.main_products}
-          </p>
+          <div className="flex flex-wrap gap-2">
+            {products.map((item, idx) => (
+              <span
+                key={idx}
+                className="px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200/80 text-xs font-extrabold text-[var(--prm-text-dark)]"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
       )}
 
-      {company.major_clients && (
+      {partners.length > 0 && (
         <div className="pt-5 border-t border-slate-200/80">
-          <h3 className="text-base font-extrabold text-[var(--prm-text-dark)] mb-2">
-            مشتریان و همکاران شاخص
+          <h3 className="text-base font-extrabold text-[var(--prm-text-dark)] mb-3">
+            سابقه همکاری با برندهای بزرگ و مشتریان کلیدی
           </h3>
-          <p className="text-sm text-[var(--prm-text-light)] leading-7 whitespace-pre-line">
-            {company.major_clients}
-          </p>
+          <div className="flex flex-wrap gap-2">
+            {partners.map((partner, idx) => (
+              <span
+                key={idx}
+                className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-transparent border border-amber-300/40 text-xs font-extrabold text-[var(--prm-text-dark)]"
+              >
+                ★ {partner}
+              </span>
+            ))}
+          </div>
         </div>
       )}
 

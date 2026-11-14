@@ -62,6 +62,7 @@ export interface PrmCompany {
   registration_number: string | null;
   national_id: string | null;
   economic_code: string | null;
+  tariff_code: string | null;
   established_year: number | null;
   legal_structure: string | null;
   ownership_type: string | null;

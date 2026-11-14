@@ -14,13 +14,15 @@ export default function PrmCompanyDetailSpecsGrid({
     { label: "سال تأسیس", value: company.established_year },
     { label: "ساختار حقوقی", value: company.legal_structure },
     { label: "نوع مالکیت", value: company.ownership_type },
+    { label: "مدل کسب‌وکار", value: company.business_model },
+    { label: "کد تعرفه گمرکی (HS Code)", value: company.tariff_code },
     { label: "تعداد پرسنل", value: company.employee_count },
     { label: "ظرفیت تولید / تامین", value: company.production_capacity },
-    { label: "مدل کسب‌وکار", value: company.business_model },
     { label: "گستره فعالیت", value: company.activity_scope },
     { label: "گردش مالی سالانه", value: company.annual_revenue },
     { label: "شماره ثبت", value: company.registration_number },
     { label: "شناسه ملی", value: company.national_id },
+    { label: "کد اقتصادی", value: company.economic_code },
   ].filter((item) => item.value !== null && item.value !== "");
 
   if (specs.length === 0) {
@@ -34,7 +36,7 @@ export default function PrmCompanyDetailSpecsGrid({
     >
       <h2 className="text-lg sm:text-xl font-black text-[var(--prm-text-dark)] mb-5 flex items-center gap-2">
         <span className="w-2 h-6 rounded-full bg-[var(--prm-accent-color)]" />
-        <span>مشخصات ثبتی و ساختار سازمانی</span>
+        <span>مشخصات ثبتی، گمرکی و ساختار سازمانی</span>
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

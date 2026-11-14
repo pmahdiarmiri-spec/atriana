@@ -31,7 +31,15 @@ const STEPS = [
 ];
 
 const STEP_FIELDS: Record<number, string[]> = {
-  1: ["name_fa", "name_en", "slogan", "industry_id", "activity_type", "description"],
+  1: [
+    "name_fa",
+    "name_en",
+    "slogan",
+    "industry_id",
+    "activity_type",
+    "business_model",
+    "description",
+  ],
   2: [
     "legal_structure",
     "ownership_type",
@@ -39,6 +47,13 @@ const STEP_FIELDS: Record<number, string[]> = {
     "national_id",
     "economic_code",
     "established_year",
+    "is_knowledge_based",
+    "is_creative",
+    "is_startup",
+    "is_exporter",
+    "has_iso",
+    "is_emc",
+    "certs",
   ],
   3: [
     "phone",
@@ -63,6 +78,7 @@ const STEP_FIELDS: Record<number, string[]> = {
     "production_capacity",
     "certifications",
     "major_clients",
+    "tariff_code",
     "logo",
     "cover",
     "catalog",
@@ -109,7 +125,7 @@ export function PrmCompanyForm({
         break;
       }
     }
-  }, [errors]);
+  }, [errors, totalSteps]);
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -191,6 +207,7 @@ export function PrmCompanyForm({
             formData={formData}
             errors={errors}
             readOnly={readOnly}
+            onUploadFile={onUploadFile}
             onChange={onChange}
           />
         )}

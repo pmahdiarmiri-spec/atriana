@@ -34,6 +34,7 @@ class PrmCompany extends Model
         'registration_number',
         'national_id',
         'economic_code',
+        'tariff_code',
         'established_year',
         'legal_structure',
         'ownership_type',

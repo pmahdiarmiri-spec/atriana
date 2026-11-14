@@ -1,59 +1,167 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { PrmCompany } from "@/types/prm-company";
-import PrmCompanyCardItem from "./prm-company-card-item";
+import { PrmCompanyBadges } from "@/components/companies/common/prm-company-badges";
 
-interface PrmCompaniesGridListProps {
-  companies: PrmCompany[];
+interface PrmCompanyCardItemProps {
+  company: PrmCompany;
   locale: string;
-  loading: boolean;
-  currentPage: number;
-  lastPage: number;
-  onPageChange: (page: number) => void;
 }
 
-export default function PrmCompaniesGridList({
-  companies,
-  locale,
-  loading,
-  currentPage,
-  lastPage,
-  onPageChange,
-}: PrmCompaniesGridListProps) {
-  if (loading) {
-    return (
-      <div
-        id="prm-companies-loading-skeleton"
-        className="max-w-7xl mx-auto py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        {Array.from({ length: 6 }).map((_, idx) => (
-          <div
-            key={idx}
-            className="prm-liquid-card-surface h-80 animate-pulse p-5 flex flex-col justify-between"
-          >
-            <div className="h-28 bg-slate-200 rounded-xl" />
-            <div className="space-y-3">
-              <div className="h-5 bg-slate-200 rounded w-2/3" />
-              <div className="h-3 bg-slate-200 rounded w-full" />
-              <div className="h-3 bg-slate-200 rounded w-4/5" />
-            </div>
-            <div className="h-9 bg-slate-200 rounded-lg" />
-          </div>
-        ))}
-      </div>
-    );
-  }
+const PRM_ACTIVITY_LABELS: Record<string, string> = {
+  production: "تولیدی",
+  distribution: "توزیعی",
+  trading: "بازرگانی",
+};
 
-  if (companies.length === 0) {
-    return (
-      <div
-        id="prm-companies-empty-state"
-        className="prm-liquid-card-surface max-w-3xl mx-auto my-14 p-10 text-center"
-      >
-        <div className="w-16 h-16 rounded-2xl bg-amber-50 text-[var(--prm-secondary-color)] flex items-center justify-center mx-auto mb-4">
+export default function PrmCompanyCardItem({
+  company,
+  locale,
+}: PrmCompanyCardItemProps) {
+  const locationLabel = [company.province, company.city]
+    .filter(Boolean)
+    .join(" ، ");
+
+  const productsArray = company.main_products
+    ? company.main_products
+        .split(/[,،\n]+/)
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .slice(0, 3)
+    : [];
+
+  return (
+    <article
+      id={`prm-company-card-${company.id}`}
+      className="prm-liquid-card-surface flex flex-col justify-between h-full group"
+    >
+      <div>
+        <div className="prm-card-cover-box relative h-32 w-full bg-gradient-to-br from-[var(--prm-primary-color)] via-slate-800 to-slate-900 overflow-hidden">
+          {company.cover_url ? (
+            <img
+              src={company.cover_url}
+              alt={company.name_fa}
+              className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : (
+            <div className="w-full h-full opacity-25 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]" />
+          )}
+
+          <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-slate-900/75 backdrop-blur-md text-white px-2.5 py-1 rounded-full text-[11px] font-semibold border border-white/15">
+            <svg
+              className="w-3.5 h-3.5 text-[var(--prm-secondary-color)]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+              />
+            </svg>
+            <span>{(company.views_count || 0).toLocaleString("fa-IR")}</span>
+          </div>
+
+          {company.industry && (
+            <span className="absolute top-3 right-3 bg-[var(--prm-secondary-color)] text-[var(--prm-primary-color)] px-2.5 py-1 rounded-full text-[11px] font-extrabold shadow">
+              {company.industry.name_fa}
+            </span>
+          )}
+        </div>
+
+        <div className="prm-card-body px-5 pt-0 pb-5">
+          <div className="flex items-end gap-3.5 -mt-9 mb-3 relative z-10">
+            <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-white p-1.5 shadow-lg border border-slate-200 flex items-center justify-center overflow-hidden shrink-0">
+              {company.logo_url ? (
+                <img
+                  src={company.logo_url}
+                  alt={company.name_fa}
+                  className="w-full h-full object-contain rounded-xl"
+                />
+              ) : (
+                <div className="w-full h-full rounded-xl bg-[var(--prm-primary-color)] text-[var(--prm-secondary-color)] flex items-center justify-center text-xl font-black">
+                  {company.name_fa.charAt(0)}
+                </div>
+              )}
+            </div>
+
+            <div className="pb-1 min-w-0 flex-1">
+              <h2 className="text-base sm:text-lg font-extrabold text-[var(--prm-text-dark)] truncate group-hover:text-[var(--prm-accent-color)] transition-colors">
+                {company.name_fa}
+              </h2>
+              {company.name_en && (
+                <p
+                  className="text-xs font-semibold text-[var(--prm-text-light)] truncate"
+                  dir="ltr"
+                >
+                  {company.name_en}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {company.slogan && (
+            <p className="text-xs font-semibold text-[var(--prm-accent-color)] mb-2 line-clamp-1">
+              «{company.slogan}»
+            </p>
+          )}
+
+          <p className="text-xs sm:text-sm text-[var(--prm-text-light)] line-clamp-2 leading-relaxed mb-4 min-h-[2.6rem]">
+            {company.description ||
+              "اطلاعات تکمیلی و شرح فعالیت‌های تجاری و بازرگانی این شرکت در پروفایل اختصاصی قابل مشاهده است."}
+          </p>
+
+          <div className="flex flex-wrap items-center gap-1.5 mb-3">
+            {company.activity_type && (
+              <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-[var(--prm-text-dark)] text-[11px] font-bold">
+                {PRM_ACTIVITY_LABELS[company.activity_type] ??
+                  company.activity_type}
+              </span>
+            )}
+            {company.business_model && (
+              <span className="px-2.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-[var(--prm-text-dark)] text-[11px] font-black">
+                {company.business_model}
+              </span>
+            )}
+          </div>
+
+          <div className="mb-4">
+            <PrmCompanyBadges company={company} size="sm" />
+          </div>
+
+          {productsArray.length > 0 && (
+            <div className="mb-3">
+              <span className="block text-[11px] font-bold text-[var(--prm-text-light)] mb-1">
+                محصولات / خدمات اصلی:
+              </span>
+              <div className="flex flex-wrap gap-1">
+                {productsArray.map((prod, idx) => (
+                  <span
+                    key={idx}
+                    className="text-[11px] bg-slate-50 border border-slate-200/80 text-[var(--prm-text-dark)] px-2 py-0.5 rounded-md truncate max-w-[140px]"
+                  >
+                    {prod}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="prm-card-footer px-5 py-3.5 bg-slate-50/80 border-t border-slate-200/70 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-[var(--prm-text-light)] truncate">
           <svg
-            className="w-8 h-8"
+            className="w-4 h-4 text-[var(--prm-secondary-color)] shrink-0"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -62,65 +170,40 @@ export default function PrmCompaniesGridList({
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
-        </div>
-        <h3 className="text-lg font-extrabold text-[var(--prm-text-dark)] mb-2">
-          هیچ شرکتی با فیلترهای انتخابی یافت نشد
-        </h3>
-        <p className="text-sm text-[var(--prm-text-light)]">
-          عبارت جستجو یا فیلترهای تخصصی را تغییر دهید تا لیست شرکت‌های تجاری
-          مرتبط نمایش داده شود.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <section
-      id="prm-companies-grid-section"
-      className="max-w-7xl mx-auto py-10"
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {companies.map((company) => (
-          <PrmCompanyCardItem
-            key={company.id}
-            company={company}
-            locale={locale}
-          />
-        ))}
-      </div>
-
-      {lastPage > 1 && (
-        <div
-          id="prm-companies-pagination"
-          className="flex items-center justify-center gap-2 mt-12"
-        >
-          <button
-            type="button"
-            disabled={currentPage <= 1}
-            onClick={() => onPageChange(currentPage - 1)}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-white border border-slate-200 text-[var(--prm-text-dark)] disabled:opacity-40 hover:border-[var(--prm-secondary-color)] transition"
-          >
-            صفحه قبل
-          </button>
-
-          <span className="px-4 py-2 rounded-xl text-xs font-extrabold bg-[var(--prm-primary-color)] text-[var(--prm-secondary-color)]">
-            صفحه {currentPage.toLocaleString("fa-IR")} از{" "}
-            {lastPage.toLocaleString("fa-IR")}
+          <span className="truncate">
+            {locationLabel || company.country || "ایران"}
           </span>
-
-          <button
-            type="button"
-            disabled={currentPage >= lastPage}
-            onClick={() => onPageChange(currentPage + 1)}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-white border border-slate-200 text-[var(--prm-text-dark)] disabled:opacity-40 hover:border-[var(--prm-secondary-color)] transition"
-          >
-            صفحه بعد
-          </button>
         </div>
-      )}
-    </section>
+
+        <Link
+          href={`/${locale}/companies/${company.id}`}
+          id={`prm-view-company-btn-${company.id}`}
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--prm-primary-color)] text-[var(--prm-white)] hover:bg-[var(--prm-secondary-color)] hover:text-[var(--prm-primary-color)] text-xs font-extrabold transition-all shrink-0 shadow-sm"
+        >
+          <span>مشاهده جزئیات</span>
+          <svg
+            className="w-3.5 h-3.5 rtl:rotate-180"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </Link>
+      </div>
+    </article>
   );
 }

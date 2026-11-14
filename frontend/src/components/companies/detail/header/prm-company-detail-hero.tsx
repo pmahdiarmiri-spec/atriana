@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { PrmCompany } from "@/types/prm-company";
+import { PrmCompanyBadges } from "@/components/companies/common/prm-company-badges";
 
 interface PrmCompanyDetailHeroProps {
   company: PrmCompany;
@@ -126,36 +127,7 @@ export default function PrmCompanyDetailHero({
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {company.is_knowledge_based && (
-              <span className="px-3.5 py-1.5 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-extrabold">
-                دانش‌بنیان
-              </span>
-            )}
-            {company.is_exporter && (
-              <span className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-extrabold">
-                صادرکننده
-              </span>
-            )}
-            {company.has_iso && (
-              <span className="px-3.5 py-1.5 rounded-xl bg-sky-500/20 border border-sky-400/40 text-sky-300 text-xs font-extrabold">
-                دارای گواهی ISO
-              </span>
-            )}
-            {company.is_startup && (
-              <span className="px-3.5 py-1.5 rounded-xl bg-purple-500/20 border border-purple-400/40 text-purple-300 text-xs font-extrabold">
-                استارتاپ
-              </span>
-            )}
-            {company.is_creative && (
-              <span className="px-3.5 py-1.5 rounded-xl bg-pink-500/20 border border-pink-400/40 text-pink-300 text-xs font-extrabold">
-                خلاق و فناور
-              </span>
-            )}
-            {company.is_emc && (
-              <span className="px-3.5 py-1.5 rounded-xl bg-orange-500/20 border border-orange-400/40 text-orange-300 text-xs font-extrabold">
-                مدیریت صادرات (EMC)
-              </span>
-            )}
+            <PrmCompanyBadges company={company} size="md" />
           </div>
         </div>
       </div>
