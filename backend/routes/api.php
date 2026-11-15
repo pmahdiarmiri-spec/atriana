@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\PrmAdmin\Companies\PrmAdminCompanyController;
+use App\Http\Controllers\Api\PrmAdmin\Companies\PrmAdminCompanyUpdateController;
 use App\Http\Controllers\Api\PrmAdmin\PrmAdminAuthController;
 use App\Http\Controllers\Api\PrmAdmin\PrmSuperAdminController;
 use App\Http\Controllers\Api\PrmAuth\PrmAuthController;
@@ -59,8 +60,8 @@ Route::prefix('v1/auth')->group(function () {
     Route::post('/register', PrmRegisterController::class);
     Route::post('/login/password', PrmPasswordLoginController::class);
     Route::post('/login/otp', PrmOtpLoginController::class);
-    Route::post('/password/reset-code', PrmRequestPasswordResetCodeController::class);
-    Route::post('/password/reset', PrmResetPasswordController::class);
+    Route::post('/password/reset-code', [PrmRequestPasswordResetCodeController::class, '__invoke']);
+    Route::post('/password/reset', [PrmResetPasswordController::class, '__invoke']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [PrmAuthController::class, 'me']);
@@ -109,6 +110,7 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum', PrmRequireAdminRoleMiddle
         Route::get('/', [PrmAdminCompanyController::class, 'index']);
         Route::get('/{company}', [PrmAdminCompanyController::class, 'show']);
         Route::post('/{company}/review', [PrmAdminCompanyController::class, 'review']);
+        Route::post('/updates/{updateRequest}/review', [PrmAdminCompanyUpdateController::class, 'review']);
     });
 
     Route::middleware(PrmRequireSuperAdminMiddleware::class)->group(function () {
@@ -125,5 +127,5 @@ require __DIR__ . '/prm_companies.php';
 require __DIR__ . '/prm_advertisements.php';
 require __DIR__ . '/prm_tradeflow.php';
 require __DIR__ . '/prm_chat.php';
-require __DIR__.'/prm_chat_moderation.php';
-require __DIR__.'/prm_Meeting.php';
+require __DIR__ . '/prm_chat_moderation.php';
+require __DIR__ . '/prm_Meeting.php';

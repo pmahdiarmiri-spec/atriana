@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   CheckCircle2,
@@ -39,10 +39,23 @@ export const PrmAdminCompanyReviewModal: React.FC<
     "general" | "legal" | "media" | "decision"
   >("general");
   const [selectedStatus, setSelectedStatus] = useState<PrmCompanyStatusType>(
-    company.status
+    company.status === "pending" || company.status === "draft"
+      ? "approved"
+      : company.status
   );
   const [adminMessage, setAdminMessage] = useState(company.admin_message ?? "");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && company) {
+      setSelectedStatus(
+        company.status === "pending" || company.status === "draft"
+          ? "approved"
+          : company.status
+      );
+      setAdminMessage(company.admin_message ?? "");
+    }
+  }, [isOpen, company]);
 
   if (!isOpen) return null;
 

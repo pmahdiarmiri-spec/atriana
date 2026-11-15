@@ -40,7 +40,7 @@ class PrmAdminCompanyController extends Controller
             ->first();
 
         $resource = (new PrmCompanyResource($company))->toArray(request());
-        
+
         $resource['has_update_request'] = (bool) $pendingUpdate;
         $resource['pending_update_data'] = $pendingUpdate ? $pendingUpdate->data : null;
 
@@ -59,10 +59,14 @@ class PrmAdminCompanyController extends Controller
             $request->validated()
         );
 
+        $resource = (new PrmCompanyResource($updatedCompany))->toArray(request());
+        $resource['has_update_request'] = false;
+        $resource['pending_update_data'] = null;
+
         return response()->json([
             'status' => 'success',
             'code' => 'prm_admin_company_status_updated',
-            'company' => new PrmCompanyResource($updatedCompany),
+            'company' => $resource,
         ]);
     }
 }

@@ -37,10 +37,11 @@ class PrmAdminCompanyReviewService
         $paginator = $query->paginate((int) ($filters['per_page'] ?? 15));
 
         $companyIds = $paginator->getCollection()->pluck('id');
-        
+
         $pendingUpdates = PrmCompanyUpdate::query()
             ->whereIn('company_id', $companyIds)
             ->where('status', PrmCompanyUpdateStatus::PENDING)
+            ->latest()
             ->get()
             ->keyBy('company_id');
 
@@ -59,9 +60,33 @@ class PrmAdminCompanyReviewService
         return DB::transaction(function () use ($admin, $company, $data) {
             $previousStatus = $company->status;
             $newStatus = PrmCompanyStatus::from($data['status']);
+            $adminMessage = $data['admin_message'] ?? null;
+
+            $pendingUpdate = PrmCompanyUpdate::query()
+                ->where('company_id', $company->id)
+                ->where('status', PrmCompanyUpdateStatus::PENDING)
+                ->latest()
+                ->first();
+
+            if ($pendingUpdate) {
+                if ($newStatus === PrmCompanyStatus::APPROVED) {
+                    $updatePayload = is_array($pendingUpdate->data) ? $pendingUpdate->data : [];
+                    if (!empty($updatePayload)) {
+                        $company->fill($updatePayload);
+                    }
+                    $pendingUpdate->status = PrmCompanyUpdateStatus::APPROVED;
+                } elseif ($newStatus === PrmCompanyStatus::NEEDS_EDIT) {
+                    $pendingUpdate->status = PrmCompanyUpdateStatus::NEEDS_EDIT;
+                } else {
+                    $pendingUpdate->status = PrmCompanyUpdateStatus::REJECTED;
+                }
+
+                $pendingUpdate->admin_message = $adminMessage;
+                $pendingUpdate->save();
+            }
 
             $company->status = $newStatus;
-            $company->admin_message = $data['admin_message'] ?? null;
+            $company->admin_message = $adminMessage;
 
             if ($newStatus === PrmCompanyStatus::APPROVED) {
                 $company->approved_at = now();
@@ -74,19 +99,25 @@ class PrmAdminCompanyReviewService
 
             PrmAdminAuditLog::query()->create([
                 'user_id' => $admin->id,
-                'action' => 'admin_company_status_updated',
+                'action' => $pendingUpdate ? 'admin_company_update_reviewed' : 'admin_company_status_updated',
                 'target_type' => PrmCompany::class,
                 'target_id' => $company->id,
                 'payload' => [
                     'previous_status' => $previousStatus instanceof PrmCompanyStatus ? $previousStatus->value : $previousStatus,
                     'new_status' => $newStatus->value,
-                    'admin_message' => $data['admin_message'] ?? null,
+                    'had_pending_update' => (bool) $pendingUpdate,
+                    'update_request_id' => $pendingUpdate?->id,
+                    'admin_message' => $adminMessage,
                 ],
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
             ]);
 
-            return $company->fresh(['industry', 'user']);
+            $freshCompany = $company->fresh(['industry', 'user']);
+            $freshCompany->has_update_request = false;
+            $freshCompany->pending_update_data = null;
+
+            return $freshCompany;
         });
     }
 }
