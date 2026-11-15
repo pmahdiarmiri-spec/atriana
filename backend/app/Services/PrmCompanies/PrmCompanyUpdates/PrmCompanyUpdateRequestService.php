@@ -18,7 +18,7 @@ class PrmCompanyUpdateRequestService
         }
 
         if (!in_array($company->status, [PrmCompanyStatus::APPROVED], true)) {
-            abort(422, 'فقط شرکت‌های تایید شده امکان ارسال درخواست به‌روزرسانی دارند.');
+            abort(422, 'فقط شرکت‌های تایید شده امکان به‌روزرسانی دارند.');
         }
 
         $allowedKeys = $company->getFillable();
@@ -35,21 +35,11 @@ class PrmCompanyUpdateRequestService
             abort(422, 'تغییری در اطلاعات جهت ثبت یافت نشد.');
         }
 
-        $pendingUpdate = PrmCompanyUpdate::query()
-            ->where('company_id', $company->id)
-            ->where('status', PrmCompanyUpdateStatus::PENDING)
-            ->first();
-
-        if ($pendingUpdate) {
-            $existingData = $pendingUpdate->data ?? [];
-            $mergedData = array_merge($existingData, $diff);
-            $pendingUpdate->update(['data' => $mergedData]);
-            return $pendingUpdate->refresh();
-        }
+        $company->update($diff);
 
         return PrmCompanyUpdate::create([
             'company_id' => $company->id,
-            'status' => PrmCompanyUpdateStatus::PENDING,
+            'status' => PrmCompanyUpdateStatus::APPROVED,
             'data' => $diff,
         ]);
     }

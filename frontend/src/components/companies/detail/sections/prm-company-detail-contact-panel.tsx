@@ -15,6 +15,8 @@ export default function PrmCompanyDetailContactPanel({
     { label: "Instagram", value: company.social_instagram },
     { label: "Telegram", value: company.social_telegram },
     { label: "WhatsApp", value: company.social_whatsapp },
+    { label: "Twitter", value: company.social_twitter },
+    { label: "Facebook", value: company.social_facebook },
     { label: "YouTube", value: company.social_youtube },
     { label: "Aparat", value: company.social_aparat },
   ].filter((s) => Boolean(s.value));
@@ -71,6 +73,20 @@ export default function PrmCompanyDetailContactPanel({
             >
               {company.phone}
             </a>
+          </div>
+        )}
+        
+        {company.fax && (
+          <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+            <span className="text-xs font-bold text-[var(--prm-text-light)]">
+              فکس:
+            </span>
+            <span
+              className="font-extrabold text-[var(--prm-text-dark)]"
+              dir="ltr"
+            >
+              {company.fax}
+            </span>
           </div>
         )}
 
@@ -155,7 +171,7 @@ export default function PrmCompanyDetailContactPanel({
             {socials.map((soc, idx) => (
               <span
                 key={idx}
-                className="px-3 py-1.5 rounded-lg bg-slate-100 text-xs font-bold text-[var(--prm-text-dark)]"
+                className="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-bold text-[var(--prm-text-dark)]"
                 dir="ltr"
               >
                 {soc.label}: {soc.value}

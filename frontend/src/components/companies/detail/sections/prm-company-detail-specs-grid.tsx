@@ -23,7 +23,7 @@ export default function PrmCompanyDetailSpecsGrid({
     { label: "شماره ثبت", value: company.registration_number },
     { label: "شناسه ملی", value: company.national_id },
     { label: "کد اقتصادی", value: company.economic_code },
-  ].filter((item) => item.value !== null && item.value !== "");
+  ].filter((item) => item.value !== null && item.value !== undefined && item.value !== "");
 
   if (specs.length === 0) {
     return null;
@@ -32,7 +32,7 @@ export default function PrmCompanyDetailSpecsGrid({
   return (
     <div
       id="prm-company-detail-specs"
-      className="prm-liquid-card-surface p-6 sm:p-8"
+      className="prm-liquid-card-surface p-6 sm:p-8 mt-8"
     >
       <h2 className="text-lg sm:text-xl font-black text-[var(--prm-text-dark)] mb-5 flex items-center gap-2">
         <span className="w-2 h-6 rounded-full bg-[var(--prm-accent-color)]" />
@@ -43,7 +43,7 @@ export default function PrmCompanyDetailSpecsGrid({
         {specs.map((spec, idx) => (
           <div
             key={idx}
-            className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col justify-between"
+            className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex flex-col justify-between hover:border-[var(--prm-secondary-color)] transition-colors duration-300"
           >
             <span className="text-xs font-bold text-[var(--prm-text-light)] mb-1">
               {spec.label}
