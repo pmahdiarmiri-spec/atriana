@@ -10,6 +10,7 @@ import {
   prmSaveCompanyDraft,
   prmSubmitCompany,
   prmUploadCompanyFile,
+  prmRequestCompanyUpdate,
   PrmCompanyApiError,
 } from "@/lib/prm-companies/prm-companies-api";
 import { PrmCompanyStatusBadge } from "../prm-company-status-badge/prm-company-status-badge";
@@ -90,6 +91,7 @@ export function PrmDashboardCompanyView({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
+  const [updateSuccess, setUpdateSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -144,6 +146,7 @@ export function PrmDashboardCompanyView({
   const handleSaveDraft = async () => {
     setIsSaving(true);
     setGeneralError(null);
+    setUpdateSuccess(null);
     setErrors({});
 
     try {
@@ -165,7 +168,13 @@ export function PrmDashboardCompanyView({
     type: "logo" | "cover" | "catalog" | "resume" | "gallery" | "certs",
     files: File | File[]
   ) => {
+    if (company?.status === "approved") {
+      setGeneralError("شرکت تایید شده است. برای تغییر مستندات لطفا از طریق تیکت پشتیبانی اقدام نمایید.");
+      return;
+    }
+
     setGeneralError(null);
+    setUpdateSuccess(null);
     try {
       const res = await prmUploadCompanyFile(token, type, files);
       setCompany(res.company);
@@ -192,6 +201,27 @@ export function PrmDashboardCompanyView({
       setPaymentType("registration");
       setIsModalOpen(true);
     } catch {
+    }
+  };
+
+  const handleUpdateRequest = async () => {
+    setIsSaving(true);
+    setGeneralError(null);
+    setUpdateSuccess(null);
+    setErrors({});
+
+    try {
+      await prmRequestCompanyUpdate(token, formData);
+      setUpdateSuccess("درخواست تغییرات شما با موفقیت در سیستم ثبت شد و پس از بررسی و تایید کارشناسان اعمال خواهد شد.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err: any) {
+      if (err instanceof PrmCompanyApiError && err.errors) {
+        setErrors(err.errors);
+      }
+      setGeneralError(err.message || "خطایی در ثبت درخواست تغییرات رخ داد.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -243,7 +273,8 @@ export function PrmDashboardCompanyView({
   const isReadOnly =
     company !== null &&
     company.status !== "draft" &&
-    company.status !== "needs_edit";
+    company.status !== "needs_edit" &&
+    company.status !== "approved";
 
   const isExpiredOrNearExpiry =
     company &&
@@ -321,16 +352,25 @@ export function PrmDashboardCompanyView({
         </div>
       )}
 
+      {updateSuccess && (
+        <div className="prm-company-alert" style={{ backgroundColor: "#dcfce3", borderColor: "#22c55e", color: "#166534" }}>
+          <strong>عملیات موفق:</strong>
+          <span>{updateSuccess}</span>
+        </div>
+      )}
+
       <div className="prm-luxury-card">
         <PrmCompanyForm
           formData={formData}
           industries={industries}
+          companyStatus={company?.status}
           errors={errors}
           readOnly={isReadOnly}
           token={token}
           isSaving={isSaving}
           onSaveDraft={handleSaveDraft}
           onSubmitInitiate={handleInitiateSubmit}
+          onUpdateRequest={handleUpdateRequest}
           onUploadFile={handleUploadFile}
           onChange={handleFieldChange}
         />

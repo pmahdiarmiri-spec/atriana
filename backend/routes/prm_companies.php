@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\PrmCompanies\User\Industries\PrmCompanyIndustryInde
 use App\Http\Controllers\Api\PrmCompanies\User\MyCompany\PrmMyCompanyRenewController;
 use App\Http\Controllers\Api\PrmCompanies\User\MyCompany\PrmMyCompanyShowController;
 use App\Http\Controllers\Api\PrmCompanies\User\MyCompany\PrmMyCompanySubmitController;
+use App\Http\Controllers\Api\PrmCompanies\User\MyCompany\PrmMyCompanyUpdateController;
 use App\Http\Controllers\Api\PrmCompanies\User\MyCompany\PrmMyCompanyUploadController;
 use App\Http\Controllers\Api\PrmCompanies\User\MyCompany\PrmMyCompanyUpsertDraftController;
 use App\Http\Controllers\Api\PrmCompanyPayments\User\MyCompanyPayment\PrmMyCompanyPaymentPayFakeController;
@@ -32,6 +33,7 @@ Route::prefix('v1/companies')->group(function () {
         Route::post('/my/upload', PrmMyCompanyUploadController::class);
         Route::post('/my/submit', PrmMyCompanySubmitController::class);
         Route::post('/my/renew', PrmMyCompanyRenewController::class);
+        Route::post('/my/update-request', PrmMyCompanyUpdateController::class);
     });
 });
 

@@ -3,8 +3,10 @@
 namespace App\Services\PrmAdmin\Companies;
 
 use App\Enums\PrmCompanies\PrmCompanyStatus;
+use App\Enums\PrmCompanies\PrmCompanyUpdateStatus;
 use App\Models\PrmAdminAuditLog;
 use App\Models\PrmCompany;
+use App\Models\PrmCompanyUpdate;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +34,24 @@ class PrmAdminCompanyReviewService
             });
         }
 
-        return $query->paginate((int) ($filters['per_page'] ?? 15));
+        $paginator = $query->paginate((int) ($filters['per_page'] ?? 15));
+
+        $companyIds = $paginator->getCollection()->pluck('id');
+        
+        $pendingUpdates = PrmCompanyUpdate::query()
+            ->whereIn('company_id', $companyIds)
+            ->where('status', PrmCompanyUpdateStatus::PENDING)
+            ->get()
+            ->keyBy('company_id');
+
+        $paginator->getCollection()->transform(function ($company) use ($pendingUpdates) {
+            $update = $pendingUpdates->get($company->id);
+            $company->has_update_request = (bool) $update;
+            $company->pending_update_data = $update ? $update->data : null;
+            return $company;
+        });
+
+        return $paginator;
     }
 
     public function review(User $admin, PrmCompany $company, array $data): PrmCompany

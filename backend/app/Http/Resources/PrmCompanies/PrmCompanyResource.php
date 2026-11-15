@@ -108,6 +108,8 @@ class PrmCompanyResource extends JsonResource
             'resume_file' => $this->resolveUrl($this->resume_path),
             'logo_url' => $this->resolveUrl($this->logo_path),
             'cover_url' => $this->resolveUrl($this->cover_path),
+            'has_update_request' => $this->has_update_request ?? false,
+            'pending_update_data' => $this->pending_update_data ?? null,
         ];
     }
 }

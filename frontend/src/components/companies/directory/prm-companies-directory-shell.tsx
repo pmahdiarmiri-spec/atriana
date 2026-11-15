@@ -9,7 +9,7 @@ import {
 import { prmGetPublicCompanies } from "@/lib/prm-companies/prm-companies-api";
 import PrmCompaniesHeroBanner from "./hero/prm-companies-hero-banner";
 import PrmCompaniesFilterPanel from "./filters/prm-companies-filter-panel";
-import PrmCompaniesGridList from "./grid/prm-companies-grid-list";
+import PrmCompanyCardItem from "./grid/prm-companies-grid-list";
 import "@/styles/prm-companies/prm-companies-liquid-glass.css";
 
 interface PrmCompaniesDirectoryShellProps {
@@ -147,14 +147,78 @@ export default function PrmCompaniesDirectoryShell({
           onResetFilters={handleResetFilters}
         />
 
-        <PrmCompaniesGridList
-          companies={companies}
-          locale={locale}
-          loading={loading}
-          currentPage={meta.current_page}
-          lastPage={meta.last_page}
-          onPageChange={handlePageChange}
-        />
+        <section
+          id="prm-companies-grid-list"
+          className="prm-companies-grid-list mt-6"
+          aria-label="فهرست شرکت‌ها"
+          aria-busy={loading}
+        >
+          {loading && (
+            <p
+              className="prm-companies-loading py-6 text-center text-sm text-[var(--prm-text-light)]"
+              role="status"
+            >
+              در حال دریافت اطلاعات شرکت‌ها...
+            </p>
+          )}
+
+          {!loading && companies.length === 0 && (
+            <div
+              className="prm-companies-empty rounded-2xl border border-slate-200 bg-[var(--prm-white)] px-6 py-12 text-center text-sm text-[var(--prm-text-light)]"
+              role="status"
+            >
+              شرکتی برای نمایش یافت نشد.
+            </div>
+          )}
+
+          {companies.length > 0 && (
+            <div className="prm-companies-grid grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {companies.map((company) => (
+                <PrmCompanyCardItem
+                  key={company.id}
+                  company={company}
+                  locale={locale}
+                />
+              ))}
+            </div>
+          )}
+
+          {companies.length > 0 && meta.last_page > 1 && (
+            <nav
+              className="prm-companies-pagination mt-8 flex flex-wrap items-center justify-center gap-4"
+              aria-label="صفحه‌بندی شرکت‌ها"
+            >
+              <button
+                type="button"
+                onClick={() => handlePageChange(meta.current_page - 1)}
+                disabled={loading || meta.current_page <= 1}
+                className="prm-companies-pagination-previous rounded-xl bg-[var(--prm-primary-color)] px-5 py-2.5 text-sm font-bold text-[var(--prm-white)] transition-colors hover:bg-[var(--prm-accent-color)] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                صفحه قبل
+              </button>
+
+              <span
+                className="prm-companies-pagination-status text-sm font-semibold text-[var(--prm-text-dark)]"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                صفحه {meta.current_page.toLocaleString("fa-IR")} از{" "}
+                {meta.last_page.toLocaleString("fa-IR")}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => handlePageChange(meta.current_page + 1)}
+                disabled={
+                  loading || meta.current_page >= meta.last_page
+                }
+                className="prm-companies-pagination-next rounded-xl bg-[var(--prm-primary-color)] px-5 py-2.5 text-sm font-bold text-[var(--prm-white)] transition-colors hover:bg-[var(--prm-accent-color)] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                صفحه بعد
+              </button>
+            </nav>
+          )}
+        </section>
       </div>
     </main>
   );

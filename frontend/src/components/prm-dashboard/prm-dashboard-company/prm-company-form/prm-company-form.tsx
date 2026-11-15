@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useState, useEffect } from "react";
-import { PrmCompanyFormData, PrmIndustry } from "@/types/prm-company";
+import { PrmCompanyFormData, PrmIndustry, PrmCompanyStatus } from "@/types/prm-company";
 import { PrmCompanyStepBasic } from "./steps/prm-company-step-basic";
 import { PrmCompanyStepLegal } from "./steps/prm-company-step-legal";
 import { PrmCompanyStepContact } from "./steps/prm-company-step-contact";
@@ -10,12 +10,14 @@ import { PrmCompanyStepCapacity } from "./steps/prm-company-step-capacity";
 interface PrmCompanyFormProps {
   formData: PrmCompanyFormData;
   industries: PrmIndustry[];
+  companyStatus?: PrmCompanyStatus;
   errors: Record<string, string[]>;
   readOnly: boolean;
   token: string;
   isSaving: boolean;
   onSaveDraft: () => Promise<void>;
   onSubmitInitiate: () => Promise<void>;
+  onUpdateRequest: () => Promise<void>;
   onUploadFile: (
     type: "logo" | "cover" | "catalog" | "resume" | "gallery" | "certs",
     files: File | File[]
@@ -90,12 +92,14 @@ const STEP_FIELDS: Record<number, string[]> = {
 export function PrmCompanyForm({
   formData,
   industries,
+  companyStatus,
   errors,
   readOnly,
   token,
   isSaving,
   onSaveDraft,
   onSubmitInitiate,
+  onUpdateRequest,
   onUploadFile,
   onChange,
 }: PrmCompanyFormProps): ReactNode {
@@ -247,7 +251,7 @@ export function PrmCompanyForm({
         </div>
 
         <div className="prm-actions-right">
-          {!readOnly && (
+          {!readOnly && companyStatus !== "approved" && (
             <button
               type="button"
               className="prm-btn-secondary"
@@ -265,6 +269,15 @@ export function PrmCompanyForm({
               onClick={handleNext}
             >
               مرحله بعد
+            </button>
+          ) : companyStatus === "approved" ? (
+            <button
+              type="button"
+              className="prm-btn-primary"
+              onClick={onUpdateRequest}
+              disabled={isSaving}
+            >
+              {isSaving ? "در حال ثبت..." : "ثبت درخواست به‌روزرسانی"}
             </button>
           ) : (
             !readOnly && (

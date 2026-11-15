@@ -193,3 +193,13 @@ export function prmRenewCompany(
     body: JSON.stringify({ payment_method: paymentMethod }),
   });
 }
+
+export function prmRequestCompanyUpdate(
+  token: string,
+  payload: Partial<PrmCompanyFormData>
+): Promise<{ status: string; code: string; update_request_id: number }> {
+  return prmCompanyRequest("/v1/companies/my/update-request", token, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
